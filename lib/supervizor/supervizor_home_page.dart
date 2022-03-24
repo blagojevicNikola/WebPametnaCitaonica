@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/pages/pregled_citaonica_page.dart';
+import 'package:web_aplikacija/supervizor/pages/pregled_sala_page_prazan.dart';
 
 class SupervizorHomePage extends StatefulWidget {
   const SupervizorHomePage({Key? key, required this.title}) : super(key: key);
@@ -12,7 +14,7 @@ class SupervizorHomePage extends StatefulWidget {
 class _SupervizorHomePageState extends State<SupervizorHomePage> {
   int _selectedIndex = 0;
   List<Widget> screens = [
-    // const Pregled(),
+    const PregledSalaPageTest(),
     // const Dodavanje(),
     // const Lozinka(),
     // const Odjava()

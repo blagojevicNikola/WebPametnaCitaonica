@@ -17,9 +17,19 @@ class _OdjavaPageState extends State<OdjavaPage> {
 
     return SingleChildScrollView(
       child: Container(
+        decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Color(0xFF0961AF),
+                Color(0xFF27AEF7),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(10)),
         height: 60,
         width: MediaQuery.of(context).size.width * 0.8,
-        color: const Color.fromARGB(255, 132, 186, 230),
+        // color: const Color.fromARGB(255, 132, 186, 230),
         child: InkWell(
             onTap: () {
               showDialog<String>(

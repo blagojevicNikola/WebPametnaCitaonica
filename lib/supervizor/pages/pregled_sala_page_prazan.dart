@@ -12,6 +12,6 @@ class PregledSalaPageTest extends StatefulWidget {
 class _PregledSalaPageTestState extends State<PregledSalaPageTest> {
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.black26);
+    return Container(color: Color.fromARGB(66, 68, 215, 241));
   }
 }

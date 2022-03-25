@@ -5,10 +5,12 @@ import 'package:web_aplikacija/pages/kreiranje_individualne_sale_page.dart';
 import 'package:web_aplikacija/widgets/grupna_sala_tile.dart';
 import 'package:web_aplikacija/widgets/individualna_sala_tile.dart';
 import 'package:web_aplikacija/widgets/information_field.dart';
+import 'package:web_aplikacija/widgets/unos_radnog_vremena.dart';
 
 import '../api/citaonica_service.dart';
 import '../models/citaonica.dart';
 import '../widgets/grupna_sala_checkbox.dart';
+import '../widgets/supervizor_tile.dart';
 
 class UredjivanjeCitaonicePage extends StatefulWidget {
   Citaonica citData;
@@ -126,6 +128,20 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                         text: widget.citData.phoneNumber),
                               ),
                             ),
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.all(9),
+                                child: Text(
+                                  'Radno vrijeme:',
+                                  style: TextStyle(
+                                      fontSize: 40, color: defaultPlava),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            UnosRadnogVremena(
+                                radnoVr: widget.citData.radnoVrijeme),
                             const SizedBox(height: 30),
                             const Align(
                               alignment: Alignment.centerLeft,
@@ -248,6 +264,46 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                   'Supervizori:',
                                   style: TextStyle(
                                       fontSize: 40, color: defaultPlava),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(9.0),
+                              child: ListView.separated(
+                                itemCount: 2,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return const SupervizorTile(
+                                      ime: 'Nikola',
+                                      prezime: 'Nikolic',
+                                      korisnickoIme: 'nikola_nikolic');
+                                },
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(
+                                  height: 20,
+                                  width: 40,
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    20.0, 9.0, 9.0, 9.0),
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.transparent,
+                                  child: IconButton(
+                                      color: const Color.fromARGB(
+                                          255, 105, 105, 105),
+                                      iconSize: 36,
+                                      icon:
+                                          const Icon(Icons.add_circle_outline),
+                                      onPressed: () {
+                                        Navigator.of(context).pushNamed(
+                                            'pregled/citaonica/dodaj_supervizora');
+                                      }),
                                 ),
                               ),
                             ),

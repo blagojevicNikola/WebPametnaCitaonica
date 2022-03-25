@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_aplikacija/constants/citaonica_const.dart';
 import 'package:web_aplikacija/models/citaonica.dart';
 import 'package:web_aplikacija/models/grupna_sala.dart';
+import 'package:web_aplikacija/pages/dodavanje_supervizora_page.dart';
 import 'package:web_aplikacija/pages/kreiranje_individualne_sale_page.dart';
 import 'package:web_aplikacija/pages/pregled_citaonica_page.dart';
 import 'package:web_aplikacija/pages/uredjivanje_citaonice_page.dart';
@@ -51,6 +52,9 @@ class _PregledCitaonicaWrapperPageState
                 builder = (BuildContext context) => IzmjenaGrupneSalePage(
                       grupnaSalaData: settings.arguments as GrupnaSala,
                     );
+                break;
+              case 'pregled/citaonica/dodaj_supervizora':
+                builder = (BuildContext context) => DodavanjeSupervizoraPage();
                 break;
               default:
                 throw Exception('Invalid route:}');

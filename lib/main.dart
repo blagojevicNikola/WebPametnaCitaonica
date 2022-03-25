@@ -15,8 +15,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: const LoginDemo(),
-        //home: const MyHomePage(title: 'Administratorska app'),
+    return MaterialApp(
+        //home: const LoginDemo(),
+        home: const MyHomePage(title: 'Administratorska app'),
         routes: {'login': (context) => const LoginDemo()});
   }
 }

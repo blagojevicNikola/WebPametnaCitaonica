@@ -22,7 +22,7 @@ class _OdjavaPageState extends State<OdjavaPage> {
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
               colors: [
-                Color(0xFF0961AF),
+                Color.fromARGB(255, 35, 128, 209),
                 Color.fromARGB(255, 226, 226, 226),
               ],
             ),

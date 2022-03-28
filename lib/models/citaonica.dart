@@ -20,7 +20,7 @@ class Citaonica {
   String adresa;
   @JsonKey(name: 'radnoVrijeme')
   List<RadnoVrijemeUDanu> radnoVrijeme;
-  //String? vlasnik;
+  String vlasnik;
   String? opis;
   int? administratorId;
 
@@ -30,6 +30,7 @@ class Citaonica {
       required this.phoneNumber,
       required this.adresa,
       required this.radnoVrijeme,
+      required this.vlasnik,
       this.id});
 
   factory Citaonica.fromJson(Map<String, dynamic> json) =>

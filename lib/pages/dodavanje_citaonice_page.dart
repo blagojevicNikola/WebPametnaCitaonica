@@ -234,6 +234,7 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
   void kreirajCitaonicu() {
     citService.createCitaonica(
       citaonicaInfo: Citaonica(
+        vlasnik: 'nesto',
         name: nazivController.text.toString(),
         mail: emailController.text.toString(),
         phoneNumber: telefonController.text.toString(),

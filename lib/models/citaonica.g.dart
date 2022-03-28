@@ -14,6 +14,7 @@ Citaonica _$CitaonicaFromJson(Map<String, dynamic> json) => Citaonica(
       radnoVrijeme: (json['radnoVrijeme'] as List<dynamic>)
           .map((e) => RadnoVrijemeUDanu.fromJson(e as Map<String, dynamic>))
           .toList(),
+      vlasnik: json['vlasnik'] as String,
       id: json['id'] as int?,
     )
       ..opis = json['opis'] as String?
@@ -26,6 +27,7 @@ Map<String, dynamic> _$CitaonicaToJson(Citaonica instance) => <String, dynamic>{
       'brojTelefona': instance.phoneNumber,
       'adresa': instance.adresa,
       'radnoVrijeme': instance.radnoVrijeme,
+      'vlasnik': instance.vlasnik,
       'opis': instance.opis,
       'administratorId': instance.administratorId,
     };

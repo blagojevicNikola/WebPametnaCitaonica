@@ -7,30 +7,25 @@ part of 'citaonica.dart';
 // **************************************************************************
 
 Citaonica _$CitaonicaFromJson(Map<String, dynamic> json) => Citaonica(
-      name: json['name'] as String,
+      name: json['naziv'] as String,
       mail: json['mail'] as String,
-      phoneNumber: json['phone_number'] as String,
+      phoneNumber: json['brojTelefona'] as String,
       adresa: json['adresa'] as String,
-      radnoVrijeme: (json['radno_vrijeme'] as List<dynamic>)
+      radnoVrijeme: (json['radnoVrijeme'] as List<dynamic>)
           .map((e) => RadnoVrijemeUDanu.fromJson(e as Map<String, dynamic>))
           .toList(),
-      individualneSale: (json['individualne_sale'] as List<dynamic>)
-          .map((e) => IndividualnaSala.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      grupneSale: (json['grupne_sale'] as List<dynamic>)
-          .map((e) => GrupnaSala.fromJson(e as Map<String, dynamic>))
-          .toList(),
       id: json['id'] as int?,
-    )..slikaURL = json['slika_url'] as String?;
+    )
+      ..opis = json['opis'] as String?
+      ..administratorId = json['administratorId'] as int?;
 
 Map<String, dynamic> _$CitaonicaToJson(Citaonica instance) => <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
+      'naziv': instance.name,
       'mail': instance.mail,
-      'phone_number': instance.phoneNumber,
+      'brojTelefona': instance.phoneNumber,
       'adresa': instance.adresa,
-      'radno_vrijeme': instance.radnoVrijeme,
-      'slika_url': instance.slikaURL,
-      'individualne_sale': instance.individualneSale,
-      'grupne_sale': instance.grupneSale,
+      'radnoVrijeme': instance.radnoVrijeme,
+      'opis': instance.opis,
+      'administratorId': instance.administratorId,
     };

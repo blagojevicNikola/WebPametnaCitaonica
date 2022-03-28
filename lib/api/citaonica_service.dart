@@ -6,7 +6,7 @@ import 'package:web_aplikacija/models/citaonica.dart';
 class CitaonicaService {
   final Dio _dio = Dio();
 
-  final _baseUrl = 'http://localhost:3000';
+  final _baseUrl = 'http://localhost:8080/api/v1';
 
   Future<List<Citaonica>> getCitaonice() async {
     // Perform GET request to the endpoint "/users/<id>"

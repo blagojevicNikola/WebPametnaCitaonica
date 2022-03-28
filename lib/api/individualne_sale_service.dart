@@ -4,7 +4,7 @@ import 'package:web_aplikacija/models/individualna_sala.dart';
 class IndividualneSaleService {
   final Dio _dio = Dio();
 
-  final _baseUrl = 'http://localhost:3000';
+  final _baseUrl = 'http://localhost:8080/api/v1';
 
   Future<List<IndividualnaSala>> getIndividualneSale(String citaonicaId) async {
     // Perform GET request to the endpoint "/users/<id>"

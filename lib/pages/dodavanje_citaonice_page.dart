@@ -30,15 +30,15 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
   final telefonController = TextEditingController(text: '');
   final emailController = TextEditingController(text: '');
 
-  Map<Dan, RadnoVrijemeUDanu?> radnoVr = {
-    Dan.Ponedeljak: RadnoVrijemeUDanu(),
-    Dan.Utorak: RadnoVrijemeUDanu(),
-    Dan.Srijeda: RadnoVrijemeUDanu(),
-    Dan.Cetrvrtak: RadnoVrijemeUDanu(),
-    Dan.Petak: RadnoVrijemeUDanu(),
-    Dan.Subota: RadnoVrijemeUDanu(),
-    Dan.Nedelja: RadnoVrijemeUDanu()
-  };
+  List<RadnoVrijemeUDanu> radnoVr = <RadnoVrijemeUDanu>[
+    RadnoVrijemeUDanu(id: 1),
+    RadnoVrijemeUDanu(id: 2),
+    RadnoVrijemeUDanu(id: 3),
+    RadnoVrijemeUDanu(id: 4),
+    RadnoVrijemeUDanu(id: 5),
+    RadnoVrijemeUDanu(id: 6),
+    RadnoVrijemeUDanu(id: 7),
+  ];
 
   CitaonicaService citService = CitaonicaService();
 
@@ -237,7 +237,6 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
           name: nazivController.text.toString(),
           mail: emailController.text.toString(),
           phoneNumber: telefonController.text.toString(),
-          radi: true,
           adresa: adresaController.text.toString(),
           radnoVrijeme: radnoVr,
           individualneSale: <IndividualnaSala>[],

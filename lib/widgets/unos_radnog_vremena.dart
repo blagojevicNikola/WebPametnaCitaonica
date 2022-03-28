@@ -4,7 +4,7 @@ import 'package:web_aplikacija/models/radno_vrijeme.dart';
 import '../models/dan.dart';
 
 class UnosRadnogVremena extends StatefulWidget {
-  final Map<Dan, RadnoVrijemeUDanu?> radnoVr;
+  final List<RadnoVrijemeUDanu> radnoVr;
   const UnosRadnogVremena({Key? key, required this.radnoVr}) : super(key: key);
 
   @override
@@ -48,14 +48,14 @@ class _UnosRadnogVremenaState extends State<UnosRadnogVremena> {
 
   String getVrijeme(String v, int index) {
     if (v == 'p') {
-      if (widget.radnoVr.values.elementAt(index)!.pocetak != null) {
-        return '${widget.radnoVr.values.elementAt(index)!.pocetak!.hour.toString().padLeft(2, '0')} : ${widget.radnoVr.values.elementAt(index)!.pocetak!.minute.toString().padLeft(2, '0')}';
+      if (widget.radnoVr.elementAt(index).pocetak != null) {
+        return '${widget.radnoVr.elementAt(index).pocetak!.hour.toString().padLeft(2, '0')} : ${widget.radnoVr.elementAt(index).pocetak!.minute.toString().padLeft(2, '0')}';
       } else {
         return 'hh:mm';
       }
     } else {
-      if (widget.radnoVr.values.elementAt(index)!.kraj != null) {
-        return '${widget.radnoVr.values.elementAt(index)!.kraj!.hour.toString().padLeft(2, '0')} : ${widget.radnoVr.values.elementAt(index)!.kraj!.minute.toString().padLeft(2, '0')}';
+      if (widget.radnoVr.elementAt(index).kraj != null) {
+        return '${widget.radnoVr.elementAt(index).kraj!.hour.toString().padLeft(2, '0')} : ${widget.radnoVr.elementAt(index).kraj!.minute.toString().padLeft(2, '0')}';
       } else {
         return 'hh:mm';
       }
@@ -77,13 +77,13 @@ class _UnosRadnogVremenaState extends State<UnosRadnogVremena> {
       if (v == 'p') {
         setState(
           () {
-            widget.radnoVr.values.elementAt(index)!.pocetak = picked;
+            widget.radnoVr.elementAt(index).pocetak = picked;
           },
         );
       } else {
         setState(
           () {
-            widget.radnoVr.values.elementAt(index)!.kraj = picked;
+            widget.radnoVr.elementAt(index).kraj = picked;
           },
         );
       }

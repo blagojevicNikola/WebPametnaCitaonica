@@ -18,8 +18,7 @@ class Citaonica {
   String phoneNumber;
   String adresa;
   @JsonKey(name: 'radno_vrijeme')
-  Map<Dan, RadnoVrijemeUDanu?> radnoVrijeme;
-  bool radi;
+  List<RadnoVrijemeUDanu> radnoVrijeme;
   //String? vlasnik;
   @JsonKey(name: 'slika_url')
   String? slikaURL;
@@ -33,7 +32,6 @@ class Citaonica {
       {required this.name,
       required this.mail,
       required this.phoneNumber,
-      required this.radi,
       required this.adresa,
       required this.radnoVrijeme,
       required this.individualneSale,

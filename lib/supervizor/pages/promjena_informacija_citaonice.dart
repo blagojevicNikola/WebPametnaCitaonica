@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/config.dart';
-import '../../models/dan.dart';
 import '../../models/radno_vrijeme.dart';
 import '../../widgets/information_field.dart';
 import '../../widgets/unos_radnog_vremena.dart';
@@ -12,15 +11,15 @@ class PromjenaInformacijaCitaonice extends StatelessWidget {
   var telefonController = TextEditingController(text: '');
   var emailController = TextEditingController(text: '');
 
-  Map<Dan, RadnoVrijemeUDanu?> radnoVr = {
-    Dan.Ponedeljak: RadnoVrijemeUDanu(),
-    Dan.Utorak: RadnoVrijemeUDanu(),
-    Dan.Srijeda: RadnoVrijemeUDanu(),
-    Dan.Cetrvrtak: RadnoVrijemeUDanu(),
-    Dan.Petak: RadnoVrijemeUDanu(),
-    Dan.Subota: RadnoVrijemeUDanu(),
-    Dan.Nedelja: RadnoVrijemeUDanu()
-  };
+  List<RadnoVrijemeUDanu> radnoVr = <RadnoVrijemeUDanu>[
+    RadnoVrijemeUDanu(id: 1),
+    RadnoVrijemeUDanu(id: 2),
+    RadnoVrijemeUDanu(id: 3),
+    RadnoVrijemeUDanu(id: 4),
+    RadnoVrijemeUDanu(id: 5),
+    RadnoVrijemeUDanu(id: 6),
+    RadnoVrijemeUDanu(id: 7),
+  ];
   PromjenaInformacijaCitaonice({Key? key}) : super(key: key);
 
   @override

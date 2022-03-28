@@ -7,14 +7,16 @@ part of 'radno_vrijeme.dart';
 // **************************************************************************
 
 RadnoVrijemeUDanu _$RadnoVrijemeUDanuFromJson(Map<String, dynamic> json) =>
-    RadnoVrijemeUDanu()
-      ..pocetak =
-          const CustomTimeOfDayConverter().fromJson(json['pocetak'] as String?)
-      ..kraj =
-          const CustomTimeOfDayConverter().fromJson(json['kraj'] as String?);
+    RadnoVrijemeUDanu(
+      id: json['id'] as int?,
+      pocetak:
+          const CustomTimeOfDayConverter().fromJson(json['pocetak'] as String?),
+      kraj: const CustomTimeOfDayConverter().fromJson(json['kraj'] as String?),
+    );
 
 Map<String, dynamic> _$RadnoVrijemeUDanuToJson(RadnoVrijemeUDanu instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'pocetak': const CustomTimeOfDayConverter().toJson(instance.pocetak),
       'kraj': const CustomTimeOfDayConverter().toJson(instance.kraj),
     };

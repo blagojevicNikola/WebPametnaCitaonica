@@ -7,10 +7,11 @@ part 'radno_vrijeme.g.dart';
 @JsonSerializable()
 @CustomTimeOfDayConverter()
 class RadnoVrijemeUDanu {
+  int? id;
   TimeOfDay? pocetak;
   TimeOfDay? kraj;
 
-  RadnoVrijemeUDanu();
+  RadnoVrijemeUDanu({this.id, this.pocetak, this.kraj});
 
   factory RadnoVrijemeUDanu.fromJson(Map<String, dynamic> json) =>
       _$RadnoVrijemeUDanuFromJson(json);

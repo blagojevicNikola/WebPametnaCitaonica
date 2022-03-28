@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/pages/login_page.dart';
+import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 import 'package:web_aplikacija/wrappers/dodavanje_citaonice_wrapper_page.dart';
 import 'package:web_aplikacija/wrappers/odjava_page_wrapper.dart';
 import 'package:web_aplikacija/wrappers/pregled_citaonica_page_wrapper.dart';
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: const LoginDemo(),
+    return MaterialApp(
+        home: const LoginDemo(), debugShowCheckedModeBanner: false,
         //home: const MyHomePage(title: 'Administratorska app'),
         routes: {'login': (context) => const LoginDemo()});
   }

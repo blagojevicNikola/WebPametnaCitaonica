@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 
 import 'package:web_aplikacija/supervizor/pages/promjena_informacija_citaonice.dart';
 
 import 'package:web_aplikacija/wrappers/supervizorski_pregled_sale_wrapper.dart';
+=======
+import 'package:web_aplikacija/pages/odjava_page.dart';
+import 'package:web_aplikacija/pages/pregled_citaonica_page.dart';
+import 'package:web_aplikacija/pages/promjena_lozinke_page.dart';
+import 'package:web_aplikacija/supervizor/pages/pregled_sala_page_prazan.dart';
+import 'package:web_aplikacija/supervizor/pages/promjena_informacija_prazan.dart';
+import 'package:web_aplikacija/supervizor/pages/slanje_notifikacija.dart';
+//import 'package:web_aplikacija/supervizor/pages/promjena_informacija_prazan.dart';
+>>>>>>> milos
 
 class SupervizorHomePage extends StatefulWidget {
   const SupervizorHomePage({Key? key, required this.title}) : super(key: key);
@@ -16,11 +26,21 @@ class SupervizorHomePage extends StatefulWidget {
 class _SupervizorHomePageState extends State<SupervizorHomePage> {
   int _selectedIndex = 0;
   List<Widget> screens = [
+<<<<<<< HEAD
     const SupervizorskiPregledSaleWrapper(),
     SlanjeNotifikacijaPage(),
     PromjenaInformacijaCitaonice(),
     SupervizorskaPromjenaLozinkePage(),
     SupervizorskaOdjavaPage(),
+=======
+    const PregledSalaPageTest(),
+    const SlanjeNotifikacija(),
+    const PromjenaInformacijaPrazan(),
+    const PromjenaLozinkePage(),
+    const OdjavaPage()
+    // const Lozinka(),
+    // const Odjava()
+>>>>>>> milos
   ];
   @override
   Widget build(BuildContext context) {

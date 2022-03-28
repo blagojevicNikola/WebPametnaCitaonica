@@ -18,9 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+<<<<<<< HEAD
         debugShowCheckedModeBanner: false,
         //home: const LoginDemo(),
         home: const MyHomePage(title: 'Administratorska app'),
+=======
+        home: const LoginDemo(), debugShowCheckedModeBanner: false,
+        //home: const MyHomePage(title: 'Administratorska app'),
+>>>>>>> milos
         routes: {'login': (context) => const LoginDemo()});
   }
 }

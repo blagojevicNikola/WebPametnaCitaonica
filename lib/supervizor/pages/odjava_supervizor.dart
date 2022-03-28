@@ -27,8 +27,8 @@ class _OdjavaPageState extends State<OdjavaPage> {
               ],
             ),
             borderRadius: BorderRadius.circular(10)),
-        height: 60,
-        width: MediaQuery.of(context).size.width * 0.8,
+        height: 80,
+        width: MediaQuery.of(context).size.width,
         // color: const Color.fromARGB(255, 132, 186, 230),
         child: InkWell(
             onTap: () {

@@ -1,8 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'login_page.dart';
+import '../../pages/login_page.dart';
+//import 'login_page.dart';
 
 class PromjenaLozinkePage extends StatefulWidget {
   const PromjenaLozinkePage({Key? key}) : super(key: key);

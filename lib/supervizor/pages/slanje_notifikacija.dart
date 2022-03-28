@@ -27,7 +27,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
     return SingleChildScrollView(
         child: Container(
       height: MediaQuery.of(context).size.height,
-      color: const Color(0xFFD6F4F4),
+      color: const Color(0xFFD6F4F3),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,

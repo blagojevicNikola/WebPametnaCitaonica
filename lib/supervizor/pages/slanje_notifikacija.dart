@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Obavjestenje {
+  int idObavjestenja;
+  int idSupervizora;
   String naslov;
   String tekstNotifikacije;
 
-  Obavjestenje(this.naslov, this.tekstNotifikacije);
+  Obavjestenje(this.idObavjestenja, this.idSupervizora, this.naslov,
+      this.tekstNotifikacije);
 }
 
 class SlanjeNotifikacija extends StatefulWidget {

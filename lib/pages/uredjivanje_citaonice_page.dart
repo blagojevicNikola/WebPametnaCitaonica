@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/api/individualne_sale_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
 import 'package:web_aplikacija/models/grupna_sala.dart';
 import 'package:web_aplikacija/pages/kreiranje_individualne_sale_page.dart';
@@ -9,6 +12,7 @@ import 'package:web_aplikacija/widgets/unos_radnog_vremena.dart';
 
 import '../api/citaonica_service.dart';
 import '../models/citaonica.dart';
+import '../models/individualna_sala.dart';
 import '../widgets/grupna_sala_checkbox.dart';
 import '../widgets/supervizor_tile.dart';
 
@@ -31,8 +35,16 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   var adresaController = TextEditingController();
   var telefonController = TextEditingController();
   var emailController = TextEditingController();
+  IndividualneSaleService indSaleService = IndividualneSaleService();
+  late Future<List<IndividualnaSala>> individualneSaleData;
 
   CitaonicaService citService = CitaonicaService();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   individualneSaleData = indSaleService.getIndividualneSale(widget.citData.id.toString());
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -155,32 +167,32 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            Padding(
-                              padding: const EdgeInsets.all(9.0),
-                              child: ListView.separated(
-                                itemCount:
-                                    widget.citData.individualneSale.length,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return IndividiualnaSalaTile(
-                                    index: index,
-                                    naziv: widget
-                                        .citData.individualneSale[index].naziv,
-                                    brojMjesta: widget.citData
-                                        .individualneSale[index].brojMjesta,
-                                    funkcijaBrisanja: obrisiIndividualnuSalu,
-                                    listaPostojecihMjesta: widget.citData
-                                        .individualneSale[index].listaMjesta,
-                                  );
-                                },
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 20,
-                                  width: 40,
-                                ),
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.all(9.0),
+                            //   child: ListView.separated(
+                            //     itemCount:
+                            //         individualneSaleData.length,
+                            //     shrinkWrap: true,
+                            //     physics: const NeverScrollableScrollPhysics(),
+                            //     itemBuilder: (context, index) {
+                            //       return IndividiualnaSalaTile(
+                            //         index: index,
+                            //         naziv: widget
+                            //             .citData.individualneSale[index].naziv,
+                            //         brojMjesta: widget.citData
+                            //             .individualneSale[index].brojMjesta,
+                            //         funkcijaBrisanja: obrisiIndividualnuSalu,
+                            //         listaPostojecihMjesta: widget.citData
+                            //             .individualneSale[index].listaMjesta,
+                            //       );
+                            //     },
+                            //     separatorBuilder: (context, index) =>
+                            //         const SizedBox(
+                            //       height: 20,
+                            //       width: 40,
+                            //     ),
+                            //   ),
+                            // ),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -214,28 +226,28 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            Padding(
-                              padding: const EdgeInsets.all(9.0),
-                              child: ListView.separated(
-                                itemCount: widget.citData.grupneSale.length,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  GrupnaSala temp =
-                                      widget.citData.grupneSale[index];
-                                  return GrupnaSalaTile(
-                                    grupnaSalaData: temp,
-                                    index: index,
-                                    funkcijaBrisanja: obrisiGrupnuSalu,
-                                  );
-                                },
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 20,
-                                  width: 40,
-                                ),
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.all(9.0),
+                            //   child: ListView.separated(
+                            //     itemCount: widget.citData.grupneSale.length,
+                            //     shrinkWrap: true,
+                            //     physics: const NeverScrollableScrollPhysics(),
+                            //     itemBuilder: (context, index) {
+                            //       GrupnaSala temp =
+                            //           widget.citData.grupneSale[index];
+                            //       return GrupnaSalaTile(
+                            //         grupnaSalaData: temp,
+                            //         index: index,
+                            //         funkcijaBrisanja: obrisiGrupnuSalu,
+                            //       );
+                            //     },
+                            //     separatorBuilder: (context, index) =>
+                            //         const SizedBox(
+                            //       height: 20,
+                            //       width: 40,
+                            //     ),
+                            //   ),
+                            // ),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -409,17 +421,17 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
     citService.azurirajCitaonicu(citaonicaInfo: cit);
   }
 
-  void obrisiIndividualnuSalu(int salaIndex) {
-    setState(() {
-      widget.citData.individualneSale.removeAt(salaIndex);
-    });
-  }
+  // void obrisiIndividualnuSalu(int salaIndex) {
+  //   setState(() {
+  //     widget.citData.individualneSale.removeAt(salaIndex);
+  //   });
+  // }
 
-  void obrisiGrupnuSalu(int salaIndex) {
-    setState(() {
-      widget.citData.grupneSale.removeAt(salaIndex);
-    });
-  }
+  // void obrisiGrupnuSalu(int salaIndex) {
+  //   setState(() {
+  //     widget.citData.grupneSale.removeAt(salaIndex);
+  //   });
+  // }
 
   void _showGrupnaSalaDialog(Citaonica citRef) {
     TextEditingController naziv = TextEditingController(text: '');
@@ -508,30 +520,30 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                       klima: klima = false),
                 ),
                 const SizedBox(height: 30),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                      padding: const EdgeInsets.all(9.0),
-                      child: TextButton(
-                        child: const Text('Sacuvaj'),
-                        onPressed: () {
-                          if (naziv.text.isEmpty ||
-                              qrCode.text.isEmpty ||
-                              brojMjesta.text.isEmpty) {
-                          } else {
-                            citRef.grupneSale.add(GrupnaSala(
-                                tv: tv,
-                                klima: klima,
-                                projektor: projektor,
-                                brojMjesta:
-                                    int.parse(brojMjesta.text.toString()),
-                                naziv: naziv.text.toString(),
-                                qrKod: qrCode.text.toString()));
-                            Navigator.pop(context);
-                          }
-                        },
-                      )),
-                ),
+                // Align(
+                //   alignment: Alignment.bottomRight,
+                //   child: Padding(
+                //       padding: const EdgeInsets.all(9.0),
+                //       child: TextButton(
+                //         child: const Text('Sacuvaj'),
+                //         onPressed: () {
+                //           if (naziv.text.isEmpty ||
+                //               qrCode.text.isEmpty ||
+                //               brojMjesta.text.isEmpty) {
+                //           } else {
+                //             citRef.grupneSale.add(GrupnaSala(
+                //                 tv: tv,
+                //                 klima: klima,
+                //                 projektor: projektor,
+                //                 brojMjesta:
+                //                     int.parse(brojMjesta.text.toString()),
+                //                 naziv: naziv.text.toString(),
+                //                 qrKod: qrCode.text.toString()));
+                //             Navigator.pop(context);
+                //           }
+                //         },
+                //       )),
+                // ),
               ],
             ),
           ));

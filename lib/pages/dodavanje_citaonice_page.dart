@@ -234,13 +234,12 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
   void kreirajCitaonicu() {
     citService.createCitaonica(
       citaonicaInfo: Citaonica(
-          name: nazivController.text.toString(),
-          mail: emailController.text.toString(),
-          phoneNumber: telefonController.text.toString(),
-          adresa: adresaController.text.toString(),
-          radnoVrijeme: radnoVr,
-          individualneSale: <IndividualnaSala>[],
-          grupneSale: <GrupnaSala>[]),
+        name: nazivController.text.toString(),
+        mail: emailController.text.toString(),
+        phoneNumber: telefonController.text.toString(),
+        adresa: adresaController.text.toString(),
+        radnoVrijeme: radnoVr,
+      ),
     );
   }
 

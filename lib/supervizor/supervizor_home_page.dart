@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:web_aplikacija/pages/pregled_citaonica_page.dart';
-import 'package:web_aplikacija/supervizor/pages/pregled_sala_page_prazan.dart';
+
+import 'package:web_aplikacija/supervizor/pages/promjena_informacija_citaonice.dart';
+
+import 'package:web_aplikacija/wrappers/supervizorski_pregled_sale_wrapper.dart';
 
 class SupervizorHomePage extends StatefulWidget {
   const SupervizorHomePage({Key? key, required this.title}) : super(key: key);
@@ -14,10 +16,11 @@ class SupervizorHomePage extends StatefulWidget {
 class _SupervizorHomePageState extends State<SupervizorHomePage> {
   int _selectedIndex = 0;
   List<Widget> screens = [
-    const PregledSalaPageTest(),
-    // const Dodavanje(),
-    // const Lozinka(),
-    // const Odjava()
+    const SupervizorskiPregledSaleWrapper(),
+    SlanjeNotifikacijaPage(),
+    PromjenaInformacijaCitaonice(),
+    SupervizorskaPromjenaLozinkePage(),
+    SupervizorskaOdjavaPage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -117,6 +120,33 @@ class _SupervizorHomePageState extends State<SupervizorHomePage> {
               child: IndexedStack(index: _selectedIndex, children: screens)),
         ],
       ),
+    );
+  }
+}
+
+class SlanjeNotifikacijaPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+    );
+  }
+}
+
+class SupervizorskaPromjenaLozinkePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+    );
+  }
+}
+
+class SupervizorskaOdjavaPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
     );
   }
 }

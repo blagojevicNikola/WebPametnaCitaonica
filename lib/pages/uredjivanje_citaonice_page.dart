@@ -199,7 +199,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                               const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
                                             return IndividiualnaSalaTile(
-                                              index: index,
+                                              index: snapshot.data![index].id,
                                               naziv:
                                                   snapshot.data![index].naziv,
                                               brojMjesta: snapshot

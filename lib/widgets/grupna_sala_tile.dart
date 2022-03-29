@@ -66,41 +66,41 @@ class GrupnaSalaTile extends StatelessWidget {
                     child: Icon(Icons.person,
                         size: 24, color: defaultKarakteristike),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: (grupnaSalaData.tv == true)
-                          ? const Icon(
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: (true == true)
+                          ? Icon(
                               Icons.tv,
                               size: 24,
                               color: defaultKarakteristike,
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.tv_off,
                               size: 24,
                               color: defaultKarakteristike,
                             )),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: (grupnaSalaData.projektor == true)
-                          ? const Icon(
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: (true == true)
+                          ? Icon(
                               Icons.camera_indoor_outlined,
                               size: 24,
                               color: defaultKarakteristike,
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.sensors_off_outlined,
                               size: 24,
                               color: defaultKarakteristike,
                             )),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: (grupnaSalaData.klima == true)
-                          ? const Icon(
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: (true == true)
+                          ? Icon(
                               Icons.ad_units_outlined,
                               size: 24,
                               color: defaultKarakteristike,
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.ac_unit_outlined,
                               size: 24,
                               color: defaultKarakteristike,

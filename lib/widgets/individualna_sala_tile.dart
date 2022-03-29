@@ -8,15 +8,14 @@ class IndividiualnaSalaTile extends StatelessWidget {
   final String naziv;
   int? brojMjesta;
   final Function(int?) funkcijaBrisanja;
-  List<Mjesto>? listaPostojecihMjesta;
-  IndividiualnaSalaTile(
-      {Key? key,
-      required this.naziv,
-      this.brojMjesta,
-      required this.funkcijaBrisanja,
-      this.index,
-      required this.listaPostojecihMjesta})
-      : super(key: key);
+
+  IndividiualnaSalaTile({
+    Key? key,
+    required this.naziv,
+    this.brojMjesta,
+    required this.funkcijaBrisanja,
+    this.index,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +74,11 @@ class IndividiualnaSalaTile extends StatelessWidget {
                           splashRadius: 25,
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            if (listaPostojecihMjesta != null) {
-                              Navigator.of(context).pushNamed(
-                                  'pregled/citaonica/izmjeni_ind',
-                                  arguments: listaPostojecihMjesta);
-                            } else {}
+                            // if (listaPostojecihMjesta != null) {
+                            //   Navigator.of(context).pushNamed(
+                            //       'pregled/citaonica/izmjeni_ind',
+                            //       arguments: listaPostojecihMjesta);
+                            // } else {}
                           },
                         ),
                       ),

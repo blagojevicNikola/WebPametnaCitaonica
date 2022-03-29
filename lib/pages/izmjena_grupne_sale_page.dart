@@ -103,13 +103,6 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(9),
-                            child: GrupnaSalaCheckBox(
-                                tv: widget.grupnaSalaData.tv,
-                                projektor: widget.grupnaSalaData.projektor,
-                                klima: widget.grupnaSalaData.klima),
-                          )
                         ],
                       ),
                     ),

@@ -206,8 +206,6 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                                   .data![index].brojMjesta,
                                               funkcijaBrisanja:
                                                   obrisiIndividualnuSalu,
-                                              listaPostojecihMjesta: snapshot
-                                                  .data![index].listaMjesta,
                                             );
                                           },
                                           separatorBuilder: (context, index) =>

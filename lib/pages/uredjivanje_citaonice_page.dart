@@ -11,6 +11,7 @@ import 'package:web_aplikacija/widgets/information_field.dart';
 import 'package:web_aplikacija/widgets/unos_radnog_vremena.dart';
 
 import '../api/citaonica_service.dart';
+import '../api/grupne_sale_service.dart';
 import '../models/citaonica.dart';
 import '../models/individualna_sala.dart';
 import '../widgets/grupna_sala_checkbox.dart';
@@ -36,15 +37,20 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   var telefonController = TextEditingController();
   var emailController = TextEditingController();
   IndividualneSaleService indSaleService = IndividualneSaleService();
+  GrupneSaleService grupSaleService = GrupneSaleService();
   late Future<List<IndividualnaSala>> individualneSaleData;
+  late Future<List<GrupnaSala>> grupneSaleData;
 
   CitaonicaService citService = CitaonicaService();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   individualneSaleData = indSaleService.getIndividualneSale(widget.citData.id.toString());
-  // }
+  @override
+  void initState() {
+    super.initState();
+    individualneSaleData =
+        indSaleService.getIndividualneSale(widget.citData.id.toString());
+    grupneSaleData =
+        grupSaleService.getGrupneSale(widget.citData.id.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,32 +173,58 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            // Padding(
-                            //   padding: const EdgeInsets.all(9.0),
-                            //   child: ListView.separated(
-                            //     itemCount:
-                            //         individualneSaleData.length,
-                            //     shrinkWrap: true,
-                            //     physics: const NeverScrollableScrollPhysics(),
-                            //     itemBuilder: (context, index) {
-                            //       return IndividiualnaSalaTile(
-                            //         index: index,
-                            //         naziv: widget
-                            //             .citData.individualneSale[index].naziv,
-                            //         brojMjesta: widget.citData
-                            //             .individualneSale[index].brojMjesta,
-                            //         funkcijaBrisanja: obrisiIndividualnuSalu,
-                            //         listaPostojecihMjesta: widget.citData
-                            //             .individualneSale[index].listaMjesta,
-                            //       );
-                            //     },
-                            //     separatorBuilder: (context, index) =>
-                            //         const SizedBox(
-                            //       height: 20,
-                            //       width: 40,
-                            //     ),
-                            //   ),
-                            // ),
+                            FutureBuilder<List<IndividualnaSala>>(
+                                future: individualneSaleData,
+                                initialData: null,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const SizedBox(
+                                        height: 120,
+                                        width: 120,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()));
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else if (snapshot.hasData) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: ListView.separated(
+                                          itemCount: snapshot.data!.length,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return IndividiualnaSalaTile(
+                                              index: index,
+                                              naziv:
+                                                  snapshot.data![index].naziv,
+                                              brojMjesta: snapshot
+                                                  .data![index].brojMjesta,
+                                              funkcijaBrisanja:
+                                                  obrisiIndividualnuSalu,
+                                              listaPostojecihMjesta: snapshot
+                                                  .data![index].listaMjesta,
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(
+                                            height: 20,
+                                            width: 40,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return const Text('Empty data');
+                                    }
+                                  } else {
+                                    return Text(
+                                        'State: ${snapshot.connectionState}');
+                                  }
+                                }),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -226,28 +258,55 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            // Padding(
-                            //   padding: const EdgeInsets.all(9.0),
-                            //   child: ListView.separated(
-                            //     itemCount: widget.citData.grupneSale.length,
-                            //     shrinkWrap: true,
-                            //     physics: const NeverScrollableScrollPhysics(),
-                            //     itemBuilder: (context, index) {
-                            //       GrupnaSala temp =
-                            //           widget.citData.grupneSale[index];
-                            //       return GrupnaSalaTile(
-                            //         grupnaSalaData: temp,
-                            //         index: index,
-                            //         funkcijaBrisanja: obrisiGrupnuSalu,
-                            //       );
-                            //     },
-                            //     separatorBuilder: (context, index) =>
-                            //         const SizedBox(
-                            //       height: 20,
-                            //       width: 40,
-                            //     ),
-                            //   ),
-                            // ),
+                            FutureBuilder<List<GrupnaSala>>(
+                                future: grupneSaleData,
+                                initialData: null,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const SizedBox(
+                                        height: 120,
+                                        width: 120,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()));
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else if (snapshot.hasData) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: ListView.separated(
+                                          itemCount: snapshot.data!.length,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            GrupnaSala temp =
+                                                snapshot.data![index];
+                                            return GrupnaSalaTile(
+                                              grupnaSalaData: temp,
+                                              index: index,
+                                              funkcijaBrisanja:
+                                                  obrisiGrupnuSalu,
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(
+                                            height: 20,
+                                            width: 40,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return const Text('Empty data');
+                                    }
+                                  } else {
+                                    return Text(
+                                        'State: ${snapshot.connectionState}');
+                                  }
+                                }),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -421,17 +480,18 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
     citService.azurirajCitaonicu(citaonicaInfo: cit);
   }
 
-  // void obrisiIndividualnuSalu(int salaIndex) {
-  //   setState(() {
-  //     widget.citData.individualneSale.removeAt(salaIndex);
-  //   });
-  // }
+  void obrisiIndividualnuSalu(int salaIndex) {
+    setState(() {
+      widget.citData.individualneSale.removeAt(salaIndex);
+    });
+  }
 
-  // void obrisiGrupnuSalu(int salaIndex) {
-  //   setState(() {
-  //     widget.citData.grupneSale.removeAt(salaIndex);
-  //   });
-  // }
+  void obrisiGrupnuSalu(int salaIndex) {
+    setState(() {
+      grupneSaleData = grupSaleService.deleteGrupnaSala(
+          citaonicaId: widget.citData.id, grupnaSalaId: salaIndex);
+    });
+  }
 
   void _showGrupnaSalaDialog(Citaonica citRef) {
     TextEditingController naziv = TextEditingController(text: '');

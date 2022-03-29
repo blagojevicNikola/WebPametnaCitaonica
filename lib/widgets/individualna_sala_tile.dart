@@ -4,17 +4,17 @@ import '../constants/config.dart';
 import '../models/mjesto.dart';
 
 class IndividiualnaSalaTile extends StatelessWidget {
-  final int index;
+  int? index;
   final String naziv;
   int? brojMjesta;
-  final Function(int) funkcijaBrisanja;
+  final Function(int?) funkcijaBrisanja;
   List<Mjesto>? listaPostojecihMjesta;
   IndividiualnaSalaTile(
       {Key? key,
       required this.naziv,
       this.brojMjesta,
       required this.funkcijaBrisanja,
-      required this.index,
+      this.index,
       required this.listaPostojecihMjesta})
       : super(key: key);
 

@@ -287,7 +287,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                                 snapshot.data![index];
                                             return GrupnaSalaTile(
                                               grupnaSalaData: temp,
-                                              index: index,
+                                              index: temp.id,
                                               funkcijaBrisanja:
                                                   obrisiGrupnuSalu,
                                             );
@@ -480,17 +480,16 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
     citService.azurirajCitaonicu(citaonicaInfo: cit);
   }
 
-  void obrisiIndividualnuSalu(int salaIndex) {
-    setState(() {
-      widget.citData.individualneSale.removeAt(salaIndex);
-    });
+  void obrisiIndividualnuSalu(int? salaIndex) {
+    indSaleService.deleteIndividualnaSala(
+        citaonicaId: widget.citData.id.toString(),
+        individualnaSalaId: salaIndex.toString());
   }
 
-  void obrisiGrupnuSalu(int salaIndex) {
-    setState(() {
-      grupneSaleData = grupSaleService.deleteGrupnaSala(
-          citaonicaId: widget.citData.id, grupnaSalaId: salaIndex);
-    });
+  void obrisiGrupnuSalu(int? salaIndex) {
+    grupSaleService.deleteGrupnaSala(
+        citaonicaId: widget.citData.id.toString(),
+        grupnaSalaId: salaIndex.toString());
   }
 
   void _showGrupnaSalaDialog(Citaonica citRef) {
@@ -580,30 +579,30 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                       klima: klima = false),
                 ),
                 const SizedBox(height: 30),
-                // Align(
-                //   alignment: Alignment.bottomRight,
-                //   child: Padding(
-                //       padding: const EdgeInsets.all(9.0),
-                //       child: TextButton(
-                //         child: const Text('Sacuvaj'),
-                //         onPressed: () {
-                //           if (naziv.text.isEmpty ||
-                //               qrCode.text.isEmpty ||
-                //               brojMjesta.text.isEmpty) {
-                //           } else {
-                //             citRef.grupneSale.add(GrupnaSala(
-                //                 tv: tv,
-                //                 klima: klima,
-                //                 projektor: projektor,
-                //                 brojMjesta:
-                //                     int.parse(brojMjesta.text.toString()),
-                //                 naziv: naziv.text.toString(),
-                //                 qrKod: qrCode.text.toString()));
-                //             Navigator.pop(context);
-                //           }
-                //         },
-                //       )),
-                // ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                      padding: const EdgeInsets.all(9.0),
+                      child: TextButton(
+                        child: const Text('Sacuvaj'),
+                        onPressed: () {
+                          // if (naziv.text.isEmpty ||
+                          //     qrCode.text.isEmpty ||
+                          //     brojMjesta.text.isEmpty) {
+                          // } else {
+                          //   citRef.grupneSale.add(GrupnaSala(
+                          //       tv: tv,
+                          //       klima: klima,
+                          //       projektor: projektor,
+                          //       brojMjesta:
+                          //           int.parse(brojMjesta.text.toString()),
+                          //       naziv: naziv.text.toString(),
+                          //       qrKod: qrCode.text.toString()));
+                          //   Navigator.pop(context);
+                          // }
+                        },
+                      )),
+                ),
               ],
             ),
           ));

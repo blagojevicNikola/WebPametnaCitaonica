@@ -10,7 +10,7 @@ class IndividualneSaleService {
     // Perform GET request to the endpoint "/users/<id>"
     try {
       Response saleData = await _dio.get(
-          _baseUrl + '/citaonice/${citaonicaId.toString()}/individualne_sale');
+          _baseUrl + '/citaonice/${citaonicaId.toString()}/individualne-sale');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -32,7 +32,7 @@ class IndividualneSaleService {
 
     try {
       Response response = await _dio.post(
-        _baseUrl + '/citaonice/${citaonicaId}/individualne_sale',
+        _baseUrl + '/citaonice/${citaonicaId}/individualne-sale',
         data: sala.toJson(),
       );
 
@@ -51,7 +51,7 @@ class IndividualneSaleService {
     try {
       await _dio.delete(
         _baseUrl +
-            '/citaonice/$citaonicaId/individualne_sale/$individualnaSalaId',
+            '/citaonice/$citaonicaId/individualne-sale/$individualnaSalaId',
       );
     } catch (e) {
       print('Error deleting user: $e');
@@ -66,7 +66,7 @@ class IndividualneSaleService {
     try {
       Response response = await _dio.put(
         _baseUrl +
-            '/citaonice/${citaonicaId}/individualne_sale/${individualnaSalaData.id}',
+            '/citaonice/$citaonicaId/individualne-sale/${individualnaSalaData.id}',
         data: individualnaSalaData.toJson(),
       );
 

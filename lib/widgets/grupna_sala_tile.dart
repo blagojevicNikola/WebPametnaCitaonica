@@ -4,8 +4,8 @@ import '../constants/config.dart';
 import '../models/grupna_sala.dart';
 
 class GrupnaSalaTile extends StatelessWidget {
-  final int index;
-  final Function(int) funkcijaBrisanja;
+  int? index;
+  final Function(int?) funkcijaBrisanja;
   // final String naziv;
   // final int brojMjesta;
   // final bool tv;

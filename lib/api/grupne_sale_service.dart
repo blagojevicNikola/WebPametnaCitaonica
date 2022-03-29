@@ -1,8 +1,6 @@
-
 import 'package:dio/dio.dart';
 
 import '../models/grupna_sala.dart';
-
 
 class GrupneSaleService {
   final Dio _dio = Dio();
@@ -12,8 +10,8 @@ class GrupneSaleService {
   Future<List<GrupnaSala>> getGrupneSale(String citaonicaId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response saleData = await _dio.get(
-          _baseUrl + '/citaonice/${citaonicaId.toString()}/grupne_sale');
+      Response saleData = await _dio
+          .get(_baseUrl + '/citaonice/${citaonicaId.toString()}/grupne_sale');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -49,13 +47,11 @@ class GrupneSaleService {
     return retrievedGrupnaSala;
   }
 
-  Future<GrupnaSala?> deleteGrupnaSala(
+  Future<void> deleteGrupnaSala(
       {required String citaonicaId, required String grupnaSalaId}) async {
     try {
-      GrupnaSala? 
       await _dio.delete(
-        _baseUrl +
-            '/citaonice/$citaonicaId/grupne_sale/$grupnaSalaId',
+        _baseUrl + '/citaonice/$citaonicaId/grupne_sale/$grupnaSalaId',
       );
     } catch (e) {
       print('Error deleting user: $e');
@@ -63,8 +59,7 @@ class GrupneSaleService {
   }
 
   Future<GrupnaSala?> azurirajGrupnuSalu(
-      {required GrupnaSala grupnaSalaData,
-      required String citaonicaId}) async {
+      {required GrupnaSala grupnaSalaData, required String citaonicaId}) async {
     GrupnaSala? retrievedGrupnaSala;
 
     try {

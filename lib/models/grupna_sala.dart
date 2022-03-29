@@ -8,16 +8,16 @@ part 'grupna_sala.g.dart';
 @JsonSerializable()
 class GrupnaSala {
   int? id;
-  @JsonKey(name: 'brojSale')
+  @JsonKey(name: 'oznakaSale')
   String naziv;
   @JsonKey(name: 'kod')
   String qrKod;
   @JsonKey(name: 'kapacitet')
   int brojMjesta;
   String? opis;
-  int statusId;
-  Clanarina? clanarine;
-  KarakteristikeSale? karakteristikeSale;
+  //int statusId;
+  List<Clanarina?> clanarine;
+  List<KarakteristikeSale?> karakteristike;
 
   GrupnaSala(
       {this.id,
@@ -25,9 +25,9 @@ class GrupnaSala {
       required this.qrKod,
       required this.brojMjesta,
       this.opis,
-      required this.statusId,
-      this.clanarine,
-      this.karakteristikeSale});
+      // required this.statusId,
+      required this.clanarine,
+      required this.karakteristike});
 
   factory GrupnaSala.fromJson(Map<String, dynamic> json) =>
       _$GrupnaSalaFromJson(json);

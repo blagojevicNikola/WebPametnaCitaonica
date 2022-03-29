@@ -14,16 +14,16 @@ class IndividualnaSala {
   @JsonKey(name: 'kapacitet')
   int? brojMjesta;
   String? opis;
-  Clanarina? clanarine;
-  KarakteristikeSale? karakteristikeSale;
+  List<Clanarina?> clanarine;
+  List<KarakteristikeSale?> karakteristike;
 
   IndividualnaSala(
       {this.id,
       required this.naziv,
       this.brojMjesta,
       this.opis,
-      this.clanarine,
-      this.karakteristikeSale});
+      required this.clanarine,
+      required this.karakteristike});
 
   factory IndividualnaSala.fromJson(Map<String, dynamic> json) =>
       _$IndividualnaSalaFromJson(json);

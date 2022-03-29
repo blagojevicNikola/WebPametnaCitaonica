@@ -11,7 +11,7 @@ class GrupneSaleService {
     // Perform GET request to the endpoint "/users/<id>"
     try {
       Response saleData = await _dio
-          .get(_baseUrl + '/citaonice/${citaonicaId.toString()}/grupne_sale');
+          .get(_baseUrl + '/citaonice/${citaonicaId.toString()}/grupne-sale');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -33,7 +33,7 @@ class GrupneSaleService {
 
     try {
       Response response = await _dio.post(
-        _baseUrl + '/citaonice/${citaonicaId}/grupne_sale',
+        _baseUrl + '/citaonice/${citaonicaId}/grupne-sale',
         data: sala.toJson(),
       );
 
@@ -51,7 +51,7 @@ class GrupneSaleService {
       {required String citaonicaId, required String grupnaSalaId}) async {
     try {
       await _dio.delete(
-        _baseUrl + '/citaonice/$citaonicaId/grupne_sale/$grupnaSalaId',
+        _baseUrl + '/citaonice/$citaonicaId/grupne-sale/$grupnaSalaId',
       );
     } catch (e) {
       print('Error deleting user: $e');
@@ -65,7 +65,7 @@ class GrupneSaleService {
     try {
       Response response = await _dio.put(
         _baseUrl +
-            '/citaonice/${citaonicaId}/individualne_sale/${grupnaSalaData.id}',
+            '/citaonice/${citaonicaId}/individualne-sale/${grupnaSalaData.id}',
         data: grupnaSalaData.toJson(),
       );
 

@@ -4,10 +4,13 @@ part 'clanarina.g.dart';
 
 @JsonSerializable()
 class Clanarina {
-  int? vremenskiPeriodId;
+  String? vremenskiPeriodNaziv;
   double? cijena;
 
-  Clanarina({this.vremenskiPeriodId, this.cijena});
+  Clanarina({
+    this.cijena,
+    this.vremenskiPeriodNaziv,
+  });
 
   factory Clanarina.fromJson(Map<String, dynamic> json) =>
       _$ClanarinaFromJson(json);

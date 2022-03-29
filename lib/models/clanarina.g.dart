@@ -7,11 +7,11 @@ part of 'clanarina.dart';
 // **************************************************************************
 
 Clanarina _$ClanarinaFromJson(Map<String, dynamic> json) => Clanarina(
-      vremenskiPeriodId: json['vremenskiPeriodId'] as int?,
+      vremenskiPeriodNaziv: json['vremenskiPeriodNaziv'] as int?,
       cijena: (json['cijena'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$ClanarinaToJson(Clanarina instance) => <String, dynamic>{
-      'vremenskiPeriodId': instance.vremenskiPeriodId,
+      'vremenskiPeriodNaziv': instance.vremenskiPeriodNaziv,
       'cijena': instance.cijena,
     };

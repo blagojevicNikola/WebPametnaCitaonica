@@ -9,18 +9,24 @@ part of 'individualna_sala.dart';
 IndividualnaSala _$IndividualnaSalaFromJson(Map<String, dynamic> json) =>
     IndividualnaSala(
       id: json['id'] as int?,
-      naziv: json['naziv'] as String,
-      listaMjesta: (json['lista_mjesta'] as List<dynamic>?)
-          ?.map((e) => Mjesto.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      slikaURL: json['slika_url'] as String,
-    )..brojMjesta = json['broj_mjesta'] as int?;
+      naziv: json['oznakaSale'] as String,
+      brojMjesta: json['kapacitet'] as int?,
+      opis: json['opis'] as String?,
+      clanarine: json['clanarine'] == null
+          ? null
+          : Clanarina.fromJson(json['clanarine'] as Map<String, dynamic>),
+      karakteristikeSale: json['karakteristikeSale'] == null
+          ? null
+          : KarakteristikeSale.fromJson(
+              json['karakteristikeSale'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$IndividualnaSalaToJson(IndividualnaSala instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'naziv': instance.naziv,
-      'broj_mjesta': instance.brojMjesta,
-      'lista_mjesta': instance.listaMjesta,
-      'slika_url': instance.slikaURL,
+      'oznakaSale': instance.naziv,
+      'kapacitet': instance.brojMjesta,
+      'opis': instance.opis,
+      'clanarine': instance.clanarine,
+      'karakteristikeSale': instance.karakteristikeSale,
     };

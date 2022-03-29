@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:web_aplikacija/models/karakteristike_sale.dart';
 
+import 'clanarina.dart';
 import 'mjesto.dart';
 
 part 'individualna_sala.g.dart';
@@ -7,16 +9,21 @@ part 'individualna_sala.g.dart';
 @JsonSerializable()
 class IndividualnaSala {
   int? id;
+  @JsonKey(name: 'oznakaSale')
   String naziv;
-  @JsonKey(name: 'broj_mjesta')
+  @JsonKey(name: 'kapacitet')
   int? brojMjesta;
-  @JsonKey(name: 'lista_mjesta')
-  List<Mjesto>? listaMjesta;
-  @JsonKey(name: 'slika_url')
-  String slikaURL;
+  String? opis;
+  Clanarina? clanarine;
+  KarakteristikeSale? karakteristikeSale;
 
   IndividualnaSala(
-      {this.id, required this.naziv, this.listaMjesta, required this.slikaURL});
+      {this.id,
+      required this.naziv,
+      this.brojMjesta,
+      this.opis,
+      this.clanarine,
+      this.karakteristikeSale});
 
   factory IndividualnaSala.fromJson(Map<String, dynamic> json) =>
       _$IndividualnaSalaFromJson(json);

@@ -1,27 +1,33 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'clanarina.dart';
+import 'karakteristike_sale.dart';
+
 part 'grupna_sala.g.dart';
 
 @JsonSerializable()
 class GrupnaSala {
   int? id;
+  @JsonKey(name: 'brojSale')
   String naziv;
-  @JsonKey(name: 'qr_kod')
+  @JsonKey(name: 'kod')
   String qrKod;
-  @JsonKey(name: 'broj_mjesta')
+  @JsonKey(name: 'kapacitet')
   int brojMjesta;
-  bool tv;
-  bool klima;
-  bool projektor;
+  String? opis;
+  int statusId;
+  Clanarina? clanarine;
+  KarakteristikeSale? karakteristikeSale;
 
   GrupnaSala(
       {this.id,
       required this.naziv,
       required this.qrKod,
       required this.brojMjesta,
-      required this.tv,
-      required this.klima,
-      required this.projektor});
+      this.opis,
+      required this.statusId,
+      this.clanarine,
+      this.karakteristikeSale});
 
   factory GrupnaSala.fromJson(Map<String, dynamic> json) =>
       _$GrupnaSalaFromJson(json);

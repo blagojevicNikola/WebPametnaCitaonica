@@ -8,21 +8,28 @@ part of 'grupna_sala.dart';
 
 GrupnaSala _$GrupnaSalaFromJson(Map<String, dynamic> json) => GrupnaSala(
       id: json['id'] as int?,
-      naziv: json['naziv'] as String,
-      qrKod: json['qr_kod'] as String,
-      brojMjesta: json['broj_mjesta'] as int,
-      tv: json['tv'] as bool,
-      klima: json['klima'] as bool,
-      projektor: json['projektor'] as bool,
+      naziv: json['brojSale'] as String,
+      qrKod: json['kod'] as String,
+      brojMjesta: json['kapacitet'] as int,
+      opis: json['opis'] as String?,
+      statusId: json['statusId'] as int,
+      clanarine: json['clanarine'] == null
+          ? null
+          : Clanarina.fromJson(json['clanarine'] as Map<String, dynamic>),
+      karakteristikeSale: json['karakteristikeSale'] == null
+          ? null
+          : KarakteristikeSale.fromJson(
+              json['karakteristikeSale'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$GrupnaSalaToJson(GrupnaSala instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'naziv': instance.naziv,
-      'qr_kod': instance.qrKod,
-      'broj_mjesta': instance.brojMjesta,
-      'tv': instance.tv,
-      'klima': instance.klima,
-      'projektor': instance.projektor,
+      'brojSale': instance.naziv,
+      'kod': instance.qrKod,
+      'kapacitet': instance.brojMjesta,
+      'opis': instance.opis,
+      'statusId': instance.statusId,
+      'clanarine': instance.clanarine,
+      'karakteristikeSale': instance.karakteristikeSale,
     };

@@ -47,14 +47,16 @@ class GrupneSaleService {
     return retrievedGrupnaSala;
   }
 
-  Future<void> deleteGrupnaSala(
+  Future<String> deleteGrupnaSala(
       {required String citaonicaId, required String grupnaSalaId}) async {
-    try {
-      await _dio.delete(
-        _baseUrl + '/citaonice/$citaonicaId/grupne-sale/$grupnaSalaId',
-      );
-    } catch (e) {
-      print('Error deleting user: $e');
+    Response response = await _dio.delete(
+      _baseUrl + '/citaonice/$citaonicaId/grupne-sale/$grupnaSalaId',
+    );
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      throw Exception('Greska pri brisanju');
     }
   }
 

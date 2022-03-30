@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:web_aplikacija/models/citaonica.dart';
 
@@ -56,23 +54,19 @@ class CitaonicaService {
     }
   }
 
-  Future<Citaonica?> azurirajCitaonicu(
+  Future<Response?> azurirajCitaonicu(
       {required Citaonica citaonicaInfo}) async {
-    Citaonica? retrievedCitaonica;
-
+    Response? temp;
     try {
       Response response = await _dio.put(
         _baseUrl + '/citaonice/${citaonicaInfo.id}',
         data: citaonicaInfo.toJson(),
       );
-
-      //print('User created: ${response.data}');
-
-      retrievedCitaonica = Citaonica.fromJson(response.data);
+      temp = response;
     } catch (e) {
       print('Error creating user: $e');
     }
-
-    return retrievedCitaonica;
+    return temp;
+    //print('User created: ${response.data}');
   }
 }

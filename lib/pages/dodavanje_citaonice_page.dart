@@ -6,11 +6,8 @@ import 'package:web_aplikacija/api/citaonica_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
 import 'package:web_aplikacija/widgets/unos_radnog_vremena.dart';
 
-import '../constants/citaonica_const.dart';
 import '../models/citaonica.dart';
-import '../models/dan.dart';
-import '../models/grupna_sala.dart';
-import '../models/individualna_sala.dart';
+
 import '../models/radno_vrijeme.dart';
 import '../widgets/information_field.dart';
 

@@ -1,10 +1,8 @@
-import 'dart:html';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
 import 'package:web_aplikacija/models/grupna_sala.dart';
-import 'package:web_aplikacija/pages/kreiranje_individualne_sale_page.dart';
 import 'package:web_aplikacija/widgets/grupna_sala_tile.dart';
 import 'package:web_aplikacija/widgets/individualna_sala_tile.dart';
 import 'package:web_aplikacija/widgets/information_field.dart';
@@ -447,7 +445,9 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                       fontSize: 21, color: Colors.white),
                                 ),
                                 onPressed: () {
-                                  azurirajCitaonicu(widget.citData);
+                                  Citaonica temp =
+                                      azurirajCitaonicu(widget.citData);
+                                  posaljiAzuriranje(temp);
                                 },
                               ),
                             ),
@@ -470,24 +470,44 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
     citService.deleteCitaonica(citaonicaId: id);
   }
 
-  void azurirajCitaonicu(Citaonica cit) {
-    cit.name = nazivController.text.toString();
-    cit.adresa = adresaController.text.toString();
-    cit.phoneNumber = telefonController.text.toString();
-    cit.mail = emailController.text.toString();
-    citService.azurirajCitaonicu(citaonicaInfo: cit);
+  void posaljiAzuriranje(Citaonica cit) async {
+    await citService.azurirajCitaonicu(citaonicaInfo: cit);
   }
 
-  void obrisiIndividualnuSalu(int? salaIndex) {
-    indSaleService.deleteIndividualnaSala(
+  Citaonica azurirajCitaonicu(Citaonica cit) {
+    return Citaonica(
+        name: cit.name,
+        adresa: cit.adresa,
+        radnoVrijeme: cit.radnoVrijeme,
+        opis: cit.opis,
+        vlasnik: cit.vlasnik,
+        phoneNumber: cit.phoneNumber,
+        administratorId: cit.administratorId,
+        mail: cit.mail);
+  }
+
+  void obrisiIndividualnuSalu(int? salaIndex) async {
+    final brisanje = await indSaleService.deleteIndividualnaSala(
         citaonicaId: widget.citData.id.toString(),
         individualnaSalaId: salaIndex.toString());
+    if (brisanje.isEmpty) {
+      setState(() {
+        individualneSaleData =
+            indSaleService.getIndividualneSale(widget.citData.id.toString());
+      });
+    }
   }
 
-  void obrisiGrupnuSalu(int? salaIndex) {
-    grupSaleService.deleteGrupnaSala(
+  void obrisiGrupnuSalu(int? salaIndex) async {
+    final brisanje = await grupSaleService.deleteGrupnaSala(
         citaonicaId: widget.citData.id.toString(),
         grupnaSalaId: salaIndex.toString());
+    if (brisanje.isEmpty) {
+      setState(() {
+        grupneSaleData =
+            grupSaleService.getGrupneSale(widget.citData.id.toString());
+      });
+    }
   }
 
   void _showGrupnaSalaDialog(Citaonica citRef) {

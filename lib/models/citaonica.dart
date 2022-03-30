@@ -1,10 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:json_annotation/json_annotation.dart';
 
-import 'dan.dart';
-import 'grupna_sala.dart';
-import 'individualna_sala.dart';
 import 'radno_vrijeme.dart';
 
 part 'citaonica.g.dart';
@@ -29,6 +24,8 @@ class Citaonica {
       required this.mail,
       required this.phoneNumber,
       required this.adresa,
+      this.opis,
+      this.administratorId,
       required this.radnoVrijeme,
       required this.vlasnik,
       this.id});

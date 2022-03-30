@@ -11,14 +11,14 @@ Citaonica _$CitaonicaFromJson(Map<String, dynamic> json) => Citaonica(
       mail: json['mail'] as String,
       phoneNumber: json['brojTelefona'] as String,
       adresa: json['adresa'] as String,
+      opis: json['opis'] as String?,
+      administratorId: json['administratorId'] as int?,
       radnoVrijeme: (json['radnoVrijeme'] as List<dynamic>)
           .map((e) => RadnoVrijemeUDanu.fromJson(e as Map<String, dynamic>))
           .toList(),
       vlasnik: json['vlasnik'] as String,
       id: json['id'] as int?,
-    )
-      ..opis = json['opis'] as String?
-      ..administratorId = json['administratorId'] as int?;
+    );
 
 Map<String, dynamic> _$CitaonicaToJson(Citaonica instance) => <String, dynamic>{
       'id': instance.id,

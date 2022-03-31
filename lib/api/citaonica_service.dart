@@ -44,18 +44,20 @@ class CitaonicaService {
     return retrievedCitaonica;
   }
 
-  Future<void> deleteCitaonica({required String citaonicaId}) async {
+  Future<Response?> deleteCitaonica({required String citaonicaId}) async {
+    Response? temp;
     try {
-      await _dio.delete(
+      temp = await _dio.delete(
         _baseUrl + '/citaonice/$citaonicaId',
       );
     } catch (e) {
       print('Error deleting user: $e');
     }
+    return temp;
   }
 
   Future<Response?> azurirajCitaonicu(
-      {required Citaonica citaonicaInfo}) async {
+      {required Citaonica citaonicaInfo, required String index}) async {
     Response? temp;
     try {
       Response response = await _dio.put(

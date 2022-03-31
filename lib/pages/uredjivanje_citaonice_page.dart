@@ -386,36 +386,39 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                             child: Align(
                               alignment: Alignment.bottomRight,
                               child: TextButton(
-                                style: ButtonStyle(
-                                    fixedSize: MaterialStateProperty.all(
-                                      const Size(120, 40),
-                                    ),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(14.0),
+                                  style: ButtonStyle(
+                                      fixedSize: MaterialStateProperty.all(
+                                        const Size(120, 40),
                                       ),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                      const Color.fromARGB(255, 207, 55, 55),
-                                    ),
-                                    overlayColor: MaterialStateProperty.all(
-                                        const Color.fromARGB(
-                                            255, 241, 114, 114))),
-                                child: const Text(
-                                  'Obrisi',
-                                  style: TextStyle(
-                                      fontSize: 21, color: Colors.white),
-                                ),
-                                onPressed: () {
-                                  if (widget.citData.id == null) {
-                                    print('Greska');
-                                  } else {
-                                    obrisiCitaonicu(
-                                        widget.citData.id.toString());
-                                  }
-                                },
-                              ),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(14.0),
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                        const Color.fromARGB(255, 207, 55, 55),
+                                      ),
+                                      overlayColor: MaterialStateProperty.all(
+                                          const Color.fromARGB(
+                                              255, 241, 114, 114))),
+                                  child: const Text(
+                                    'Obrisi',
+                                    style: TextStyle(
+                                        fontSize: 21, color: Colors.white),
+                                  ),
+                                  onPressed: () async {
+                                    final response =
+                                        await citService.deleteCitaonica(
+                                            citaonicaId:
+                                                widget.citData.id.toString());
+                                    if (response != null) {
+                                      if (response.statusCode == 200) {
+                                        Navigator.of(context).pop();
+                                      }
+                                    }
+                                  }),
                             ),
                           ),
                           Padding(
@@ -444,10 +447,12 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                   style: TextStyle(
                                       fontSize: 21, color: Colors.white),
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   Citaonica temp =
                                       azurirajCitaonicu(widget.citData);
-                                  posaljiAzuriranje(temp);
+                                  citService.azurirajCitaonicu(
+                                      citaonicaInfo: temp,
+                                      index: widget.citData.id.toString());
                                 },
                               ),
                             ),
@@ -470,8 +475,17 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
     citService.deleteCitaonica(citaonicaId: id);
   }
 
-  void posaljiAzuriranje(Citaonica cit) async {
-    await citService.azurirajCitaonicu(citaonicaInfo: cit);
+  void posaljiAzuriranje(Citaonica cit, String index) async {
+    Citaonica temp = Citaonica(
+        name: cit.name,
+        adresa: cit.adresa,
+        radnoVrijeme: cit.radnoVrijeme,
+        opis: cit.opis,
+        vlasnik: cit.vlasnik,
+        phoneNumber: cit.phoneNumber,
+        administratorId: cit.administratorId,
+        mail: cit.mail);
+    citService.azurirajCitaonicu(citaonicaInfo: temp, index: index);
   }
 
   Citaonica azurirajCitaonicu(Citaonica cit) {

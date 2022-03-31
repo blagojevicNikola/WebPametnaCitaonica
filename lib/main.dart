@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: const LoginDemo(), debugShowCheckedModeBanner: false,
-        //home: const MyHomePage(title: 'Administratorska app'),
+        //home: const LoginDemo(), debugShowCheckedModeBanner: false,
+        home: const MyHomePage(title: 'Administratorska app'),
         routes: {'login': (context) => const LoginDemo()});
   }
 }

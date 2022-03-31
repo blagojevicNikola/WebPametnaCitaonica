@@ -26,6 +26,8 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
   final adresaController = TextEditingController(text: '');
   final telefonController = TextEditingController(text: '');
   final emailController = TextEditingController(text: '');
+  final vlasnikController = TextEditingController(text: '');
+  final opisController = TextEditingController(text: '');
 
   List<RadnoVrijemeUDanu> radnoVr = <RadnoVrijemeUDanu>[
     RadnoVrijemeUDanu(id: 1),
@@ -105,13 +107,27 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
                                 control: telefonController,
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(9),
+                              child: InformationField(
+                                labelInformation: 'Vlasnik',
+                                control: vlasnikController,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(9),
+                              child: InformationField(
+                                labelInformation: 'Opis',
+                                control: opisController,
+                              ),
+                            ),
                             const SizedBox(height: 45),
                             const Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
                                 padding: EdgeInsets.all(9),
                                 child: Text(
-                                  'Radno Vrijeme:',
+                                  'Radno vrijeme:',
                                   style: TextStyle(
                                       fontSize: 40, color: defaultPlava),
                                 ),
@@ -221,21 +237,24 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
         nazivController.text.isEmpty ||
         adresaController.text.isEmpty ||
         telefonController.text.isEmpty ||
-        emailController.text.isEmpty) {
+        emailController.text.isEmpty ||
+        vlasnikController.text.isEmpty) {
       return false;
     } else {
       return true;
     }
   }
 
-  void kreirajCitaonicu() {
+  void kreirajCitaonicu() async {
     citService.createCitaonica(
       citaonicaInfo: Citaonica(
-        vlasnik: 'nesto',
+        vlasnik: vlasnikController.text.toString(),
         name: nazivController.text.toString(),
         mail: emailController.text.toString(),
         phoneNumber: telefonController.text.toString(),
         adresa: adresaController.text.toString(),
+        opis: opisController.text.toString(),
+        administratorId: 1,
         radnoVrijeme: radnoVr,
       ),
     );

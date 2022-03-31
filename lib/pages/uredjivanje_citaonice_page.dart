@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
 import 'package:web_aplikacija/models/grupna_sala.dart';
+import 'package:web_aplikacija/pages/kreiranje_grupne_sale.dart';
 import 'package:web_aplikacija/widgets/grupna_sala_tile.dart';
 import 'package:web_aplikacija/widgets/individualna_sala_tile.dart';
 import 'package:web_aplikacija/widgets/information_field.dart';
@@ -317,8 +318,11 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                       iconSize: 36,
                                       icon:
                                           const Icon(Icons.add_circle_outline),
-                                      onPressed: () =>
-                                          _showGrupnaSalaDialog(widget.citData),
+                                      onPressed: () => {
+                                        Navigator.of(context).pushNamed(
+                                            'pregled/citaonica/dodaj_grup',
+                                            arguments: widget.citData.id)
+                                      },
                                     ),
                                   )),
                             ),

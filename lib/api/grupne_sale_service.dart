@@ -27,9 +27,9 @@ class GrupneSaleService {
     }
   }
 
-  Future<GrupnaSala?> createGrupnaSala(
+  Future<Response?> createGrupnaSala(
       {required String citaonicaId, required GrupnaSala sala}) async {
-    GrupnaSala? retrievedGrupnaSala;
+    Response? temp;
 
     try {
       Response response = await _dio.post(
@@ -39,12 +39,12 @@ class GrupneSaleService {
 
       //print('User created: ${response.data}');
 
-      retrievedGrupnaSala = GrupnaSala.fromJson(response.data);
+      temp = response;
     } catch (e) {
       print('Error creating user: $e');
     }
 
-    return retrievedGrupnaSala;
+    return temp;
   }
 
   Future<String> deleteGrupnaSala(

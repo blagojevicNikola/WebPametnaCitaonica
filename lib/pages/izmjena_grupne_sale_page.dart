@@ -19,6 +19,7 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
   TextEditingController? nazivSaleController;
   TextEditingController? qrCodeSaleController;
   TextEditingController? brojMjestaSaleController;
+  TextEditingController? opisSaleController;
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +104,46 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               ),
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.all(9),
+                            child: InformationField(
+                              labelInformation: 'Opis',
+                              control: opisSaleController =
+                                  TextEditingController(
+                                      text: widget.grupnaSalaData.opis),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          Padding(
+                            padding: const EdgeInsets.all(9.0),
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: TextButton(
+                                style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all(
+                                      const Size(120, 40),
+                                    ),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14.0),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                      const Color.fromARGB(255, 87, 182, 93),
+                                    ),
+                                    overlayColor: MaterialStateProperty.all(
+                                        const Color.fromARGB(
+                                            255, 112, 218, 116))),
+                                child: const Text(
+                                  'Sacuvaj',
+                                  style: TextStyle(
+                                      fontSize: 21, color: Colors.white),
+                                ),
+                                onPressed: () async {},
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),

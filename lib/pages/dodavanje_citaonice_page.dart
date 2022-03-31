@@ -201,7 +201,7 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
                                   TextStyle(fontSize: 21, color: Colors.white),
                             ),
                             onPressed: () {
-                              if (ispravnostInformacijaCitaonice()) {
+                              if (ispravnostInformacijaCitaonice(radnoVr)) {
                                 kreirajCitaonicu();
                               } else {
                                 const snackBar = SnackBar(
@@ -232,7 +232,7 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
     );
   }
 
-  bool ispravnostInformacijaCitaonice() {
+  bool ispravnostInformacijaCitaonice(List<RadnoVrijemeUDanu> lista) {
     if (slika == null ||
         nazivController.text.isEmpty ||
         adresaController.text.isEmpty ||
@@ -241,7 +241,16 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
         vlasnikController.text.isEmpty) {
       return false;
     } else {
+      lista.removeWhere(radnoVrijemeIsNull);
       return true;
+    }
+  }
+
+  bool radnoVrijemeIsNull(RadnoVrijemeUDanu element) {
+    if (element.id == null || element.pocetak == null || element.kraj == null) {
+      return true;
+    } else {
+      return false;
     }
   }
 

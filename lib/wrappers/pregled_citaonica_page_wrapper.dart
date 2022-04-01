@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_aplikacija/constants/citaonica_const.dart';
+
 import 'package:web_aplikacija/models/citaonica.dart';
 import 'package:web_aplikacija/models/grupna_sala.dart';
 import 'package:web_aplikacija/pages/dodavanje_supervizora_page.dart';
@@ -8,10 +8,8 @@ import 'package:web_aplikacija/pages/kreiranje_individualne_sale_page.dart';
 import 'package:web_aplikacija/pages/pregled_citaonica_page.dart';
 import 'package:web_aplikacija/pages/uredjivanje_citaonice_page.dart';
 
-import '../models/mjesto.dart';
 import '../pages/izmjena_grupne_sale_page.dart';
 import '../pages/izmjena_individualne_sale.dart';
-import '../widgets/citaonica_card.dart';
 
 class PregledCitaonicaWrapperPage extends StatefulWidget {
   const PregledCitaonicaWrapperPage({Key? key}) : super(key: key);
@@ -43,11 +41,13 @@ class _PregledCitaonicaWrapperPageState
                 break;
               case 'pregled/citaonica/dodaj_ind':
                 builder =
-                    (BuildContext context) => KreiranjeIndivividualneSalePage();
+                    (BuildContext context) => KreiranjeIndivividualneSalePage(
+                          citaonicaId: settings.arguments as int,
+                        );
                 break;
               case 'pregled/citaonica/izmjeni_ind':
                 builder = (BuildContext context) => IzmjenaIndividualneSalePage(
-                    listaPostojecihMjesta: settings.arguments as List<Mjesto>);
+                    individualnaSalaId: settings.arguments as int);
                 break;
               case 'pregled/citaonica/izmjeni_grup':
                 builder = (BuildContext context) => IzmjenaGrupneSalePage(

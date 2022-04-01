@@ -237,7 +237,8 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                           const Icon(Icons.add_circle_outline),
                                       onPressed: () {
                                         Navigator.of(context).pushNamed(
-                                            'pregled/citaonica/dodaj_ind');
+                                            'pregled/citaonica/dodaj_ind',
+                                            arguments: widget.citData.id);
                                       },
                                     ),
                                   )),

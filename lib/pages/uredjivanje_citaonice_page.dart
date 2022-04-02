@@ -495,14 +495,14 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
 
   Citaonica azurirajCitaonicu(Citaonica cit) {
     return Citaonica(
-        name: cit.name,
-        adresa: cit.adresa,
+        name: nazivController.text.toString(),
+        adresa: adresaController.text.toString(),
         radnoVrijeme: cit.radnoVrijeme,
         opis: cit.opis,
         vlasnik: cit.vlasnik,
-        phoneNumber: cit.phoneNumber,
+        phoneNumber: telefonController.text.toString(),
         administratorId: cit.administratorId,
-        mail: cit.mail);
+        mail: emailController.text.toString());
   }
 
   void obrisiIndividualnuSalu(int? salaIndex) async {

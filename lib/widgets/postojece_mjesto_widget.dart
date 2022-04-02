@@ -10,8 +10,8 @@ class PostojeceMjestoWidget extends StatelessWidget {
       : super(key: key);
 
   final int index;
-  final double velicina;
-  final double ugao;
+  final int velicina;
+  final int ugao;
   //final Mjesto mjestoDat;
 
   @override
@@ -25,7 +25,8 @@ class PostojeceMjestoWidget extends StatelessWidget {
         Transform.rotate(
           angle: ugao * math.pi / 180,
           child: Icon(Icons.event_seat,
-              color: const Color.fromARGB(255, 88, 88, 88), size: velicina),
+              color: const Color.fromARGB(255, 88, 88, 88),
+              size: velicina.toDouble()),
         ),
         Positioned(
           right: 0,

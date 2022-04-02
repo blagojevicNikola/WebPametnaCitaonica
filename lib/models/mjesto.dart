@@ -13,8 +13,8 @@ class Mjesto {
   int brojMjesta;
   @JsonKey(name: 'kod')
   String qrCode;
-  double velicina;
-  double ugao;
+  int velicina;
+  int ugao;
   bool uticnica;
   int statusId;
   PozicijaXY pozicija;

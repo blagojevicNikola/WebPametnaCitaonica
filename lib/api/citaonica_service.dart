@@ -61,7 +61,7 @@ class CitaonicaService {
     Response? temp;
     try {
       Response response = await _dio.put(
-        _baseUrl + '/citaonice/${citaonicaInfo.id}',
+        _baseUrl + '/citaonice/$index',
         data: citaonicaInfo.toJson(),
       );
       temp = response;

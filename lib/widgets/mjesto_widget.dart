@@ -33,7 +33,7 @@ class MjestoWidget extends StatelessWidget {
           angle: mjestoDat.ugao * math.pi / 180,
           child: Icon(Icons.event_seat,
               color: const Color.fromARGB(255, 88, 88, 88),
-              size: mjestoDat.velicina),
+              size: mjestoDat.velicina.toDouble()),
         ),
         Positioned(
           right: 0,

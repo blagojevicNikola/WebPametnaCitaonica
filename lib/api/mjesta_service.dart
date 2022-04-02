@@ -57,13 +57,15 @@ class MjestaService {
     return temp;
   }
 
-  Future<Response?> azurirajCitaonicu(
-      {required Mjesto citaonicaInfo, required String index}) async {
+  Future<Response?> azurirajMjesta(
+      {required Mjesto mjestoInfo,
+      required String individualnaSalaId,
+      required String mjestoId}) async {
     Response? temp;
     try {
       Response response = await _dio.put(
-        _baseUrl + '/citaonice/${citaonicaInfo.id}',
-        data: citaonicaInfo.toJson(),
+        _baseUrl + '/individualne-sale/$individualnaSalaId/mjesta/$mjestoId',
+        data: mjestoInfo.toJson(),
       );
       temp = response;
     } catch (e) {

@@ -253,7 +253,6 @@ class _KreiranjeIdividualneSalePageState
       );
       if (salaTemp != null) {
         kreiranaIndividualnaSalaId = salaTemp.id;
-        print('$kreiranaIndividualnaSalaId');
         var futures = <Future>[];
         for (var item in listaMjesta) {
           futures.add(mjestaService.createMjesta(
@@ -313,8 +312,8 @@ class _KreiranjeIdividualneSalePageState
           uticnica: true,
           statusId: 1,
           pozicija: PozicijaXY(x: 10.0, y: 50.0),
-          velicina: double.parse(velicinaController.text),
-          ugao: double.parse(ugaoController.text),
+          velicina: int.parse(velicinaController.text),
+          ugao: int.parse(ugaoController.text),
           qrCode: qrCodeController.text,
           brojMjesta: int.parse(brojController.text)));
     });

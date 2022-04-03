@@ -55,7 +55,9 @@ class _PregledCitaonicaWrapperPageState
                     );
                 break;
               case 'pregled/citaonica/dodaj_supervizora':
-                builder = (BuildContext context) => DodavanjeSupervizoraPage();
+                builder = (BuildContext context) => DodavanjeSupervizoraPage(
+                      citaonicaId: settings.arguments as int,
+                    );
                 break;
               case 'pregled/citaonica/dodaj_grup':
                 builder = (BuildContext context) => KreiranjeGrupneSalePage(

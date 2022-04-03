@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
 class SupervizorTile extends StatelessWidget {
+  final int id;
   final String ime;
   final String prezime;
   final String korisnickoIme;
+  final Function(int?) funkcijaBrisanja;
   const SupervizorTile(
       {Key? key,
+      required this.id,
       required this.ime,
       required this.prezime,
-      required this.korisnickoIme})
+      required this.korisnickoIme,
+      required this.funkcijaBrisanja})
       : super(key: key);
 
   @override
@@ -69,7 +73,9 @@ class SupervizorTile extends StatelessWidget {
                           color: const Color.fromARGB(255, 105, 105, 105),
                           splashRadius: 25,
                           icon: const Icon(Icons.delete),
-                          onPressed: () {},
+                          onPressed: () {
+                            funkcijaBrisanja(id);
+                          },
                         ),
                       ),
                     ),

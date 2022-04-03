@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
+import 'package:web_aplikacija/api/supervizor_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
 import 'package:web_aplikacija/models/grupna_sala.dart';
-import 'package:web_aplikacija/pages/kreiranje_grupne_sale.dart';
 import 'package:web_aplikacija/widgets/grupna_sala_tile.dart';
 import 'package:web_aplikacija/widgets/individualna_sala_tile.dart';
 import 'package:web_aplikacija/widgets/information_field.dart';
@@ -13,7 +13,7 @@ import '../api/citaonica_service.dart';
 import '../api/grupne_sale_service.dart';
 import '../models/citaonica.dart';
 import '../models/individualna_sala.dart';
-import '../widgets/grupna_sala_checkbox.dart';
+import '../models/nalog.dart';
 import '../widgets/supervizor_tile.dart';
 
 class UredjivanjeCitaonicePage extends StatefulWidget {
@@ -37,8 +37,10 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   var emailController = TextEditingController();
   IndividualneSaleService indSaleService = IndividualneSaleService();
   GrupneSaleService grupSaleService = GrupneSaleService();
+  SupervizorService supervizorService = SupervizorService();
   late Future<List<IndividualnaSala>> individualneSaleData;
   late Future<List<GrupnaSala>> grupneSaleData;
+  late Future<List<Nalog>> supervizoriData;
 
   CitaonicaService citService = CitaonicaService();
 
@@ -49,6 +51,8 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
         indSaleService.getIndividualneSale(widget.citData.id.toString());
     grupneSaleData =
         grupSaleService.getGrupneSale(widget.citData.id.toString());
+    supervizoriData =
+        supervizorService.getSupervizore(widget.citData.id.toString());
   }
 
   @override
@@ -339,25 +343,57 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(9.0),
-                              child: ListView.separated(
-                                itemCount: 2,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return const SupervizorTile(
-                                      ime: 'Nikola',
-                                      prezime: 'Nikolic',
-                                      korisnickoIme: 'nikola_nikolic');
-                                },
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 20,
-                                  width: 40,
-                                ),
-                              ),
-                            ),
+                            FutureBuilder<List<Nalog>>(
+                                future: supervizoriData,
+                                initialData: null,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const SizedBox(
+                                        height: 120,
+                                        width: 120,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()));
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else if (snapshot.hasData) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: ListView.separated(
+                                          itemCount: snapshot.data!.length,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return SupervizorTile(
+                                              id: snapshot.data![index].id!,
+                                              ime: snapshot.data![index].ime,
+                                              prezime:
+                                                  snapshot.data![index].prezime,
+                                              korisnickoIme: snapshot
+                                                  .data![index].korisnickoIme,
+                                              funkcijaBrisanja:
+                                                  obrisiSupervizora,
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(
+                                            height: 20,
+                                            width: 40,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return const Text('Empty data');
+                                    }
+                                  } else {
+                                    return Text(
+                                        'State: ${snapshot.connectionState}');
+                                  }
+                                }),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -374,7 +410,8 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                           const Icon(Icons.add_circle_outline),
                                       onPressed: () {
                                         Navigator.of(context).pushNamed(
-                                            'pregled/citaonica/dodaj_supervizora');
+                                            'pregled/citaonica/dodaj_supervizora',
+                                            arguments: widget.citData.id);
                                       }),
                                 ),
                               ),
@@ -529,120 +566,17 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
     }
   }
 
-  void _showGrupnaSalaDialog(Citaonica citRef) {
-    TextEditingController naziv = TextEditingController(text: '');
-    TextEditingController qrCode = TextEditingController(text: '');
-    TextEditingController brojMjesta = TextEditingController(text: '');
-    bool tv;
-    bool projektor;
-    bool klima;
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-              child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.3,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(9.0),
-                  child: Text(
-                    'Dodaj grupnu salu:',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 44, 44, 44), fontSize: 38),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(9.0),
-                  child: SizedBox(
-                    width: 150,
-                    height: 70,
-                    child: TextField(
-                      controller: naziv,
-                      decoration: const InputDecoration(
-                        labelText: 'Naziv',
-                        labelStyle:
-                            TextStyle(color: defaultPlava, fontSize: 23),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: defaultPlava),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(9.0),
-                  child: SizedBox(
-                    width: 150,
-                    height: 70,
-                    child: TextField(
-                      controller: qrCode,
-                      decoration: const InputDecoration(
-                        labelText: 'QR Code',
-                        labelStyle:
-                            TextStyle(color: defaultPlava, fontSize: 23),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: defaultPlava),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(9.0),
-                  child: SizedBox(
-                    width: 150,
-                    height: 70,
-                    child: TextField(
-                      controller: brojMjesta,
-                      decoration: const InputDecoration(
-                        labelText: 'Broj mjesta',
-                        labelStyle:
-                            TextStyle(color: defaultPlava, fontSize: 23),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: defaultPlava),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(9.0),
-                  child: GrupnaSalaCheckBox(
-                      tv: tv = false,
-                      projektor: projektor = false,
-                      klima: klima = false),
-                ),
-                const SizedBox(height: 30),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                      padding: const EdgeInsets.all(9.0),
-                      child: TextButton(
-                        child: const Text('Sacuvaj'),
-                        onPressed: () {
-                          // if (naziv.text.isEmpty ||
-                          //     qrCode.text.isEmpty ||
-                          //     brojMjesta.text.isEmpty) {
-                          // } else {
-                          //   citRef.grupneSale.add(GrupnaSala(
-                          //       tv: tv,
-                          //       klima: klima,
-                          //       projektor: projektor,
-                          //       brojMjesta:
-                          //           int.parse(brojMjesta.text.toString()),
-                          //       naziv: naziv.text.toString(),
-                          //       qrKod: qrCode.text.toString()));
-                          //   Navigator.pop(context);
-                          // }
-                        },
-                      )),
-                ),
-              ],
-            ),
-          ));
+  void obrisiSupervizora(int? supervizorId) async {
+    final brisanje = await supervizorService.deleteSupervizor(
+        citaonicaId: widget.citData.id.toString(),
+        supervizorId: supervizorId.toString());
+    if (brisanje != null) {
+      if (brisanje.statusCode == 204) {
+        setState(() {
+          supervizoriData =
+              supervizorService.getSupervizore(widget.citData.id.toString());
         });
+      }
+    }
   }
 }

@@ -1,15 +1,16 @@
 import 'package:dio/dio.dart';
+import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/models/mjesto.dart';
 
 class MjestaService {
-  final Dio _dio = Dio();
+  final DioClient _dioClient = DioClient();
 
   final _baseUrl = 'http://localhost:8080/api/v1';
 
   Future<List<Mjesto>> getMjesta(String individualnaSalaId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response citaoniceData = await _dio
+      Response citaoniceData = await _dioClient.dio
           .get(_baseUrl + '/individualne-sale/$individualnaSalaId/mjesta');
 
       // Prints the raw data returned by the server
@@ -31,7 +32,7 @@ class MjestaService {
     Mjesto? retrievedMjesto;
 
     try {
-      Response response = await _dio.post(
+      Response response = await _dioClient.dio.post(
           _baseUrl + '/individualne-sale/$individualnaSalaId/mjesta',
           data: mjestoInfo.toJson());
 
@@ -48,7 +49,7 @@ class MjestaService {
   Future<Response?> deleteCitaonica({required String citaonicaId}) async {
     Response? temp;
     try {
-      temp = await _dio.delete(
+      temp = await _dioClient.dio.delete(
         _baseUrl + '/citaonice/$citaonicaId',
       );
     } catch (e) {
@@ -63,7 +64,7 @@ class MjestaService {
       required String mjestoId}) async {
     Response? temp;
     try {
-      Response response = await _dio.put(
+      Response response = await _dioClient.dio.put(
         _baseUrl + '/individualne-sale/$individualnaSalaId/mjesta/$mjestoId',
         data: mjestoInfo.toJson(),
       );

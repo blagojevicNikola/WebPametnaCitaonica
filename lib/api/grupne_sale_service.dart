@@ -1,16 +1,17 @@
 import 'package:dio/dio.dart';
+import 'package:web_aplikacija/api/dio_client.dart';
 
 import '../models/grupna_sala.dart';
 
 class GrupneSaleService {
-  final Dio _dio = Dio();
+  final DioClient _dio = DioClient();
 
   final _baseUrl = 'http://localhost:8080/api/v1';
 
   Future<List<GrupnaSala>> getGrupneSale(String citaonicaId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response saleData = await _dio
+      Response saleData = await _dio.dio
           .get(_baseUrl + '/citaonice/${citaonicaId.toString()}/grupne-sale');
 
       // Prints the raw data returned by the server
@@ -32,7 +33,7 @@ class GrupneSaleService {
     Response? temp;
 
     try {
-      Response response = await _dio.post(
+      Response response = await _dio.dio.post(
         _baseUrl + '/citaonice/${citaonicaId}/grupne-sale',
         data: sala.toJson(),
       );
@@ -49,7 +50,7 @@ class GrupneSaleService {
 
   Future<String> deleteGrupnaSala(
       {required String citaonicaId, required String grupnaSalaId}) async {
-    Response response = await _dio.delete(
+    Response response = await _dio.dio.delete(
       _baseUrl + '/citaonice/$citaonicaId/grupne-sale/$grupnaSalaId',
     );
 
@@ -65,7 +66,7 @@ class GrupneSaleService {
     GrupnaSala? retrievedGrupnaSala;
 
     try {
-      Response response = await _dio.put(
+      Response response = await _dio.dio.put(
         _baseUrl +
             '/citaonice/${citaonicaId}/individualne-sale/${grupnaSalaData.id}',
         data: grupnaSalaData.toJson(),

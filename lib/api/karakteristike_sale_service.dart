@@ -1,18 +1,20 @@
 import 'package:dio/dio.dart';
+import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/models/mjesto.dart';
 import 'package:web_aplikacija/models/nalog.dart';
 import 'package:web_aplikacija/widgets/karakteristike_field.dart';
 
 class SupervizorService {
-  final Dio _dio = Dio();
+  final DioClient _dioClient = DioClient();
 
   final _baseUrl = 'http://localhost:8080/api/v1';
 
   Future<List<KarakteristikeSale>> getkarakteristike() async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response karakteristikeData = await _dio.get(_baseUrl + 'karakteristike');
+      Response karakteristikeData =
+          await _dioClient.dio.get(_baseUrl + 'karakteristike');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -34,7 +36,7 @@ class SupervizorService {
     Nalog? retrievedMjesto;
 
     try {
-      Response response = await _dio.post(
+      Response response = await _dioClient.dio.post(
           _baseUrl + '/citaonice/$citaonicaId/supervizori',
           data: supervizorInfo.toJson());
 
@@ -52,7 +54,7 @@ class SupervizorService {
       {required String citaonicaId, required String supervizorId}) async {
     Response? temp;
     try {
-      temp = await _dio.delete(
+      temp = await _dioClient.dio.delete(
         _baseUrl + '/citaonice/$citaonicaId/supervizori/$supervizorId',
       );
     } catch (e) {
@@ -67,7 +69,7 @@ class SupervizorService {
       required String mjestoId}) async {
     Response? temp;
     try {
-      Response response = await _dio.put(
+      Response response = await _dioClient.dio.put(
         _baseUrl + '/individualne-sale/$individualnaSalaId/mjesta/$mjestoId',
         data: mjestoInfo.toJson(),
       );

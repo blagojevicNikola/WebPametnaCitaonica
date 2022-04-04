@@ -5,9 +5,10 @@ part 'karakteristike_sale.g.dart';
 @JsonSerializable()
 class KarakteristikeSale {
   int? karakteristikaId;
+  String? naziv;
   String? detalji;
 
-  KarakteristikeSale({this.karakteristikaId, this.detalji});
+  KarakteristikeSale({this.karakteristikaId, this.detalji, this.naziv});
 
   factory KarakteristikeSale.fromJson(Map<String, dynamic> json) =>
       _$KarakteristikeSaleFromJson(json);

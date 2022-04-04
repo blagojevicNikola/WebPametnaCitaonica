@@ -9,8 +9,9 @@ class CustomTimeOfDayConverter implements JsonConverter<TimeOfDay?, String?> {
       return null;
     } else {
       return TimeOfDay(
-          hour: int.parse(json.split(":")[0]),
-          minute: int.parse(json.split(":")[1]));
+        hour: int.parse(json.split(":")[0]),
+        minute: int.parse(json.split(":")[1]),
+      );
     }
   }
 
@@ -20,7 +21,7 @@ class CustomTimeOfDayConverter implements JsonConverter<TimeOfDay?, String?> {
       return null;
     } else {
       String vrijednost =
-          '${object.hour.toString().padLeft(2, '0')}:${object.minute.toString().padLeft(2, '0')}';
+          '${object.hour.toString().padLeft(2, '0')}:${object.minute.toString().padLeft(2, '0')}:00';
       return vrijednost;
     }
   }

@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 
 import 'clanarina.dart';
-import 'mjesto.dart';
 
 part 'individualna_sala.g.dart';
 

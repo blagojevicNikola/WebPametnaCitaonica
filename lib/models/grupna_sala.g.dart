@@ -12,6 +12,7 @@ GrupnaSala _$GrupnaSalaFromJson(Map<String, dynamic> json) => GrupnaSala(
       qrKod: json['kod'] as String,
       brojMjesta: json['kapacitet'] as int,
       opis: json['opis'] as String?,
+      statusId: json['statusId'] as int,
       clanarine: (json['clanarine'] as List<dynamic>)
           .map((e) =>
               e == null ? null : Clanarina.fromJson(e as Map<String, dynamic>))
@@ -30,6 +31,7 @@ Map<String, dynamic> _$GrupnaSalaToJson(GrupnaSala instance) =>
       'kod': instance.qrKod,
       'kapacitet': instance.brojMjesta,
       'opis': instance.opis,
+      'statusId': instance.statusId,
       'clanarine': instance.clanarine,
       'karakteristike': instance.karakteristike,
     };

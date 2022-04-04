@@ -43,7 +43,7 @@ class _UnosRadnogVremenaState extends State<UnosRadnogVremena> {
               height: 10,
               width: 20,
             ),
-        itemCount: Dan.values.length);
+        itemCount: widget.radnoVr.length);
   }
 
   String getVrijeme(String v, int index) {

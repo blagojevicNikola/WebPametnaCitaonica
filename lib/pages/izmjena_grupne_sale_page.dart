@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:web_aplikacija/widgets/grupna_sala_checkbox.dart';
-
 import '../models/grupna_sala.dart';
+import '../models/karakteristike_sale.dart';
+import '../widgets/dodavanje_karakteristika_sale.dart';
 import '../widgets/information_field.dart';
 
 class IzmjenaGrupneSalePage extends StatefulWidget {
@@ -19,6 +19,17 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
   TextEditingController? nazivSaleController;
   TextEditingController? qrCodeSaleController;
   TextEditingController? brojMjestaSaleController;
+  TextEditingController? opisSaleController;
+  List<KarakteristikeSale> listaPostojecihKarakteristika = <KarakteristikeSale>[
+    KarakteristikeSale(naziv: 'tv', karakteristikaId: 1),
+    KarakteristikeSale(naziv: 'projektor', karakteristikaId: 3),
+    KarakteristikeSale(naziv: 'wifi', karakteristikaId: 2),
+    KarakteristikeSale(naziv: 'struja', karakteristikaId: 4),
+    KarakteristikeSale(naziv: 'voda', karakteristikaId: 5),
+  ];
+
+  List<KarakteristikeSale> listaDodatihPostojecih = <KarakteristikeSale>[];
+  List<KarakteristikeSale> listaDodatihKreiranih = <KarakteristikeSale>[];
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +114,54 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               ),
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.all(9),
+                            child: InformationField(
+                              labelInformation: 'Opis',
+                              control: opisSaleController =
+                                  TextEditingController(
+                                      text: widget.grupnaSalaData.opis),
+                            ),
+                          ),
+                          DodavanjeKarakteristikaSale(
+                            listaPostojecihKarakteristika:
+                                listaPostojecihKarakteristika,
+                            listaDodatihKreiranihKarakteristika:
+                                listaDodatihKreiranih,
+                            listaDodatihPostojecihKarakteristika:
+                                listaDodatihPostojecih,
+                          ),
+                          const SizedBox(height: 30),
+                          Padding(
+                            padding: const EdgeInsets.all(9.0),
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: TextButton(
+                                style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all(
+                                      const Size(120, 40),
+                                    ),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14.0),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                      const Color.fromARGB(255, 87, 182, 93),
+                                    ),
+                                    overlayColor: MaterialStateProperty.all(
+                                        const Color.fromARGB(
+                                            255, 112, 218, 116))),
+                                child: const Text(
+                                  'Sacuvaj',
+                                  style: TextStyle(
+                                      fontSize: 21, color: Colors.white),
+                                ),
+                                onPressed: () async {},
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),

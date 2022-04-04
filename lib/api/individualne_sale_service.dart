@@ -46,15 +46,17 @@ class IndividualneSaleService {
     return retrievedIndividualnaSala;
   }
 
-  Future<void> deleteIndividualnaSala(
+  Future<String> deleteIndividualnaSala(
       {required String citaonicaId, required String individualnaSalaId}) async {
-    try {
-      await _dio.delete(
-        _baseUrl +
-            '/citaonice/$citaonicaId/individualne-sale/$individualnaSalaId',
-      );
-    } catch (e) {
-      print('Error deleting user: $e');
+    Response response = await _dio.delete(
+      _baseUrl +
+          '/citaonice/$citaonicaId/individualne-sale/$individualnaSalaId',
+    );
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      throw Exception('Greska pri brisanju');
     }
   }
 

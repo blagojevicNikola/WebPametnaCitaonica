@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../constants/config.dart';
-import '../models/mjesto.dart';
 
 class IndividiualnaSalaTile extends StatelessWidget {
   int? index;
@@ -14,7 +13,7 @@ class IndividiualnaSalaTile extends StatelessWidget {
     required this.naziv,
     this.brojMjesta,
     required this.funkcijaBrisanja,
-    this.index,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -74,11 +73,9 @@ class IndividiualnaSalaTile extends StatelessWidget {
                           splashRadius: 25,
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            // if (listaPostojecihMjesta != null) {
-                            //   Navigator.of(context).pushNamed(
-                            //       'pregled/citaonica/izmjeni_ind',
-                            //       arguments: listaPostojecihMjesta);
-                            // } else {}
+                            Navigator.of(context).pushNamed(
+                                'pregled/citaonica/izmjeni_ind',
+                                arguments: index);
                           },
                         ),
                       ),

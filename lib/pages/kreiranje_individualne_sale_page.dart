@@ -1,15 +1,22 @@
-import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:web_aplikacija/api/individualne_sale_service.dart';
+import 'package:web_aplikacija/api/mjesta_service.dart';
+import 'package:web_aplikacija/models/clanarina.dart';
+import 'package:web_aplikacija/models/karakteristike_sale.dart';
+import 'package:web_aplikacija/models/pozicijaXY.dart';
 import 'package:web_aplikacija/widgets/mjesto_widget.dart';
 
+import '../models/individualna_sala.dart';
 import '../models/mjesto.dart';
 
 class KreiranjeIndivividualneSalePage extends StatefulWidget {
-  const KreiranjeIndivividualneSalePage({Key? key}) : super(key: key);
+  int citaonicaId;
+  KreiranjeIndivividualneSalePage({Key? key, required this.citaonicaId})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -26,6 +33,9 @@ class _KreiranjeIdividualneSalePageState
   final qrCodeController = TextEditingController();
   final brojController = TextEditingController();
   final nazivSaleController = TextEditingController();
+  int? kreiranaIndividualnaSalaId;
+  IndividualneSaleService indSaleService = IndividualneSaleService();
+  MjestaService mjestaService = MjestaService();
 
   @override
   void dispose() {
@@ -34,6 +44,11 @@ class _KreiranjeIdividualneSalePageState
     qrCodeController.dispose();
     brojController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -166,8 +181,8 @@ class _KreiranjeIdividualneSalePageState
           ),
           for (var item in listaMjesta)
             Positioned(
-              left: item.pozicija.dx,
-              top: item.pozicija.dy,
+              left: item.pozicija.x,
+              top: item.pozicija.y,
               child: MjestoWidget(
                 index: listaMjesta.indexOf(item),
                 onDragEnd: onDragEnd,
@@ -196,7 +211,22 @@ class _KreiranjeIdividualneSalePageState
                   'Sacuvaj',
                   style: TextStyle(fontSize: 21, color: Colors.white),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  final kreirano = await kreirajIndividualnuSalu();
+                  if (kreirano == true) {
+                    Navigator.of(context).pop();
+                  } else {
+                    const snackBar = SnackBar(
+                      backgroundColor: Color.fromARGB(255, 185, 44, 34),
+                      content: Text(
+                        'Greska pri kreiranju sale i dodavanju mjesta!',
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                },
               ))
         ],
       ),
@@ -205,8 +235,39 @@ class _KreiranjeIdividualneSalePageState
 
   void onDragEnd(Offset offset, int index) {
     setState(() {
-      listaMjesta[index].pozicija += offset;
+      listaMjesta[index].pozicija.x += offset.dx;
+      listaMjesta[index].pozicija.y += offset.dy;
     });
+  }
+
+  Future<bool> kreirajIndividualnuSalu() async {
+    if (listaMjesta.isNotEmpty) {
+      final salaTemp = await indSaleService.createIndividualnaSala(
+        citaonicaId: widget.citaonicaId.toString(),
+        sala: IndividualnaSala(
+            naziv: nazivSaleController.text.toString(),
+            clanarine: <Clanarina>[],
+            karakteristike: <KarakteristikeSale>[],
+            opis: "",
+            brojMjesta: listaMjesta.length),
+      );
+      if (salaTemp != null) {
+        kreiranaIndividualnaSalaId = salaTemp.id;
+        var futures = <Future>[];
+        for (var item in listaMjesta) {
+          futures.add(mjestaService.createMjesta(
+              individualnaSalaId: kreiranaIndividualnaSalaId.toString(),
+              mjestoInfo: item));
+        }
+        await Future.wait(futures);
+
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   void pickImage() async {
@@ -248,9 +309,11 @@ class _KreiranjeIdividualneSalePageState
   void dodajMjesto() {
     setState(() {
       listaMjesta.add(Mjesto(
-          pozicija: Offset(10, 50),
-          velicina: double.parse(velicinaController.text),
-          ugao: double.parse(ugaoController.text),
+          uticnica: true,
+          statusId: 1,
+          pozicija: PozicijaXY(x: 10.0, y: 50.0),
+          velicina: int.parse(velicinaController.text),
+          ugao: int.parse(ugaoController.text),
           qrCode: qrCodeController.text,
           brojMjesta: int.parse(brojController.text)));
     });

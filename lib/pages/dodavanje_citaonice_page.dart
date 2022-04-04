@@ -6,11 +6,8 @@ import 'package:web_aplikacija/api/citaonica_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
 import 'package:web_aplikacija/widgets/unos_radnog_vremena.dart';
 
-import '../constants/citaonica_const.dart';
 import '../models/citaonica.dart';
-import '../models/dan.dart';
-import '../models/grupna_sala.dart';
-import '../models/individualna_sala.dart';
+
 import '../models/radno_vrijeme.dart';
 import '../widgets/information_field.dart';
 
@@ -29,6 +26,8 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
   final adresaController = TextEditingController(text: '');
   final telefonController = TextEditingController(text: '');
   final emailController = TextEditingController(text: '');
+  final vlasnikController = TextEditingController(text: '');
+  final opisController = TextEditingController(text: '');
 
   List<RadnoVrijemeUDanu> radnoVr = <RadnoVrijemeUDanu>[
     RadnoVrijemeUDanu(id: 1),
@@ -108,13 +107,27 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
                                 control: telefonController,
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(9),
+                              child: InformationField(
+                                labelInformation: 'Vlasnik',
+                                control: vlasnikController,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(9),
+                              child: InformationField(
+                                labelInformation: 'Opis',
+                                control: opisController,
+                              ),
+                            ),
                             const SizedBox(height: 45),
                             const Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
                                 padding: EdgeInsets.all(9),
                                 child: Text(
-                                  'Radno Vrijeme:',
+                                  'Radno vrijeme:',
                                   style: TextStyle(
                                       fontSize: 40, color: defaultPlava),
                                 ),
@@ -188,7 +201,7 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
                                   TextStyle(fontSize: 21, color: Colors.white),
                             ),
                             onPressed: () {
-                              if (ispravnostInformacijaCitaonice()) {
+                              if (ispravnostInformacijaCitaonice(radnoVr)) {
                                 kreirajCitaonicu();
                               } else {
                                 const snackBar = SnackBar(
@@ -219,26 +232,38 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
     );
   }
 
-  bool ispravnostInformacijaCitaonice() {
+  bool ispravnostInformacijaCitaonice(List<RadnoVrijemeUDanu> lista) {
     if (slika == null ||
         nazivController.text.isEmpty ||
         adresaController.text.isEmpty ||
         telefonController.text.isEmpty ||
-        emailController.text.isEmpty) {
+        emailController.text.isEmpty ||
+        vlasnikController.text.isEmpty) {
       return false;
     } else {
+      lista.removeWhere(radnoVrijemeIsNull);
       return true;
     }
   }
 
-  void kreirajCitaonicu() {
+  bool radnoVrijemeIsNull(RadnoVrijemeUDanu element) {
+    if (element.id == null || element.pocetak == null || element.kraj == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void kreirajCitaonicu() async {
     citService.createCitaonica(
       citaonicaInfo: Citaonica(
-        vlasnik: 'nesto',
+        vlasnik: vlasnikController.text.toString(),
         name: nazivController.text.toString(),
         mail: emailController.text.toString(),
         phoneNumber: telefonController.text.toString(),
         adresa: adresaController.text.toString(),
+        opis: opisController.text.toString(),
+        administratorId: 1,
         radnoVrijeme: radnoVr,
       ),
     );

@@ -1,14 +1,21 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/api/supervizor_service.dart';
 
+import '../models/nalog.dart';
 import '../widgets/information_field.dart';
 
 class DodavanjeSupervizoraPage extends StatelessWidget {
-  var nazivController = TextEditingController();
-  var adresaController = TextEditingController();
-  var telefonController = TextEditingController();
+  final int citaonicaId;
+  var imeController = TextEditingController();
+  var prezimeController = TextEditingController();
+  var korisnickoController = TextEditingController();
   var emailController = TextEditingController();
+  var lozinkaController = TextEditingController();
+  SupervizorService supervizorService = SupervizorService();
 
-  DodavanjeSupervizoraPage({Key? key}) : super(key: key);
+  DodavanjeSupervizoraPage({Key? key, required this.citaonicaId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +62,13 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
                     ),
                   ),
                   width: MediaQuery.of(context).size.width * 0.64,
+                  height: MediaQuery.of(context).size.height,
                   child: Column(children: [
                     Padding(
                       padding: const EdgeInsets.all(9),
                       child: InformationField(
                         labelInformation: 'Ime',
-                        control: nazivController =
+                        control: imeController =
                             TextEditingController(text: ''),
                       ),
                     ),
@@ -68,7 +76,7 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
                       padding: const EdgeInsets.all(9),
                       child: InformationField(
                         labelInformation: 'Prezime',
-                        control: adresaController =
+                        control: prezimeController =
                             TextEditingController(text: ''),
                       ),
                     ),
@@ -76,7 +84,7 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
                       padding: const EdgeInsets.all(9),
                       child: InformationField(
                         labelInformation: 'Korisnicko ime',
-                        control: emailController =
+                        control: korisnickoController =
                             TextEditingController(text: ''),
                       ),
                     ),
@@ -84,7 +92,7 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
                       padding: const EdgeInsets.all(9),
                       child: InformationField(
                         labelInformation: 'E-mail',
-                        control: telefonController =
+                        control: emailController =
                             TextEditingController(text: ''),
                       ),
                     ),
@@ -92,7 +100,7 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
                       padding: const EdgeInsets.all(9),
                       child: InformationField(
                         labelInformation: 'Lozinka',
-                        control: telefonController =
+                        control: lozinkaController =
                             TextEditingController(text: ''),
                       ),
                     ),
@@ -120,7 +128,49 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
                             'Sacuvaj',
                             style: TextStyle(fontSize: 21, color: Colors.white),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (ispravneInformacijeSupervizora()) {
+                              final response =
+                                  await supervizorService.createSupervizor(
+                                citaonicaId: citaonicaId.toString(),
+                                supervizorInfo: Nalog(
+                                  ime: imeController.text.toString(),
+                                  prezime: prezimeController.text.toString(),
+                                  korisnickoIme:
+                                      korisnickoController.text.toString(),
+                                  mail: emailController.text.toString(),
+                                  lozinka: lozinkaController.text.toString(),
+                                ),
+                              );
+                              if (response != null) {
+                                Navigator.of(context).pop();
+                              } else {
+                                const snackBar = SnackBar(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 185, 44, 34),
+                                  content: Text(
+                                    'Greska pri dodavanju supervizorskog naloga!',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                );
+
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            } else {
+                              const snackBar = SnackBar(
+                                backgroundColor:
+                                    Color.fromARGB(255, 185, 44, 34),
+                                content: Text(
+                                  'Pogresno ispunjene informacije o korisniku!',
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          },
                         ),
                       ),
                     )
@@ -132,5 +182,17 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool ispravneInformacijeSupervizora() {
+    if (imeController.text.isEmpty ||
+        prezimeController.text.isEmpty ||
+        korisnickoController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        lozinkaController.text.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

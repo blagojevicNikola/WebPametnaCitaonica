@@ -7,20 +7,23 @@ part of 'mjesto.dart';
 // **************************************************************************
 
 Mjesto _$MjestoFromJson(Map<String, dynamic> json) => Mjesto(
-      pozicija:
-          const CustomOffsetConverter().fromJson(json['pozicija'] as String),
-      velicina: (json['velicina'] as num).toDouble(),
-      ugao: (json['ugao'] as num).toDouble(),
-      qrCode: json['qr_code'] as String,
-      brojMjesta: json['broj_mjesta'] as int,
+      pozicija: PozicijaXY.fromJson(json['pozicija'] as Map<String, dynamic>),
+      velicina: json['velicina'] as int,
+      ugao: json['ugao'] as int,
+      qrCode: json['kod'] as String,
+      brojMjesta: json['brojMjesta'] as int,
+      statusId: json['statusId'] as int,
+      uticnica: json['uticnica'] as bool,
       id: json['id'] as int?,
     );
 
 Map<String, dynamic> _$MjestoToJson(Mjesto instance) => <String, dynamic>{
       'id': instance.id,
-      'broj_mjesta': instance.brojMjesta,
-      'qr_code': instance.qrCode,
+      'brojMjesta': instance.brojMjesta,
+      'kod': instance.qrCode,
       'velicina': instance.velicina,
       'ugao': instance.ugao,
-      'pozicija': const CustomOffsetConverter().toJson(instance.pozicija),
+      'uticnica': instance.uticnica,
+      'statusId': instance.statusId,
+      'pozicija': instance.pozicija,
     };

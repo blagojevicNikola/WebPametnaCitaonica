@@ -1,22 +1,23 @@
 import 'package:dio/dio.dart';
-import 'package:web_aplikacija/models/citaonica.dart';
+import 'package:web_aplikacija/models/mjesto.dart';
 
-class CitaonicaService {
+class MjestaService {
   final Dio _dio = Dio();
 
   final _baseUrl = 'http://localhost:8080/api/v1';
 
-  Future<List<Citaonica>> getCitaonice() async {
+  Future<List<Mjesto>> getMjesta(String individualnaSalaId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response citaoniceData = await _dio.get(_baseUrl + '/citaonice');
+      Response citaoniceData = await _dio
+          .get(_baseUrl + '/individualne-sale/$individualnaSalaId/mjesta');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
 
       // Parsing the raw JSON data to the User class
-      List<Citaonica> citaonice = (citaoniceData.data as List)
-          .map((data) => Citaonica.fromJson(data))
+      List<Mjesto> citaonice = (citaoniceData.data as List)
+          .map((data) => Mjesto.fromJson(data))
           .toList();
 
       return citaonice;
@@ -25,23 +26,23 @@ class CitaonicaService {
     }
   }
 
-  Future<Citaonica?> createCitaonica({required Citaonica citaonicaInfo}) async {
-    Citaonica? retrievedCitaonica;
+  Future<Mjesto?> createMjesta(
+      {required String individualnaSalaId, required Mjesto mjestoInfo}) async {
+    Mjesto? retrievedMjesto;
 
     try {
       Response response = await _dio.post(
-        _baseUrl + '/citaonice/',
-        data: citaonicaInfo.toJson(),
-      );
+          _baseUrl + '/individualne-sale/$individualnaSalaId/mjesta',
+          data: mjestoInfo.toJson());
 
       //print('User created: ${response.data}');
 
-      retrievedCitaonica = Citaonica.fromJson(response.data);
+      retrievedMjesto = Mjesto.fromJson(response.data);
     } catch (e) {
       print('Error creating user: $e');
     }
 
-    return retrievedCitaonica;
+    return retrievedMjesto;
   }
 
   Future<Response?> deleteCitaonica({required String citaonicaId}) async {
@@ -56,13 +57,15 @@ class CitaonicaService {
     return temp;
   }
 
-  Future<Response?> azurirajCitaonicu(
-      {required Citaonica citaonicaInfo, required String index}) async {
+  Future<Response?> azurirajMjesta(
+      {required Mjesto mjestoInfo,
+      required String individualnaSalaId,
+      required String mjestoId}) async {
     Response? temp;
     try {
       Response response = await _dio.put(
-        _baseUrl + '/citaonice/$index',
-        data: citaonicaInfo.toJson(),
+        _baseUrl + '/individualne-sale/$individualnaSalaId/mjesta/$mjestoId',
+        data: mjestoInfo.toJson(),
       );
       temp = response;
     } catch (e) {

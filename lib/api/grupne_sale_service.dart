@@ -27,9 +27,9 @@ class GrupneSaleService {
     }
   }
 
-  Future<GrupnaSala?> createGrupnaSala(
+  Future<Response?> createGrupnaSala(
       {required String citaonicaId, required GrupnaSala sala}) async {
-    GrupnaSala? retrievedGrupnaSala;
+    Response? temp;
 
     try {
       Response response = await _dio.post(
@@ -39,22 +39,24 @@ class GrupneSaleService {
 
       //print('User created: ${response.data}');
 
-      retrievedGrupnaSala = GrupnaSala.fromJson(response.data);
+      temp = response;
     } catch (e) {
       print('Error creating user: $e');
     }
 
-    return retrievedGrupnaSala;
+    return temp;
   }
 
-  Future<void> deleteGrupnaSala(
+  Future<String> deleteGrupnaSala(
       {required String citaonicaId, required String grupnaSalaId}) async {
-    try {
-      await _dio.delete(
-        _baseUrl + '/citaonice/$citaonicaId/grupne-sale/$grupnaSalaId',
-      );
-    } catch (e) {
-      print('Error deleting user: $e');
+    Response response = await _dio.delete(
+      _baseUrl + '/citaonice/$citaonicaId/grupne-sale/$grupnaSalaId',
+    );
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      throw Exception('Greska pri brisanju');
     }
   }
 

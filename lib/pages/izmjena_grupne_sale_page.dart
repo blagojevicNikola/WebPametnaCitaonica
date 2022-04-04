@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:web_aplikacija/widgets/grupna_sala_checkbox.dart';
-
 import '../models/grupna_sala.dart';
+import '../models/karakteristike_sale.dart';
+import '../widgets/dodavanje_karakteristika_sale.dart';
 import '../widgets/information_field.dart';
 
 class IzmjenaGrupneSalePage extends StatefulWidget {
@@ -20,6 +20,16 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
   TextEditingController? qrCodeSaleController;
   TextEditingController? brojMjestaSaleController;
   TextEditingController? opisSaleController;
+  List<KarakteristikeSale> listaPostojecihKarakteristika = <KarakteristikeSale>[
+    KarakteristikeSale(naziv: 'tv', karakteristikaId: 1),
+    KarakteristikeSale(naziv: 'projektor', karakteristikaId: 3),
+    KarakteristikeSale(naziv: 'wifi', karakteristikaId: 2),
+    KarakteristikeSale(naziv: 'struja', karakteristikaId: 4),
+    KarakteristikeSale(naziv: 'voda', karakteristikaId: 5),
+  ];
+
+  List<KarakteristikeSale> listaDodatihPostojecih = <KarakteristikeSale>[];
+  List<KarakteristikeSale> listaDodatihKreiranih = <KarakteristikeSale>[];
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +122,14 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                                   TextEditingController(
                                       text: widget.grupnaSalaData.opis),
                             ),
+                          ),
+                          DodavanjeKarakteristikaSale(
+                            listaPostojecihKarakteristika:
+                                listaPostojecihKarakteristika,
+                            listaDodatihKreiranihKarakteristika:
+                                listaDodatihKreiranih,
+                            listaDodatihPostojecihKarakteristika:
+                                listaDodatihPostojecih,
                           ),
                           const SizedBox(height: 30),
                           Padding(

@@ -1,22 +1,46 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/grupne_sale_service.dart';
+import 'package:web_aplikacija/constants/config.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
+import 'package:web_aplikacija/widgets/dodavanje_karakteristika_sale.dart';
 
 import '../models/clanarina.dart';
 import '../models/grupna_sala.dart';
 import '../widgets/information_field.dart';
 
-class KreiranjeGrupneSalePage extends StatelessWidget {
+class KreiranjeGrupneSalePage extends StatefulWidget {
   final int citaonicaId;
+
+  const KreiranjeGrupneSalePage({required this.citaonicaId, Key? key})
+      : super(key: key);
+
+  @override
+  State<KreiranjeGrupneSalePage> createState() =>
+      _KreiranjeGrupneSalePageState();
+}
+
+class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
   final nazivController = TextEditingController(text: '');
+
   final kapacitetController = TextEditingController(text: '');
+
   final opisController = TextEditingController(text: '');
+
   final kodController = TextEditingController(text: '');
+
   GrupneSaleService grupSale = GrupneSaleService();
 
-  KreiranjeGrupneSalePage({required this.citaonicaId, Key? key})
-      : super(key: key);
+  List<KarakteristikeSale> listaPostojecihKarakteristika = <KarakteristikeSale>[
+    KarakteristikeSale(naziv: 'tv', karakteristikaId: 1),
+    KarakteristikeSale(naziv: 'projektor', karakteristikaId: 3),
+    KarakteristikeSale(naziv: 'wifi', karakteristikaId: 2),
+    KarakteristikeSale(naziv: 'struja', karakteristikaId: 4),
+    KarakteristikeSale(naziv: 'voda', karakteristikaId: 5),
+  ];
+
+  List<KarakteristikeSale> listaDodatihPostojecih = <KarakteristikeSale>[];
+  List<KarakteristikeSale> listaDodatihKreiranih = <KarakteristikeSale>[];
 
   @override
   Widget build(BuildContext context) {
@@ -65,35 +89,61 @@ class KreiranjeGrupneSalePage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.64,
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(9),
-                        child: InformationField(
-                          labelInformation: 'Ime',
-                          control: nazivController,
+                      SizedBox(
+                        width:
+                            (MediaQuery.of(context).size.width * 0.64) * 0.78,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(9),
+                              child: InformationField(
+                                labelInformation: 'Ime',
+                                control: nazivController,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(9),
+                              child: InformationField(
+                                labelInformation: 'Kapacitet',
+                                control: kapacitetController,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(9),
+                              child: InformationField(
+                                labelInformation: 'Kod',
+                                control: kodController,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(9),
+                              child: InformationField(
+                                labelInformation: 'Opis',
+                                control: opisController,
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.all(9),
+                                child: Text("Karakteristike sale:",
+                                    style: TextStyle(
+                                        fontSize: 40, color: defaultPlava)),
+                              ),
+                            ),
+                            DodavanjeKarakteristikaSale(
+                              listaPostojecihKarakteristika:
+                                  listaPostojecihKarakteristika,
+                              listaDodatihKreiranihKarakteristika:
+                                  listaDodatihKreiranih,
+                              listaDodatihPostojecihKarakteristika:
+                                  listaDodatihPostojecih,
+                            ),
+                            const SizedBox(height: 30),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(9),
-                        child: InformationField(
-                          labelInformation: 'Kapacitet',
-                          control: kapacitetController,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(9),
-                        child: InformationField(
-                          labelInformation: 'Kod',
-                          control: kodController,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(9),
-                        child: InformationField(
-                          labelInformation: 'Opis',
-                          control: opisController,
-                        ),
-                      ),
-                      const SizedBox(height: 30),
                       Padding(
                         padding: const EdgeInsets.all(9.0),
                         child: Align(
@@ -122,7 +172,7 @@ class KreiranjeGrupneSalePage extends StatelessWidget {
                               //print('Citaonica $citaonicaId');
                               if (ispravnostInformacijaSale()) {
                                 Response? res = await grupSale.createGrupnaSala(
-                                    citaonicaId: citaonicaId.toString(),
+                                    citaonicaId: widget.citaonicaId.toString(),
                                     sala: GrupnaSala(
                                         naziv: nazivController.text.toString(),
                                         brojMjesta: int.parse(

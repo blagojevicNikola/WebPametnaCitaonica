@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/supervizor/supervizor_models/obavjestenje.dart';
 
 class ObavjestenjeService {
-  final Dio _dio = Dio();
+  final DioClient _dioClient = DioClient();
 
   final _baseUrl = 'http://localhost:8080/api/v1';
 
@@ -10,7 +11,7 @@ class ObavjestenjeService {
       String citaonicaId, String supervizorId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response obavjestenjaData = await _dio.get(_baseUrl +
+      Response obavjestenjaData = await _dioClient.dio.get(_baseUrl +
           '/citaonice/' +
           '${citaonicaId.toString()}/' +
           // '${supervizorId.toString()}/' +
@@ -37,7 +38,7 @@ class ObavjestenjeService {
     Obavjestenje? retrievedObavjestenje;
 
     try {
-      Response response = await _dio.post(
+      Response response = await _dioClient.dio.post(
         _baseUrl +
             '/supervizori/' +
             '${supervizorId.toString()}/' +
@@ -59,7 +60,7 @@ class ObavjestenjeService {
   Future<void> deleteObavjestenje(
       {required String obavjestenjeId, required String citaonicaId}) async {
     try {
-      await _dio.delete(_baseUrl +
+      await _dioClient.dio.delete(_baseUrl +
           // '/citaonice/' +
           // '${citaonicaId.toString()}/' +
           '/obavjestenja/' +

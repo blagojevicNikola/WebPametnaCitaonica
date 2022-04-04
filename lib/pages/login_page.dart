@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use, file_names
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/api/auth_service.dart';
 import 'package:web_aplikacija/main.dart';
 
 import '../supervizor/supervizor_home_page.dart';
@@ -29,6 +31,7 @@ String izbor = 'Administrator';
 
 class _LoginDemoState extends State<LoginDemo> {
   //late Future<Korisnik> test;
+  AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -204,9 +207,11 @@ class _LoginDemoState extends State<LoginDemo> {
                     borderRadius: BorderRadius.circular(20)),
                 child: FlatButton(
                   onPressed: () async {
-                    if (emailLogin.isEmpty ||
-                        !isEmail(emailLogin) ||
-                        lozinkaLogin.length < 8) {
+                    if (emailLogin.isEmpty
+                        //||
+                        //  !isEmail(emailLogin) ||
+                        //lozinkaLogin.length < 8
+                        ) {
                       showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
@@ -223,13 +228,19 @@ class _LoginDemoState extends State<LoginDemo> {
                               ));
                     } else {
                       if (izbor == 'Administrator') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                const MyHomePage(title: 'Administratorska App'),
-                          ),
-                        );
+                        var response = await authService.postLogin(
+                            emailLogin, lozinkaLogin);
+                        if (response != null) {
+                          if (response.statusCode == 201) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const MyHomePage(
+                                    title: 'Administratorska App'),
+                              ),
+                            );
+                          }
+                        }
                       } else if (izbor == 'Supervizor') {
                         Navigator.push(
                             context,

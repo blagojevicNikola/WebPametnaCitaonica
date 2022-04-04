@@ -18,7 +18,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: const LoginDemo(), debugShowCheckedModeBanner: false,
+        home: const LoginDemo(),
+        // const SupervizorHomePage(title: 'Supervizorska app'),
+        debugShowCheckedModeBanner: false,
         //home: const MyHomePage(title: 'Administratorska app'),
         routes: {'login': (context) => const LoginDemo()});
   }
@@ -54,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     //double visina = MediaQuery.of(context).size.height;
     return Scaffold(
+      // backgroundColor: const Color(0xFFD6F4F4),
       body: Row(
         children: <Widget>[
           NavigationRail(

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class OdjavaPage extends StatefulWidget {
-  const OdjavaPage({Key? key}) : super(key: key);
+class OdjavaSupervizorPage extends StatefulWidget {
+  const OdjavaSupervizorPage({Key? key}) : super(key: key);
 
   @override
-  _OdjavaPageState createState() => _OdjavaPageState();
+  _OdjavaSupervizorPageState createState() => _OdjavaSupervizorPageState();
 }
 
-class _OdjavaPageState extends State<OdjavaPage> {
+class _OdjavaSupervizorPageState extends State<OdjavaSupervizorPage> {
   //late Future<Korisnik> test;
 
   @override

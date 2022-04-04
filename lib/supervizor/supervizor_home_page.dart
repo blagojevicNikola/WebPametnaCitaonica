@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:web_aplikacija/pages/odjava_page.dart';
 
 import 'package:web_aplikacija/pages/promjena_lozinke_page.dart';
+import 'package:web_aplikacija/supervizor/pages/odjava_supervizor.dart';
 
 import 'package:web_aplikacija/supervizor/pages/promjena_informacija_citaonice.dart';
 
@@ -25,7 +25,7 @@ class _SupervizorHomePageState extends State<SupervizorHomePage> {
     const SlanjeNotifikacija(),
     PromjenaInformacijaCitaonice(),
     const PromjenaLozinkePage(),
-    const OdjavaPage()
+    const OdjavaSupervizorPage()
     // const Lozinka(),
     // const Odjava()
   ];
@@ -33,6 +33,7 @@ class _SupervizorHomePageState extends State<SupervizorHomePage> {
   Widget build(BuildContext context) {
     //double visina = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: const Color(0xFFD6F4F4),
       body: Row(
         children: <Widget>[
           NavigationRail(

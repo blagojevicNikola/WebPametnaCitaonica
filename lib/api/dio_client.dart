@@ -2,10 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DioClient {
-  final Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8080/api/v1"));
+  final Dio dio = Dio(BaseOptions(
+    baseUrl: "http://localhost:8080/api/v1",
+  ));
 
   DioClient() {
-    dio.interceptors.add(InterceptorsWrapper(
+    dio.interceptors.add(QueuedInterceptorsWrapper(
       onError: (error, hendler) async {
         if (error.response?.statusCode == 403 ||
             error.response?.statusCode == 401) {
@@ -17,7 +19,7 @@ class DioClient {
       onRequest: (options, hendler) async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         options.headers['Authorization'] =
-            'Bearer: ${prefs.getString('accessToken')}';
+            'Bearer ${prefs.getString('accessToken')}';
         return hendler.next(options);
       },
     ));
@@ -27,9 +29,10 @@ class DioClient {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final refreshToken = prefs.getString('refreshToken');
     final response =
-        await dio.post('/users/refresh', data: {'token': refreshToken});
+        await dio.post('/refreshtoken', data: {'refreshToken': refreshToken});
     if (response.statusCode == 200) {
       prefs.setString('accessToken', response.data['accessToken']);
+      prefs.setString('refreshToken', response.data['refreshToken']);
     }
   }
 

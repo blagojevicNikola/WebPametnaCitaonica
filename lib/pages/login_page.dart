@@ -207,9 +207,11 @@ class _LoginDemoState extends State<LoginDemo> {
                     borderRadius: BorderRadius.circular(20)),
                 child: FlatButton(
                   onPressed: () async {
-                    if (emailLogin.isEmpty ||
+                    if (emailLogin.isEmpty
+                        //||
                         //  !isEmail(emailLogin) ||
-                        lozinkaLogin.length < 8) {
+                        //lozinkaLogin.length < 8
+                        ) {
                       showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
@@ -229,7 +231,7 @@ class _LoginDemoState extends State<LoginDemo> {
                         var response = await authService.postLogin(
                             emailLogin, lozinkaLogin);
                         if (response != null) {
-                          if (response.statusCode == 200) {
+                          if (response.statusCode == 201) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(

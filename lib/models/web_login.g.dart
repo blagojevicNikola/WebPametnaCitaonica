@@ -14,7 +14,7 @@ WebLogin _$WebLoginFromJson(Map<String, dynamic> json) => WebLogin(
       mail: json['mail'] as String,
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String,
-      uloga: json['uloga'] as String,
+      uloga: json['uloga'] as String?,
     );
 
 Map<String, dynamic> _$WebLoginToJson(WebLogin instance) => <String, dynamic>{

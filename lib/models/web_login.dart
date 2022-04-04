@@ -11,7 +11,7 @@ class WebLogin {
   String mail;
   String refreshToken;
   String accessToken;
-  String uloga;
+  String? uloga;
 
   WebLogin(
       {this.id,

@@ -33,7 +33,7 @@ class GrupneSaleService {
 
     try {
       Response response = await dioClient.dio.post(
-        '/citaonice/${citaonicaId}/grupne-sale',
+        '/citaonice/$citaonicaId/grupne-sale',
         data: sala.toJson(),
       );
 

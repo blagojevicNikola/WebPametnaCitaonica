@@ -6,7 +6,7 @@ import 'package:web_aplikacija/models/nalog.dart';
 import 'package:web_aplikacija/widgets/karakteristike_field.dart';
 
 class KarakteristikeSaleService {
-  Future<List<KarakteristikeSale>> getkarakteristike(
+  Future<List<KarakteristikeSale>> getKarakteristike(
       DioClient dioClient) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
@@ -27,28 +27,26 @@ class KarakteristikeSaleService {
     }
   }
 
-  Future<Nalog?> createSupervizor(
+  Future<KarakteristikeSale?> createKarakteristika(
       {required DioClient dioClient,
-      required String citaonicaId,
-      required Nalog supervizorInfo}) async {
-    Nalog? retrievedMjesto;
+      required KarakteristikeSale karakteristikaInfo}) async {
+    KarakteristikeSale? retrievedKarakteristika;
 
     try {
-      Response response = await dioClient.dio.post(
-          '/citaonice/$citaonicaId/supervizori',
-          data: supervizorInfo.toJson());
+      Response response = await dioClient.dio
+          .post('/karakteristike', data: karakteristikaInfo.toJson());
 
       //print('User created: ${response.data}');
 
-      retrievedMjesto = Nalog.fromJson(response.data);
+      retrievedKarakteristika = KarakteristikeSale.fromJson(response.data);
     } catch (e) {
       print('Error creating user: $e');
     }
 
-    return retrievedMjesto;
+    return retrievedKarakteristika;
   }
 
-  Future<Response?> deleteSupervizor(
+  Future<Response?> deleteKarakteristika(
       {required DioClient dioClient,
       required String citaonicaId,
       required String supervizorId}) async {
@@ -63,7 +61,7 @@ class KarakteristikeSaleService {
     return temp;
   }
 
-  Future<Response?> azurirajSupervizor(
+  Future<Response?> azurirajKarakteristika(
       {required DioClient dioClient,
       required Mjesto mjestoInfo,
       required String individualnaSalaId,

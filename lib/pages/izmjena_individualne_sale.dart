@@ -34,13 +34,20 @@ class _IzmjenaIndividualneSalePageState
   final brojController = TextEditingController();
   final nazivSaleController = TextEditingController();
   DioClient dioCL = DioClient();
+
+  @override
+  void initState() {
+    super.initState();
+    listaPostojecihMjesta =
+        mjestaService.getMjesta(dioCL, widget.individualnaSalaId.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
         child: FutureBuilder<List<Mjesto>>(
-            future: mjestaService.getMjesta(
-                dioCL, widget.individualnaSalaId.toString()),
+            future: listaPostojecihMjesta,
             initialData: null,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

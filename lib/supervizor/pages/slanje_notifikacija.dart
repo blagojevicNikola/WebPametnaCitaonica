@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import '../../api/dio_client.dart';
 import '../supervizor_models/obavjestenje.dart';
 import 'package:dio/dio.dart';
 import 'package:web_aplikacija/supervizor/supervizor_models/obavjestenje.dart';
@@ -21,6 +22,7 @@ ObavjestenjeService obavjService = ObavjestenjeService();
 
 class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
   Obavjestenje obavjestenje = Obavjestenje(naslov: '', tekstNotifikacije: '');
+  DioClient dioCL = DioClient();
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +200,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                     top: 0,
                     bottom: 10),
                 child: FutureBuilder<List<Obavjestenje>>(
-                    future: obavjService.getObavjestenja('3', '4'),
+                    future: obavjService.getObavjestenja(dioCL, '3', '4'),
                     initialData: null,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -260,6 +262,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
 
   void kreirajObavjestenje() {
     obavjService.createObavjestenje(
+        dioClient: dioCL,
         obavjestenjeInfo: Obavjestenje(
             naslov: obavjestenje.naslov,
             tekstNotifikacije: obavjestenje.tekstNotifikacije),

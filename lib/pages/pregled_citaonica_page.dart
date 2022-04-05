@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/citaonica_service.dart';
 import 'package:web_aplikacija/constants/citaonica_const.dart';
 
+import '../api/dio_client.dart';
 import '../models/citaonica.dart';
 import '../widgets/citaonica_card.dart';
 
@@ -16,6 +17,7 @@ class PregledCitaonicaPage extends StatefulWidget {
 
 class _PregledCitaonicaPageState extends State<PregledCitaonicaPage> {
   CitaonicaService citService = CitaonicaService();
+  DioClient dioCL = DioClient();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,7 @@ class _PregledCitaonicaPageState extends State<PregledCitaonicaPage> {
                   ),
                   width: MediaQuery.of(context).size.width * 0.64,
                   child: FutureBuilder<List<Citaonica>>(
-                      future: citService.getCitaonice(),
+                      future: citService.getCitaonice(dioCL),
                       initialData: null,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==

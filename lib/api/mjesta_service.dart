@@ -3,15 +3,12 @@ import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/models/mjesto.dart';
 
 class MjestaService {
-  final DioClient _dioClient = DioClient();
-
-  final _baseUrl = 'http://localhost:8080/api/v1';
-
-  Future<List<Mjesto>> getMjesta(String individualnaSalaId) async {
+  Future<List<Mjesto>> getMjesta(
+      DioClient dioClient, String individualnaSalaId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response citaoniceData = await _dioClient.dio
-          .get(_baseUrl + '/individualne-sale/$individualnaSalaId/mjesta');
+      Response citaoniceData = await dioClient.dio
+          .get('/individualne-sale/$individualnaSalaId/mjesta');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -28,12 +25,14 @@ class MjestaService {
   }
 
   Future<Mjesto?> createMjesta(
-      {required String individualnaSalaId, required Mjesto mjestoInfo}) async {
+      {required DioClient dioClient,
+      required String individualnaSalaId,
+      required Mjesto mjestoInfo}) async {
     Mjesto? retrievedMjesto;
 
     try {
-      Response response = await _dioClient.dio.post(
-          _baseUrl + '/individualne-sale/$individualnaSalaId/mjesta',
+      Response response = await dioClient.dio.post(
+          '/individualne-sale/$individualnaSalaId/mjesta',
           data: mjestoInfo.toJson());
 
       //print('User created: ${response.data}');
@@ -46,11 +45,12 @@ class MjestaService {
     return retrievedMjesto;
   }
 
-  Future<Response?> deleteCitaonica({required String citaonicaId}) async {
+  Future<Response?> deleteCitaonica(
+      {required DioClient dioClient, required String citaonicaId}) async {
     Response? temp;
     try {
-      temp = await _dioClient.dio.delete(
-        _baseUrl + '/citaonice/$citaonicaId',
+      temp = await dioClient.dio.delete(
+        '/citaonice/$citaonicaId',
       );
     } catch (e) {
       print('Error deleting user: $e');
@@ -59,13 +59,14 @@ class MjestaService {
   }
 
   Future<Response?> azurirajMjesta(
-      {required Mjesto mjestoInfo,
+      {required DioClient dioClient,
+      required Mjesto mjestoInfo,
       required String individualnaSalaId,
       required String mjestoId}) async {
     Response? temp;
     try {
-      Response response = await _dioClient.dio.put(
-        _baseUrl + '/individualne-sale/$individualnaSalaId/mjesta/$mjestoId',
+      Response response = await dioClient.dio.put(
+        '/individualne-sale/$individualnaSalaId/mjesta/$mjestoId',
         data: mjestoInfo.toJson(),
       );
       temp = response;

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/auth_service.dart';
 import 'package:web_aplikacija/main.dart';
 
+import '../api/dio_client.dart';
 import '../supervizor/supervizor_home_page.dart';
 
 //import 'Registracija.dart';
@@ -32,6 +33,7 @@ String izbor = 'Administrator';
 class _LoginDemoState extends State<LoginDemo> {
   //late Future<Korisnik> test;
   AuthService authService = AuthService();
+  DioClient dioCL = DioClient();
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +231,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     } else {
                       if (izbor == 'Administrator') {
                         var response = await authService.postLogin(
-                            emailLogin, lozinkaLogin);
+                            dioCL, emailLogin, lozinkaLogin);
                         if (response != null) {
                           if (response.statusCode == 201) {
                             Navigator.push(

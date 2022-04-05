@@ -6,6 +6,7 @@ import 'package:web_aplikacija/api/citaonica_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
 import 'package:web_aplikacija/widgets/unos_radnog_vremena.dart';
 
+import '../api/dio_client.dart';
 import '../models/citaonica.dart';
 
 import '../models/radno_vrijeme.dart';
@@ -38,7 +39,7 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
     RadnoVrijemeUDanu(id: 6),
     RadnoVrijemeUDanu(id: 7),
   ];
-
+  DioClient dioCL = DioClient();
   CitaonicaService citService = CitaonicaService();
 
   @override
@@ -256,6 +257,7 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
 
   void kreirajCitaonicu() async {
     citService.createCitaonica(
+      dioClient: dioCL,
       citaonicaInfo: Citaonica(
         vlasnik: vlasnikController.text.toString(),
         name: nazivController.text.toString(),

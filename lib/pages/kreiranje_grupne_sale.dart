@@ -5,6 +5,7 @@ import 'package:web_aplikacija/constants/config.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/widgets/dodavanje_karakteristika_sale.dart';
 
+import '../api/dio_client.dart';
 import '../models/clanarina.dart';
 import '../models/grupna_sala.dart';
 import '../widgets/information_field.dart';
@@ -30,6 +31,7 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
   final kodController = TextEditingController(text: '');
 
   GrupneSaleService grupSale = GrupneSaleService();
+  DioClient dioCL = DioClient();
 
   List<KarakteristikeSale> listaPostojecihKarakteristika = <KarakteristikeSale>[
     KarakteristikeSale(naziv: 'tv', karakteristikaId: 1),
@@ -172,6 +174,7 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                               //print('Citaonica $citaonicaId');
                               if (ispravnostInformacijaSale()) {
                                 Response? res = await grupSale.createGrupnaSala(
+                                    dioClient: dioCL,
                                     citaonicaId: widget.citaonicaId.toString(),
                                     sala: GrupnaSala(
                                         naziv: nazivController.text.toString(),

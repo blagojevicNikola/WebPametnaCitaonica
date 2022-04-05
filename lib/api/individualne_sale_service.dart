@@ -3,15 +3,12 @@ import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/models/individualna_sala.dart';
 
 class IndividualneSaleService {
-  final DioClient _dioClient = DioClient();
-
-  final _baseUrl = 'http://localhost:8080/api/v1';
-
-  Future<List<IndividualnaSala>> getIndividualneSale(String citaonicaId) async {
+  Future<List<IndividualnaSala>> getIndividualneSale(
+      DioClient dioClient, String citaonicaId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response saleData = await _dioClient.dio.get(
-          _baseUrl + '/citaonice/${citaonicaId.toString()}/individualne-sale');
+      Response saleData = await dioClient.dio
+          .get('/citaonice/${citaonicaId.toString()}/individualne-sale');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -28,12 +25,14 @@ class IndividualneSaleService {
   }
 
   Future<IndividualnaSala?> createIndividualnaSala(
-      {required String citaonicaId, required IndividualnaSala sala}) async {
+      {required DioClient dioClient,
+      required String citaonicaId,
+      required IndividualnaSala sala}) async {
     IndividualnaSala? retrievedIndividualnaSala;
 
     try {
-      Response response = await _dioClient.dio.post(
-        _baseUrl + '/citaonice/${citaonicaId}/individualne-sale',
+      Response response = await dioClient.dio.post(
+        '/citaonice/${citaonicaId}/individualne-sale',
         data: sala.toJson(),
       );
 
@@ -48,10 +47,11 @@ class IndividualneSaleService {
   }
 
   Future<String> deleteIndividualnaSala(
-      {required String citaonicaId, required String individualnaSalaId}) async {
-    Response response = await _dioClient.dio.delete(
-      _baseUrl +
-          '/citaonice/$citaonicaId/individualne-sale/$individualnaSalaId',
+      {required DioClient dioClient,
+      required String citaonicaId,
+      required String individualnaSalaId}) async {
+    Response response = await dioClient.dio.delete(
+      '/citaonice/$citaonicaId/individualne-sale/$individualnaSalaId',
     );
 
     if (response.statusCode == 200) {
@@ -62,14 +62,14 @@ class IndividualneSaleService {
   }
 
   Future<IndividualnaSala?> azurirajIndividualnuSalu(
-      {required IndividualnaSala individualnaSalaData,
+      {required DioClient dioClient,
+      required IndividualnaSala individualnaSalaData,
       required String citaonicaId}) async {
     IndividualnaSala? retrievedIndividualnaSala;
 
     try {
-      Response response = await _dioClient.dio.put(
-        _baseUrl +
-            '/citaonice/$citaonicaId/individualne-sale/${individualnaSalaData.id}',
+      Response response = await dioClient.dio.put(
+        '/citaonice/$citaonicaId/individualne-sale/${individualnaSalaData.id}',
         data: individualnaSalaData.toJson(),
       );
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../api/dio_client.dart';
 import '../pages/slanje_notifikacija.dart';
 
 import '../supervizor_models/obavjestenje.dart';
@@ -19,6 +20,7 @@ class ObavjestenjeCard extends StatefulWidget {
 class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
   // final Obavjestenje obavjestenjeData;
   //_ObavjestenjeCardState(this.obavjestenjeData);
+  DioClient dioCL = DioClient();
 
   int counter = 0;
 
@@ -120,6 +122,7 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
 
   void obrisiObavjestenje() {
     obavjService.deleteObavjestenje(
+        dioClient: dioCL,
         obavjestenjeId: widget.obavjestenjeData.idObavjestenja.toString(),
         citaonicaId: '3');
     setState(() {});

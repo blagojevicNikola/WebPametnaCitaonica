@@ -3,16 +3,11 @@ import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/supervizor/supervizor_models/obavjestenje.dart';
 
 class ObavjestenjeService {
-  final DioClient _dioClient = DioClient();
-
-  final _baseUrl = 'http://localhost:8080/api/v1';
-
   Future<List<Obavjestenje>> getObavjestenja(
-      String citaonicaId, String supervizorId) async {
+      DioClient dioClient, String citaonicaId, String supervizorId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response obavjestenjaData = await _dioClient.dio.get(_baseUrl +
-          '/citaonice/' +
+      Response obavjestenjaData = await dioClient.dio.get('/citaonice/' +
           '${citaonicaId.toString()}/' +
           // '${supervizorId.toString()}/' +
           'obavjestenja');
@@ -32,15 +27,15 @@ class ObavjestenjeService {
   }
 
   Future<Obavjestenje?> createObavjestenje(
-      {required Obavjestenje obavjestenjeInfo,
+      {required DioClient dioClient,
+      required Obavjestenje obavjestenjeInfo,
       required String citaonicaId,
       required String supervizorId}) async {
     Obavjestenje? retrievedObavjestenje;
 
     try {
-      Response response = await _dioClient.dio.post(
-        _baseUrl +
-            '/supervizori/' +
+      Response response = await dioClient.dio.post(
+        '/supervizori/' +
             '${supervizorId.toString()}/' +
             // '${supervizorId.toString()}/' +
             'obavjestenja',
@@ -58,13 +53,14 @@ class ObavjestenjeService {
   }
 
   Future<void> deleteObavjestenje(
-      {required String obavjestenjeId, required String citaonicaId}) async {
+      {required DioClient dioClient,
+      required String obavjestenjeId,
+      required String citaonicaId}) async {
     try {
-      await _dioClient.dio.delete(_baseUrl +
+      await dioClient.dio.delete(
           // '/citaonice/' +
           // '${citaonicaId.toString()}/' +
-          '/obavjestenja/' +
-          '${obavjestenjeId.toString()}/');
+          '/obavjestenja/' + '${obavjestenjeId.toString()}/');
     } catch (e) {
       print('Error deleting user: $e');
     }

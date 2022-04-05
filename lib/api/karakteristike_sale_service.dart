@@ -5,16 +5,12 @@ import 'package:web_aplikacija/models/mjesto.dart';
 import 'package:web_aplikacija/models/nalog.dart';
 import 'package:web_aplikacija/widgets/karakteristike_field.dart';
 
-class SupervizorService {
-  final DioClient _dioClient = DioClient();
-
-  final _baseUrl = 'http://localhost:8080/api/v1';
-
-  Future<List<KarakteristikeSale>> getkarakteristike() async {
+class KarakteristikeSaleService {
+  Future<List<KarakteristikeSale>> getkarakteristike(
+      DioClient dioClient) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response karakteristikeData =
-          await _dioClient.dio.get(_baseUrl + 'karakteristike');
+      Response karakteristikeData = await dioClient.dio.get('/karakteristike');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -32,12 +28,14 @@ class SupervizorService {
   }
 
   Future<Nalog?> createSupervizor(
-      {required String citaonicaId, required Nalog supervizorInfo}) async {
+      {required DioClient dioClient,
+      required String citaonicaId,
+      required Nalog supervizorInfo}) async {
     Nalog? retrievedMjesto;
 
     try {
-      Response response = await _dioClient.dio.post(
-          _baseUrl + '/citaonice/$citaonicaId/supervizori',
+      Response response = await dioClient.dio.post(
+          '/citaonice/$citaonicaId/supervizori',
           data: supervizorInfo.toJson());
 
       //print('User created: ${response.data}');
@@ -51,11 +49,13 @@ class SupervizorService {
   }
 
   Future<Response?> deleteSupervizor(
-      {required String citaonicaId, required String supervizorId}) async {
+      {required DioClient dioClient,
+      required String citaonicaId,
+      required String supervizorId}) async {
     Response? temp;
     try {
-      temp = await _dioClient.dio.delete(
-        _baseUrl + '/citaonice/$citaonicaId/supervizori/$supervizorId',
+      temp = await dioClient.dio.delete(
+        '/citaonice/$citaonicaId/supervizori/$supervizorId',
       );
     } catch (e) {
       print('Error deleting user: $e');
@@ -64,13 +64,14 @@ class SupervizorService {
   }
 
   Future<Response?> azurirajSupervizor(
-      {required Mjesto mjestoInfo,
+      {required DioClient dioClient,
+      required Mjesto mjestoInfo,
       required String individualnaSalaId,
       required String mjestoId}) async {
     Response? temp;
     try {
-      Response response = await _dioClient.dio.put(
-        _baseUrl + '/individualne-sale/$individualnaSalaId/mjesta/$mjestoId',
+      Response response = await dioClient.dio.put(
+        '/individualne-sale/$individualnaSalaId/mjesta/$mjestoId',
         data: mjestoInfo.toJson(),
       );
       temp = response;

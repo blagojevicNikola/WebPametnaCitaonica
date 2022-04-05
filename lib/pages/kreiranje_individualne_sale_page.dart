@@ -10,6 +10,7 @@ import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/models/pozicijaXY.dart';
 import 'package:web_aplikacija/widgets/mjesto_widget.dart';
 
+import '../api/dio_client.dart';
 import '../models/individualna_sala.dart';
 import '../models/mjesto.dart';
 
@@ -36,6 +37,7 @@ class _KreiranjeIdividualneSalePageState
   int? kreiranaIndividualnaSalaId;
   IndividualneSaleService indSaleService = IndividualneSaleService();
   MjestaService mjestaService = MjestaService();
+  DioClient dioCL = DioClient();
 
   @override
   void dispose() {
@@ -243,6 +245,7 @@ class _KreiranjeIdividualneSalePageState
   Future<bool> kreirajIndividualnuSalu() async {
     if (listaMjesta.isNotEmpty) {
       final salaTemp = await indSaleService.createIndividualnaSala(
+        dioClient: dioCL,
         citaonicaId: widget.citaonicaId.toString(),
         sala: IndividualnaSala(
             naziv: nazivSaleController.text.toString(),
@@ -256,6 +259,7 @@ class _KreiranjeIdividualneSalePageState
         var futures = <Future>[];
         for (var item in listaMjesta) {
           futures.add(mjestaService.createMjesta(
+              dioClient: dioCL,
               individualnaSalaId: kreiranaIndividualnaSalaId.toString(),
               mjestoInfo: item));
         }

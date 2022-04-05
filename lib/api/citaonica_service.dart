@@ -3,14 +3,10 @@ import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/models/citaonica.dart';
 
 class CitaonicaService {
-  final DioClient _dioClient = DioClient();
-
-  final _baseUrl = 'http://localhost:8080/api/v1';
-
-  Future<List<Citaonica>> getCitaonice() async {
+  Future<List<Citaonica>> getCitaonice(DioClient dioClient) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response citaoniceData = await _dioClient.dio.get('/citaonice');
+      Response citaoniceData = await dioClient.dio.get('/citaonice');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -26,12 +22,13 @@ class CitaonicaService {
     }
   }
 
-  Future<Citaonica?> createCitaonica({required Citaonica citaonicaInfo}) async {
+  Future<Citaonica?> createCitaonica(
+      {required DioClient dioClient, required Citaonica citaonicaInfo}) async {
     Citaonica? retrievedCitaonica;
 
     try {
-      Response response = await _dioClient.dio.post(
-        _baseUrl + '/citaonice/',
+      Response response = await dioClient.dio.post(
+        '/citaonice/',
         data: citaonicaInfo.toJson(),
       );
 
@@ -45,11 +42,12 @@ class CitaonicaService {
     return retrievedCitaonica;
   }
 
-  Future<Response?> deleteCitaonica({required String citaonicaId}) async {
+  Future<Response?> deleteCitaonica(
+      {required DioClient dioClient, required String citaonicaId}) async {
     Response? temp;
     try {
-      temp = await _dioClient.dio.delete(
-        _baseUrl + '/citaonice/$citaonicaId',
+      temp = await dioClient.dio.delete(
+        '/citaonice/$citaonicaId',
       );
     } catch (e) {
       print('Error deleting user: $e');
@@ -58,11 +56,13 @@ class CitaonicaService {
   }
 
   Future<Response?> azurirajCitaonicu(
-      {required Citaonica citaonicaInfo, required String index}) async {
+      {required DioClient dioClient,
+      required Citaonica citaonicaInfo,
+      required String index}) async {
     Response? temp;
     try {
-      Response response = await _dioClient.dio.put(
-        _baseUrl + '/citaonice/$index',
+      Response response = await dioClient.dio.put(
+        '/citaonice/$index',
         data: citaonicaInfo.toJson(),
       );
       temp = response;

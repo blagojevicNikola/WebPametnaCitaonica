@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../api/dio_client.dart';
 import '../api/mjesta_service.dart';
 import '../models/mjesto.dart';
 import '../models/pozicijaXY.dart';
@@ -32,14 +33,14 @@ class _IzmjenaIndividualneSalePageState
   final qrCodeController = TextEditingController();
   final brojController = TextEditingController();
   final nazivSaleController = TextEditingController();
-
+  DioClient dioCL = DioClient();
   @override
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
         child: FutureBuilder<List<Mjesto>>(
-            future:
-                mjestaService.getMjesta(widget.individualnaSalaId.toString()),
+            future: mjestaService.getMjesta(
+                dioCL, widget.individualnaSalaId.toString()),
             initialData: null,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -308,6 +309,7 @@ class _IzmjenaIndividualneSalePageState
         var futuresPostojecaMjesta = <Future>[];
         for (var item in postojecaMjesta) {
           futuresPostojecaMjesta.add(mjestaService.azurirajMjesta(
+              dioClient: dioCL,
               individualnaSalaId: widget.individualnaSalaId.toString(),
               mjestoId: item.id.toString(),
               mjestoInfo: Mjesto(
@@ -324,6 +326,7 @@ class _IzmjenaIndividualneSalePageState
       var futures = <Future>[];
       for (var item in listaMjesta) {
         futures.add(mjestaService.createMjesta(
+            dioClient: dioCL,
             individualnaSalaId: widget.individualnaSalaId.toString(),
             mjestoInfo: item));
       }

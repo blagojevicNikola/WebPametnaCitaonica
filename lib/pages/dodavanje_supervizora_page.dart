@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/supervizor_service.dart';
 
+import '../api/dio_client.dart';
 import '../models/nalog.dart';
 import '../widgets/information_field.dart';
 
@@ -13,6 +14,7 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
   var emailController = TextEditingController();
   var lozinkaController = TextEditingController();
   SupervizorService supervizorService = SupervizorService();
+  DioClient dioCL = DioClient();
 
   DodavanjeSupervizoraPage({Key? key, required this.citaonicaId})
       : super(key: key);
@@ -132,6 +134,7 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
                             if (ispravneInformacijeSupervizora()) {
                               final response =
                                   await supervizorService.createSupervizor(
+                                dioClient: dioCL,
                                 citaonicaId: citaonicaId.toString(),
                                 supervizorInfo: Nalog(
                                   ime: imeController.text.toString(),

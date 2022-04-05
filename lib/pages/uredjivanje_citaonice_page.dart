@@ -10,6 +10,7 @@ import 'package:web_aplikacija/widgets/information_field.dart';
 import 'package:web_aplikacija/widgets/unos_radnog_vremena.dart';
 
 import '../api/citaonica_service.dart';
+import '../api/dio_client.dart';
 import '../api/grupne_sale_service.dart';
 import '../models/citaonica.dart';
 import '../models/individualna_sala.dart';
@@ -43,16 +44,17 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   late Future<List<Nalog>> supervizoriData;
 
   CitaonicaService citService = CitaonicaService();
+  DioClient dioCL = DioClient();
 
   @override
   void initState() {
     super.initState();
     individualneSaleData =
-        indSaleService.getIndividualneSale(widget.citData.id.toString());
+        indSaleService.getIndividualneSale(dioCL, widget.citData.id.toString());
     grupneSaleData =
-        grupSaleService.getGrupneSale(widget.citData.id.toString());
+        grupSaleService.getGrupneSale(dioCL, widget.citData.id.toString());
     supervizoriData =
-        supervizorService.getSupervizore(widget.citData.id.toString());
+        supervizorService.getSupervizore(dioCL, widget.citData.id.toString());
   }
 
   @override
@@ -453,6 +455,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                   onPressed: () async {
                                     final response =
                                         await citService.deleteCitaonica(
+                                            dioClient: dioCL,
                                             citaonicaId:
                                                 widget.citData.id.toString());
                                     if (response != null) {
@@ -493,6 +496,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                   Citaonica temp =
                                       azurirajCitaonicu(widget.citData);
                                   citService.azurirajCitaonicu(
+                                      dioClient: dioCL,
                                       citaonicaInfo: temp,
                                       index: widget.citData.id.toString());
                                 },
@@ -514,7 +518,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   }
 
   void obrisiCitaonicu(String id) {
-    citService.deleteCitaonica(citaonicaId: id);
+    citService.deleteCitaonica(dioClient: dioCL, citaonicaId: id);
   }
 
   void posaljiAzuriranje(Citaonica cit, String index) async {
@@ -527,7 +531,8 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
         phoneNumber: cit.phoneNumber,
         administratorId: cit.administratorId,
         mail: cit.mail);
-    citService.azurirajCitaonicu(citaonicaInfo: temp, index: index);
+    citService.azurirajCitaonicu(
+        dioClient: dioCL, citaonicaInfo: temp, index: index);
   }
 
   Citaonica azurirajCitaonicu(Citaonica cit) {
@@ -544,37 +549,40 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
 
   void obrisiIndividualnuSalu(int? salaIndex) async {
     final brisanje = await indSaleService.deleteIndividualnaSala(
+        dioClient: dioCL,
         citaonicaId: widget.citData.id.toString(),
         individualnaSalaId: salaIndex.toString());
     if (brisanje.isEmpty) {
       setState(() {
-        individualneSaleData =
-            indSaleService.getIndividualneSale(widget.citData.id.toString());
+        individualneSaleData = indSaleService.getIndividualneSale(
+            dioCL, widget.citData.id.toString());
       });
     }
   }
 
   void obrisiGrupnuSalu(int? salaIndex) async {
     final brisanje = await grupSaleService.deleteGrupnaSala(
+        dioClient: dioCL,
         citaonicaId: widget.citData.id.toString(),
         grupnaSalaId: salaIndex.toString());
     if (brisanje.isEmpty) {
       setState(() {
         grupneSaleData =
-            grupSaleService.getGrupneSale(widget.citData.id.toString());
+            grupSaleService.getGrupneSale(dioCL, widget.citData.id.toString());
       });
     }
   }
 
   void obrisiSupervizora(int? supervizorId) async {
     final brisanje = await supervizorService.deleteSupervizor(
+        dioClient: dioCL,
         citaonicaId: widget.citData.id.toString(),
         supervizorId: supervizorId.toString());
     if (brisanje != null) {
       if (brisanje.statusCode == 204) {
         setState(() {
-          supervizoriData =
-              supervizorService.getSupervizore(widget.citData.id.toString());
+          supervizoriData = supervizorService.getSupervizore(
+              dioCL, widget.citData.id.toString());
         });
       }
     }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/models/argumenti_izmjene_grupne_sale.dart';
 
 import '../constants/config.dart';
 import '../models/grupna_sala.dart';
@@ -6,6 +7,7 @@ import '../models/grupna_sala.dart';
 class GrupnaSalaTile extends StatelessWidget {
   int? index;
   final Function(int?) funkcijaBrisanja;
+  final String citaonicaId;
   // final String naziv;
   // final int brojMjesta;
   // final bool tv;
@@ -19,6 +21,7 @@ class GrupnaSalaTile extends StatelessWidget {
     // required this.tv,
     // required this.projektor,
     // required this.klima,
+    required this.citaonicaId,
     required this.index,
     required this.funkcijaBrisanja,
     required this.grupnaSalaData,
@@ -116,7 +119,9 @@ class GrupnaSalaTile extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pushNamed(
                               'pregled/citaonica/izmjeni_grup',
-                              arguments: grupnaSalaData);
+                              arguments: ArgumentiIzmjeneGrupneSale(
+                                  citaonicaId: citaonicaId,
+                                  grupnaSalaData: grupnaSalaData));
                         },
                       ),
                     ),

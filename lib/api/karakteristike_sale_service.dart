@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:web_aplikacija/api/dio_client.dart';
+import 'package:web_aplikacija/models/karakteristike.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/models/mjesto.dart';
 import 'package:web_aplikacija/models/nalog.dart';
 import 'package:web_aplikacija/widgets/karakteristike_field.dart';
 
 class KarakteristikeSaleService {
-  Future<List<KarakteristikeSale>> getKarakteristike(
-      DioClient dioClient) async {
+  Future<List<Karakteristike>> getKarakteristike(DioClient dioClient) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
       Response karakteristikeData = await dioClient.dio.get('/karakteristike');
@@ -16,10 +16,9 @@ class KarakteristikeSaleService {
       //print('User Info: ${userData.data}');
 
       // Parsing the raw JSON data to the User class
-      List<KarakteristikeSale> karakteristike =
-          (karakteristikeData.data as List)
-              .map((data) => KarakteristikeSale.fromJson(data))
-              .toList();
+      List<Karakteristike> karakteristike = (karakteristikeData.data as List)
+          .map((data) => Karakteristike.fromJson(data))
+          .toList();
 
       return karakteristike;
     } catch (error, stacktrace) {

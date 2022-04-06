@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/models/argumenti_izmjene_grupne_sale.dart';
 
 import 'package:web_aplikacija/models/citaonica.dart';
 import 'package:web_aplikacija/models/grupna_sala.dart';
@@ -51,7 +52,7 @@ class _PregledCitaonicaWrapperPageState
                 break;
               case 'pregled/citaonica/izmjeni_grup':
                 builder = (BuildContext context) => IzmjenaGrupneSalePage(
-                      grupnaSalaData: settings.arguments as GrupnaSala,
+                      data: settings.arguments as ArgumentiIzmjeneGrupneSale,
                     );
                 break;
               case 'pregled/citaonica/dodaj_supervizora':

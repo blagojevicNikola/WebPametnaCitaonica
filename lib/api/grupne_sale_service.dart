@@ -62,25 +62,24 @@ class GrupneSaleService {
     }
   }
 
-  Future<GrupnaSala?> azurirajGrupnuSalu(
+  Future<Response?> azurirajGrupnuSalu(
       {required DioClient dioClient,
       required GrupnaSala grupnaSalaData,
       required String citaonicaId}) async {
-    GrupnaSala? retrievedGrupnaSala;
+    Response? temp;
 
     try {
-      Response response = await dioClient.dio.put(
-        '/citaonice/${citaonicaId}/individualne-sale/${grupnaSalaData.id}',
+      temp = await dioClient.dio.put(
+        '/citaonice/${citaonicaId}/grupne-sale/${grupnaSalaData.id}',
         data: grupnaSalaData.toJson(),
       );
 
       //print('User created: ${response.data}');
 
-      retrievedGrupnaSala = GrupnaSala.fromJson(response.data);
     } catch (e) {
       print('Error creating user: $e');
     }
 
-    return retrievedGrupnaSala;
+    return temp;
   }
 }

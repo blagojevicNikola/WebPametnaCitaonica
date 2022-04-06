@@ -7,6 +7,7 @@ part 'radno_vrijeme.g.dart';
 @JsonSerializable()
 @CustomTimeOfDayConverter()
 class RadnoVrijemeUDanu {
+  @JsonKey(name: 'dan')
   int? id;
   TimeOfDay? pocetak;
   TimeOfDay? kraj;

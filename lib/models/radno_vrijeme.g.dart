@@ -8,7 +8,7 @@ part of 'radno_vrijeme.dart';
 
 RadnoVrijemeUDanu _$RadnoVrijemeUDanuFromJson(Map<String, dynamic> json) =>
     RadnoVrijemeUDanu(
-      id: json['id'] as int?,
+      id: json['dan'] as int?,
       pocetak:
           const CustomTimeOfDayConverter().fromJson(json['pocetak'] as String?),
       kraj: const CustomTimeOfDayConverter().fromJson(json['kraj'] as String?),
@@ -16,7 +16,7 @@ RadnoVrijemeUDanu _$RadnoVrijemeUDanuFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$RadnoVrijemeUDanuToJson(RadnoVrijemeUDanu instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'dan': instance.id,
       'pocetak': const CustomTimeOfDayConverter().toJson(instance.pocetak),
       'kraj': const CustomTimeOfDayConverter().toJson(instance.kraj),
     };

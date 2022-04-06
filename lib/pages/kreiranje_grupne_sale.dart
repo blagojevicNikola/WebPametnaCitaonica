@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/grupne_sale_service.dart';
 import 'package:web_aplikacija/api/karakteristike_sale_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
+import 'package:web_aplikacija/models/karakteristike.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/widgets/dodavanje_karakteristika_sale.dart';
 
@@ -36,7 +37,7 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
       KarakteristikeSaleService();
   DioClient dioCL = DioClient();
 
-  late Future<List<KarakteristikeSale>> listaPostojecihKarakteristika;
+  late Future<List<Karakteristike>> listaPostojecihKarakteristika;
   //  <KarakteristikeSale>[
   //   KarakteristikeSale(naziv: 'tv', karakteristikaId: 1),
   //   KarakteristikeSale(naziv: 'projektor', karakteristikaId: 3),
@@ -145,7 +146,7 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                                         fontSize: 40, color: defaultPlava)),
                               ),
                             ),
-                            FutureBuilder<List<KarakteristikeSale>>(
+                            FutureBuilder<List<Karakteristike>>(
                                 future: listaPostojecihKarakteristika,
                                 initialData: null,
                                 builder: (context, snapshot) {
@@ -212,12 +213,13 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                             onPressed: () async {
                               //print('Citaonica $citaonicaId');
                               if (ispravnostInformacijaSale()) {
-                                await dodajNoveKarakteristike();
+                                //await dodajNoveKarakteristike();
                                 List<KarakteristikeSale> temp =
                                     <KarakteristikeSale>[];
                                 for (var item in listaDodatihPostojecih) {
                                   temp.add(KarakteristikeSale(
-                                      karakteristikaId: item.karakteristikaId));
+                                    karakteristikaId: item.karakteristikaId,
+                                  ));
                                 }
                                 Response? res = await grupSale.createGrupnaSala(
                                     dioClient: dioCL,

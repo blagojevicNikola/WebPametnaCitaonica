@@ -5,6 +5,7 @@ part 'karakteristike_sale.g.dart';
 @JsonSerializable()
 class KarakteristikeSale {
   int? karakteristikaId;
+  @JsonKey(name: 'karakteristikaNaziv')
   String? naziv;
   String? detalji;
 

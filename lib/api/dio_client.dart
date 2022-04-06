@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:fresh_dio/fresh_dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DioClient {

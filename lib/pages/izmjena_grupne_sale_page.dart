@@ -13,7 +13,7 @@ import '../widgets/information_field.dart';
 class IzmjenaGrupneSalePage extends StatefulWidget {
   final ArgumentiIzmjeneGrupneSale data;
 
-  IzmjenaGrupneSalePage({Key? key, required this.data}) : super(key: key);
+  const IzmjenaGrupneSalePage({Key? key, required this.data}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _IzmjenaGrupneSalePageState();
@@ -21,10 +21,10 @@ class IzmjenaGrupneSalePage extends StatefulWidget {
 }
 
 class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
-  TextEditingController? nazivSaleController;
-  TextEditingController? qrCodeSaleController;
-  TextEditingController? brojMjestaSaleController;
-  TextEditingController? opisSaleController;
+  TextEditingController nazivSaleController = TextEditingController();
+  TextEditingController qrCodeSaleController= TextEditingController();
+  TextEditingController brojMjestaSaleController= TextEditingController();
+  TextEditingController opisSaleController= TextEditingController();
   // List<Karakteristike> listaPostojecihKarakteristika = <Karakteristike>[
   //   Karakteristike(naziv: 'tv', id: 1),
   //   Karakteristike(naziv: 'projektor', id: 3),
@@ -115,21 +115,21 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                           Padding(
                             padding: const EdgeInsets.all(9),
                             child: InformationField(
-                              labelInformation: 'QR Code',
-                              control: qrCodeSaleController =
-                                  TextEditingController(
-                                      text: widget.data.grupnaSalaData.qrKod),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(9),
-                            child: InformationField(
                               labelInformation: 'Broj mjesta',
                               control: brojMjestaSaleController =
                                   TextEditingController(
                                 text: widget.data.grupnaSalaData.brojMjesta
                                     .toString(),
                               ),
+                            ),
+                          ),
+                            Padding(
+                            padding: const EdgeInsets.all(9),
+                            child: InformationField(
+                              labelInformation: 'QR Code',
+                              control: qrCodeSaleController =
+                                  TextEditingController(
+                                      text: widget.data.grupnaSalaData.qrKod),
                             ),
                           ),
                           Padding(
@@ -165,7 +165,7 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                                           listaDodatihKreiranihKarakteristika:
                                               listaDodatihKreiranih,
                                           listaDodatihPostojecihKarakteristika:
-                                              listaDodatihPostojecih,
+                                              widget.data.grupnaSalaData.karakteristike,
                                         ));
                                   } else {
                                     return const Text('Empty data');
@@ -241,9 +241,9 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
   }
 
   bool ispravnostInformacijaSale() {
-    if (nazivSaleController!.text.isEmpty ||
-        qrCodeSaleController!.text.isEmpty ||
-        brojMjestaSaleController!.text.isEmpty) {
+    if (nazivSaleController.text.isEmpty ||
+        qrCodeSaleController.text.isEmpty ||
+        brojMjestaSaleController.text.isEmpty) {
       return false;
     } else {
       return true;
@@ -255,9 +255,10 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
         dioClient: dioCL,
         grupnaSalaData: GrupnaSala(
             id: widget.data.grupnaSalaData.id
-            naziv: nazivSaleController!.text.toString(),
-            qrKod: qrCodeSaleController!.text.toString(),
-            brojMjesta: int.parse(brojMjestaSaleController!.text.toString()),
+            naziv: nazivSaleController.text.toString(),
+            qrKod: qrCodeSaleController.text.toString(),
+            brojMjesta: int.parse(brojMjestaSaleController.text.toString()),
+            opis: opisSaleController.text.toString()
             statusId: 1,
             clanarine: widget.data.grupnaSalaData.clanarine,
             karakteristike: widget.data.grupnaSalaData.karakteristike),

@@ -558,7 +558,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
     return Citaonica(
         name: nazivController.text.toString(),
         adresa: adresaController.text.toString(),
-        radnoVrijeme: cit.radnoVrijeme,
+        radnoVrijeme: radnoVr,
         opis: cit.opis,
         vlasnik: cit.vlasnik,
         phoneNumber: telefonController.text.toString(),

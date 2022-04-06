@@ -18,9 +18,7 @@ GrupnaSala _$GrupnaSalaFromJson(Map<String, dynamic> json) => GrupnaSala(
               e == null ? null : Clanarina.fromJson(e as Map<String, dynamic>))
           .toList(),
       karakteristike: (json['karakteristike'] as List<dynamic>)
-          .map((e) => e == null
-              ? null
-              : KarakteristikeSale.fromJson(e as Map<String, dynamic>))
+          .map((e) => KarakteristikeSale.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

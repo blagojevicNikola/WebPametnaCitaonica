@@ -18,7 +18,7 @@ class GrupnaSala {
   int statusId;
   //int statusId;
   List<Clanarina?> clanarine;
-  List<KarakteristikeSale?> karakteristike;
+  List<KarakteristikeSale> karakteristike;
 
   GrupnaSala(
       {this.id,

@@ -3,8 +3,6 @@ import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/models/karakteristike.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/models/mjesto.dart';
-import 'package:web_aplikacija/models/nalog.dart';
-import 'package:web_aplikacija/widgets/karakteristike_field.dart';
 
 class KarakteristikeSaleService {
   Future<List<Karakteristike>> getKarakteristike(DioClient dioClient) async {

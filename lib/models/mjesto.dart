@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:web_aplikacija/converter/custom_offset_converter.dart';
 import 'package:web_aplikacija/models/pozicijaXY.dart';

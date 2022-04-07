@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
 import 'package:web_aplikacija/models/clanarina.dart';
@@ -10,25 +9,25 @@ import 'package:web_aplikacija/widgets/supervizorsko_mjesto_widget.dart';
 
 import '../../api/dio_client.dart';
 import '../../api/mjesta_service.dart';
-import 'package:web_aplikacija/widgets/mjesto_widget.dart';
 
 import '../../models/individualna_sala.dart';
 
-class IzmjenaIndividualneSalePage extends StatefulWidget {
+class SupervizorskiPregledIndividualneSalePage extends StatefulWidget {
   //final List<Mjesto> listaPostojecihMjesta;
   int citaonicaId;
   int individualnaSalaId;
-  IzmjenaIndividualneSalePage({Key? key, required this.individualnaSalaId, required this.citaonicaId})
+  SupervizorskiPregledIndividualneSalePage(
+      {Key? key, required this.individualnaSalaId, required this.citaonicaId})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _IzmjenaIndividualneSalePageState();
+    return _SupervizorskiPregledIndividualneSalePageState();
   }
 }
 
-class _IzmjenaIndividualneSalePageState
-    extends State<IzmjenaIndividualneSalePage> {
+class _SupervizorskiPregledIndividualneSalePageState
+    extends State<SupervizorskiPregledIndividualneSalePage> {
   Uint8List? slika;
   MjestaService mjestaService = MjestaService();
   late final Future<List<Mjesto>> listaPostojecihMjesta;
@@ -177,7 +176,7 @@ class _IzmjenaIndividualneSalePageState
         await individualneSaleService.azurirajIndividualnuSalu(
       dioClient: dioCL,
       individualnaSalaData: IndividualnaSala(
-          id: widget.individualnaSalaId
+          id: widget.individualnaSalaId,
           naziv: nazivSaleController.text.toString(),
           clanarine: <Clanarina>[],
           karakteristike: <KarakteristikeSale>[]),

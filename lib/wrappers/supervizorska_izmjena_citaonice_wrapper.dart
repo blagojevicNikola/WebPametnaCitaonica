@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/supervizor/pages/promjena_informacija_citaonice.dart';
 
-import '../api/citaonica_service.dart';
-import '../api/dio_client.dart';
-import '../models/citaonica.dart';
-
 class SupervizorskaIzmjenaCitaoniceWrapperPage extends StatefulWidget {
   const SupervizorskaIzmjenaCitaoniceWrapperPage({Key? key}) : super(key: key);
 
@@ -28,7 +24,7 @@ class _SupervizorskaIzmjenaCitaoniceWrapperPageState
             switch (settings.name) {
               case 'promjena':
                 builder = (BuildContext context) =>
-                    const PromjenaInformacijaCitaonice();
+                    const PromjenaInformacijaCitaonice(citaonicaId: 4);
                 break;
               default:
                 throw Exception('Invalid route:}');

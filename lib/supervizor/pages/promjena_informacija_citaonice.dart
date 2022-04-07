@@ -10,7 +10,9 @@ import '../../widgets/information_field.dart';
 import '../../widgets/unos_radnog_vremena.dart';
 
 class PromjenaInformacijaCitaonice extends StatefulWidget {
-  const PromjenaInformacijaCitaonice({Key? key}) : super(key: key);
+  final int citaonicaId;
+  const PromjenaInformacijaCitaonice({Key? key, required this.citaonicaId})
+      : super(key: key);
 
   @override
   State<PromjenaInformacijaCitaonice> createState() =>
@@ -19,15 +21,15 @@ class PromjenaInformacijaCitaonice extends StatefulWidget {
 
 class _PromjenaInformacijaCitaoniceState
     extends State<PromjenaInformacijaCitaonice> {
-  TextEditingController? nazivController;
+  TextEditingController nazivController = TextEditingController();
 
-  TextEditingController? adresaController;
+  TextEditingController adresaController = TextEditingController();
 
-  TextEditingController? telefonController;
+  TextEditingController telefonController = TextEditingController();
 
-  TextEditingController? emailController;
-  TextEditingController? opisController;
-  String? vlasnik;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController opisController = TextEditingController();
+  TextEditingController vlasnikController = TextEditingController();
   String? citaonicaId;
 
   List<RadnoVrijemeUDanu> radnoVr = <RadnoVrijemeUDanu>[
@@ -106,7 +108,6 @@ class _PromjenaInformacijaCitaoniceState
                                     snapshot.data!.radnoVrijeme[pozicija].kraj;
                               }
                             }
-                            vlasnik = snapshot.data!.vlasnik;
                             return Column(
                               children: [
                                 const SizedBox(height: 30),
@@ -151,6 +152,15 @@ class _PromjenaInformacijaCitaoniceState
                                                   text: snapshot
                                                       .data!.phoneNumber),
                                         ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(9),
+                                        child: InformationField(
+                                            labelInformation: 'Vlasnik',
+                                            control: vlasnikController =
+                                                TextEditingController(
+                                                    text: snapshot
+                                                        .data!.vlasnik)),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(9),
@@ -279,10 +289,11 @@ class _PromjenaInformacijaCitaoniceState
   }
 
   bool ispravneInformacijeCitaonice() {
-    if (nazivController!.text.isEmpty ||
-        adresaController!.text.isEmpty ||
-        telefonController!.text.isEmpty ||
-        emailController!.text.isEmpty) {
+    if (nazivController.text.isEmpty ||
+        adresaController.text.isEmpty ||
+        telefonController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        vlasnikController.text.isEmpty) {
       return false;
     } else {
       return true;
@@ -290,19 +301,16 @@ class _PromjenaInformacijaCitaoniceState
   }
 
   Future<Response?> azurirajCitaonicu() async {
-    if (vlasnik != null && citaonicaId != null) {
-      Response? odgovor = await citaonicaService.azurirajCitaonicu(
-          dioClient: dioCL,
-          citaonicaInfo: Citaonica(
-              name: nazivController!.text.toString(),
-              mail: emailController!.text.toString(),
-              phoneNumber: telefonController!.text.toString(),
-              adresa: adresaController!.text.toString(),
-              radnoVrijeme: radnoVr,
-              vlasnik: vlasnik!),
-          index: citaonicaId!);
-      return odgovor;
-    }
-    return null;
+    Response? odgovor = await citaonicaService.azurirajCitaonicu(
+        dioClient: dioCL,
+        citaonicaInfo: Citaonica(
+            name: nazivController.text.toString(),
+            mail: emailController.text.toString(),
+            phoneNumber: telefonController.text.toString(),
+            adresa: adresaController.text.toString(),
+            radnoVrijeme: radnoVr,
+            vlasnik: vlasnikController.text.toString()),
+        index: citaonicaId!);
+    return odgovor;
   }
 }

@@ -237,8 +237,8 @@ class _LoginDemoState extends State<LoginDemo> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const MyHomePage(
-                                    title: 'Administratorska App'),
+                                builder: (_) => const SupervizorHomePage(
+                                    title: 'Supervizorska App'),
                               ),
                             );
                           }

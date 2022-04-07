@@ -22,6 +22,24 @@ class CitaonicaService {
     }
   }
 
+  Future<Citaonica> getJednaCitaonica(
+      DioClient dioClient, String citaonicaId) async {
+    // Perform GET request to the endpoint "/users/<id>"
+    try {
+      Response citaoniceData =
+          await dioClient.dio.get('/citaonice/$citaonicaId');
+
+      // Prints the raw data returned by the server
+      //print('User Info: ${userData.data}');
+
+      // Parsing the raw JSON data to the User class
+      Citaonica citaonice = Citaonica.fromJson(citaoniceData.data);
+      return citaonice;
+    } catch (error, stacktrace) {
+      throw Exception("Exception occured: $error stackTrace: $stacktrace");
+    }
+  }
+
   Future<Citaonica?> createCitaonica(
       {required DioClient dioClient, required Citaonica citaonicaInfo}) async {
     Citaonica? retrievedCitaonica;

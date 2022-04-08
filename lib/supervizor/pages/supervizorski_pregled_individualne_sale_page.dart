@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
+import 'package:web_aplikacija/models/argumenti_supervizorske_izmjene_individualne_sale.dart';
 import 'package:web_aplikacija/models/clanarina.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/models/mjesto.dart';
@@ -14,10 +15,9 @@ import '../../models/individualna_sala.dart';
 
 class SupervizorskiPregledIndividualneSalePage extends StatefulWidget {
   //final List<Mjesto> listaPostojecihMjesta;
-  int citaonicaId;
-  int individualnaSalaId;
-  SupervizorskiPregledIndividualneSalePage(
-      {Key? key, required this.individualnaSalaId, required this.citaonicaId})
+  final ArgSupervizorskeIzmjeneIndividualneSale argumenti;
+  const SupervizorskiPregledIndividualneSalePage(
+      {Key? key, required this.argumenti})
       : super(key: key);
 
   @override
@@ -31,15 +31,17 @@ class _SupervizorskiPregledIndividualneSalePageState
   Uint8List? slika;
   MjestaService mjestaService = MjestaService();
   late final Future<List<Mjesto>> listaPostojecihMjesta;
-  final nazivSaleController = TextEditingController();
+  late TextEditingController _nazivSaleController;
   IndividualneSaleService individualneSaleService = IndividualneSaleService();
   DioClient dioCL = DioClient();
 
   @override
   void initState() {
     super.initState();
-    listaPostojecihMjesta =
-        mjestaService.getMjesta(dioCL, widget.individualnaSalaId.toString());
+    listaPostojecihMjesta = mjestaService.getMjesta(
+        dioCL, widget.argumenti.individualnaSalaId.toString());
+    _nazivSaleController =
+        TextEditingController(text: widget.argumenti.nazivIndividualneSale);
   }
 
   @override
@@ -84,9 +86,9 @@ class _SupervizorskiPregledIndividualneSalePageState
                               children: [
                                 const Text('Naziv sale: '),
                                 SizedBox(
-                                  width: 60,
+                                  width: 200,
                                   child: TextField(
-                                    controller: nazivSaleController,
+                                    controller: _nazivSaleController,
                                     style: const TextStyle(
                                         fontSize: 19, height: 1.1),
                                   ),
@@ -164,7 +166,7 @@ class _SupervizorskiPregledIndividualneSalePageState
   }
 
   bool ispravneInformacijeSale() {
-    if (nazivSaleController.text.isEmpty) {
+    if (_nazivSaleController.text.isEmpty) {
       return false;
     } else {
       return true;
@@ -176,11 +178,12 @@ class _SupervizorskiPregledIndividualneSalePageState
         await individualneSaleService.azurirajIndividualnuSalu(
       dioClient: dioCL,
       individualnaSalaData: IndividualnaSala(
-          id: widget.individualnaSalaId,
-          naziv: nazivSaleController.text.toString(),
+          id: widget.argumenti.individualnaSalaId,
+          naziv: _nazivSaleController.text.toString(),
+          brojMjesta: widget.argumenti.brojMjestaUSali,
           clanarine: <Clanarina>[],
           karakteristike: <KarakteristikeSale>[]),
-      citaonicaId: widget.citaonicaId.toString(),
+      citaonicaId: widget.argumenti.citaonicaId.toString(),
     );
     if (odgovor != null) {
       return true;

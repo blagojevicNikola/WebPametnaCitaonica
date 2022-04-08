@@ -555,15 +555,24 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   }
 
   Citaonica azurirajCitaonicu(Citaonica cit) {
+    cit.radnoVrijeme.removeWhere(radnoVrijemeIsNull);
     return Citaonica(
         name: nazivController.text.toString(),
         adresa: adresaController.text.toString(),
-        radnoVrijeme: radnoVr,
+        radnoVrijeme: cit.radnoVrijeme,
         opis: cit.opis,
         vlasnik: cit.vlasnik,
         phoneNumber: telefonController.text.toString(),
         administratorId: cit.administratorId,
         mail: emailController.text.toString());
+  }
+
+  bool radnoVrijemeIsNull(RadnoVrijemeUDanu element) {
+    if (element.id == null || element.pocetak == null || element.kraj == null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void obrisiIndividualnuSalu(int? salaIndex) async {

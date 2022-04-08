@@ -30,7 +30,6 @@ class _PromjenaInformacijaCitaoniceState
   TextEditingController emailController = TextEditingController();
   TextEditingController opisController = TextEditingController();
   TextEditingController vlasnikController = TextEditingController();
-  String? citaonicaId;
 
   List<RadnoVrijemeUDanu> radnoVr = <RadnoVrijemeUDanu>[
     RadnoVrijemeUDanu(id: 1),
@@ -225,7 +224,17 @@ class _PromjenaInformacijaCitaoniceState
                                               await azurirajCitaonicu();
                                           if (odgovor != null) {
                                             if (odgovor.statusCode == 200) {
-                                              Navigator.of(context).pop();
+                                              const snackBar = SnackBar(
+                                                backgroundColor: Color.fromARGB(
+                                                    255, 40, 233, 40),
+                                                content: Text(
+                                                  'Uspjesna izmjena citaonice!',
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              );
+
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
                                             } else {
                                               const snackBar = SnackBar(
                                                 backgroundColor: Color.fromARGB(
@@ -309,8 +318,9 @@ class _PromjenaInformacijaCitaoniceState
             phoneNumber: telefonController.text.toString(),
             adresa: adresaController.text.toString(),
             radnoVrijeme: radnoVr,
-            vlasnik: vlasnikController.text.toString()),
-        index: citaonicaId!);
+            vlasnik: vlasnikController.text.toString(),
+            administratorId: 1),
+        index: widget.citaonicaId.toString());
     return odgovor;
   }
 }

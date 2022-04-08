@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/models/argumenti_supervizorske_izmjene_individualne_sale.dart';
 
 import '../constants/config.dart';
+import '../models/individualna_sala.dart';
 
 class SupervizorskiIndTile extends StatelessWidget {
+  final IndividualnaSala indSalaData;
+  final int citaonicaId;
+  final Function(IndividualnaSala, int) funkcijaZakljucavanja;
   const SupervizorskiIndTile({
+    required this.indSalaData,
+    required this.citaonicaId,
+    required this.funkcijaZakljucavanja,
     Key? key,
   }) : super(key: key);
 
@@ -23,11 +31,11 @@ class SupervizorskiIndTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(9.0, 0.0, 0.0, 0.0),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(9.0, 0.0, 0.0, 0.0),
                   child: Text(
-                    'Sala 1',
-                    style: TextStyle(
+                    indSalaData.naziv,
+                    style: const TextStyle(
                       fontSize: 24,
                       color: Color.fromARGB(255, 105, 105, 105),
                     ),
@@ -36,11 +44,11 @@ class SupervizorskiIndTile extends StatelessWidget {
                 const SizedBox(width: 15),
                 Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 3, 0),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 3, 0),
                       child: Text(
-                        '3',
-                        style: TextStyle(
+                        indSalaData.brojMjesta.toString(),
+                        style: const TextStyle(
                           fontSize: 24,
                           color: defaultKarakteristike,
                         ),
@@ -63,7 +71,18 @@ class SupervizorskiIndTile extends StatelessWidget {
                           color: const Color.fromARGB(255, 105, 105, 105),
                           splashRadius: 25,
                           icon: const Icon(Icons.edit),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                                'pregled_individualne_sale',
+                                arguments:
+                                    ArgSupervizorskeIzmjeneIndividualneSale(
+                                        brojMjestaUSali:
+                                            indSalaData.brojMjesta!,
+                                        nazivIndividualneSale:
+                                            indSalaData.naziv,
+                                        individualnaSalaId: indSalaData.id!,
+                                        citaonicaId: citaonicaId));
+                          },
                         ),
                       ),
                     ),

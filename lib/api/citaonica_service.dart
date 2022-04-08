@@ -73,6 +73,20 @@ class CitaonicaService {
     return temp;
   }
 
+  Future<Response?> postaviSliku(
+      {required DioClient dioClient,
+      required String url,
+      required String citaonicaId}) async {
+    Response? temp;
+    try {
+      temp = await dioClient.dio.post(
+        url,
+      );
+    } catch (e) {
+      print('Error deleting user: $e');
+    }
+  }
+
   Future<Response?> azurirajCitaonicu(
       {required DioClient dioClient,
       required Citaonica citaonicaInfo,

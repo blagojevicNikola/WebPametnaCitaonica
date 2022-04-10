@@ -33,6 +33,7 @@ class DioClient {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         options.headers['Authorization'] =
             'Bearer ${prefs.getString('accessToken')}';
+
         hendler.next(options);
       },
     ));

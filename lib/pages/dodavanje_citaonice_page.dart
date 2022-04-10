@@ -1,11 +1,9 @@
-import 'dart:html';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_aplikacija/api/citaonica_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
@@ -261,8 +259,10 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
   }
 
   void kreirajCitaonicu() async {
-    dio.FormData f = dio.FormData.fromMap(
-        {'slika': dio.MultipartFile.fromBytes(slika!.toList())});
+    dio.FormData f = dio.FormData.fromMap({
+      'slika': dio.MultipartFile.fromBytes(slika!.toList(),
+          contentType: MediaType('image', 'png'), filename: 'index')
+    });
 
     Citaonica? cit = await citService.createCitaonica(
       dioClient: dioCL,

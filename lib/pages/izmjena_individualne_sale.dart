@@ -1,6 +1,3 @@
-import 'dart:typed_data';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../api/dio_client.dart';
@@ -24,7 +21,6 @@ class IzmjenaIndividualneSalePage extends StatefulWidget {
 
 class _IzmjenaIndividualneSalePageState
     extends State<IzmjenaIndividualneSalePage> {
-  Uint8List? slika;
   MjestaService mjestaService = MjestaService();
   late final Future<List<Mjesto>> listaPostojecihMjesta;
   List<Mjesto> listaMjesta = <Mjesto>[];
@@ -57,11 +53,18 @@ class _IzmjenaIndividualneSalePageState
                     child: Center(child: CircularProgressIndicator()));
               } else if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return Text('Error  : ${snapshot.error}');
                 } else if (snapshot.hasData) {
                   return Stack(
                     children: [
-                      (slika == null) ? Container() : Image.memory(slika!),
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                'http://localhost:8080/api/v1/individualne-sale/${widget.individualnaSalaId}/slika'),
+                          ),
+                        ),
+                      ),
                       Positioned(
                         top: 14,
                         child: Align(
@@ -81,11 +84,11 @@ class _IzmjenaIndividualneSalePageState
                           children: [
                             TextButton(
                               child: const Text('Dodaj sliku'),
-                              onPressed: () => pickImage(),
+                              onPressed: () {},
                             ),
                             TextButton(
                               child: const Text('Ukloni sliku'),
-                              onPressed: () => removeImage(),
+                              onPressed: () {},
                             ),
                             TextButton(
                                 child: const Text('Dodaj mjesto'),
@@ -274,24 +277,24 @@ class _IzmjenaIndividualneSalePageState
     });
   }
 
-  void pickImage() async {
-    var picked = await FilePicker.platform.pickFiles();
-    if (picked != null) {
-      setState(() {
-        slika = picked.files.first.bytes;
-      });
-    }
-  }
+  // void pickImage() async {
+  //   var picked = await FilePicker.platform.pickFiles();
+  //   if (picked != null) {
+  //     setState(() {
+  //       slika = picked.files.first.bytes;
+  //     });
+  //   }
+  // }
 
-  void removeImage() async {
-    if (slika != null) {
-      setState(
-        () {
-          slika = null;
-        },
-      );
-    }
-  }
+  // void removeImage() async {
+  //   if (slika != null) {
+  //     setState(
+  //       () {
+  //         slika = null;
+  //       },
+  //     );
+  //   }
+  // }
 
   bool ispravneInformacijeMjesta() {
     if (velicinaController.text.isEmpty ||

@@ -179,13 +179,14 @@ class CitaonicaCard extends StatelessWidget {
                             (MediaQuery.of(context).size.height * 0.25) * 0.6,
                         width:
                             (MediaQuery.of(context).size.width * 0.55) * 0.27,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
                             //bottomLeft: Radius.circular(30.0),
                             bottomRight: Radius.circular(21.0),
                           ),
                           image: DecorationImage(
-                              image: AssetImage('assets/images/index.jpg'),
+                              image: NetworkImage(
+                                  'http://localhost:8080/api/v1/citaonice/${citaonicaData.id}/slika'),
                               fit: BoxFit.fill),
                         ),
                       ),

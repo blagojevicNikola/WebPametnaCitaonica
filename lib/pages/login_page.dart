@@ -234,13 +234,14 @@ class _LoginDemoState extends State<LoginDemo> {
                             dioCL, emailLogin, lozinkaLogin);
                         if (response != null) {
                           if (response.statusCode == 201) {
-                            Navigator.push(
+                            Navigator.pushNamed(context, 'adminhome');
+                            /*Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => const MyHomePage(
                                     title: 'Administratorska App'),
                               ),
-                            );
+                            );*/
                           }
                         }
                       } else if (izbor == 'Supervizor') {

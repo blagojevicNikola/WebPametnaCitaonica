@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_aplikacija/api/dio_client.dart';
+import 'package:web_aplikacija/api/odjava_admin_service.dart';
 
 class OdjavaPage extends StatefulWidget {
   const OdjavaPage({Key? key}) : super(key: key);
@@ -8,8 +10,11 @@ class OdjavaPage extends StatefulWidget {
   _OdjavaPageState createState() => _OdjavaPageState();
 }
 
+OdjavaService odjavaService = OdjavaService();
+
 class _OdjavaPageState extends State<OdjavaPage> {
   //late Future<Korisnik> test;
+  DioClient dioCL = DioClient();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +32,7 @@ class _OdjavaPageState extends State<OdjavaPage> {
               ],
             ),
             borderRadius: BorderRadius.circular(10)),
-        height: 60,
+        height: 100,
         width: MediaQuery.of(context).size.width,
         // color: const Color.fromARGB(255, 132, 186, 230),
         child: InkWell(
@@ -50,15 +55,10 @@ class _OdjavaPageState extends State<OdjavaPage> {
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () async {
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.remove('email');
-                                  final pref =
-                                      await SharedPreferences.getInstance();
-                                  await pref.clear();
+                                  odjaviSe();
                                   //Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false);
                                   Navigator.popUntil(
-                                      context, ModalRoute.withName("/"));
+                                      context, ModalRoute.withName("login"));
                                 },
                                 child: const Text('OK'),
                               ),
@@ -76,8 +76,14 @@ class _OdjavaPageState extends State<OdjavaPage> {
                 ),
               );
             },
-            child: const Text('Odjava')),
+            child: const ListTile(
+                leading: Icon(Icons.logout, color: Colors.white, size: 35),
+                title: Text('Odjava', style: TextStyle(color: Colors.white)))),
       ),
     );
+  }
+
+  void odjaviSe() {
+    odjavaService.createOdjava(dioClient: dioCL);
   }
 }

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/api/grupne_sale_service.dart';
+import 'package:web_aplikacija/api/individualne_sale_service.dart';
+import 'package:web_aplikacija/models/individualna_sala.dart';
+import 'package:web_aplikacija/widgets/grupna_sala_tile.dart';
 import 'package:web_aplikacija/widgets/supervizorski_ind_tile.dart';
 
+import '../../api/dio_client.dart';
 import '../../constants/config.dart';
+import '../../models/grupna_sala.dart';
 import '../../widgets/supervizorski_grup_tile.dart';
 
 class SupervizorskiPregledSalaPage extends StatefulWidget {
@@ -15,6 +21,20 @@ class SupervizorskiPregledSalaPage extends StatefulWidget {
 
 class _SupervizorskiPregledSalaPageState
     extends State<SupervizorskiPregledSalaPage> {
+  GrupneSaleService grupneSaleService = GrupneSaleService();
+  IndividualneSaleService individualneSaleService = IndividualneSaleService();
+  DioClient dioCL = DioClient();
+  late Future<List<IndividualnaSala>> listaIndividualnihSala;
+  late Future<List<GrupnaSala>> listaGrupnihSala;
+
+  @override
+  void initState() {
+    listaIndividualnihSala =
+        individualneSaleService.getIndividualneSale(dioCL, '4');
+    listaGrupnihSala = grupneSaleService.getGrupneSale(dioCL, '4');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -66,22 +86,54 @@ class _SupervizorskiPregledSalaPageState
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(9.0),
-                              child: ListView.separated(
-                                itemCount: 2,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return const SupervizorskiIndTile();
-                                },
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 20,
-                                  width: 40,
-                                ),
-                              ),
-                            ),
+                            FutureBuilder<List<IndividualnaSala>>(
+                                future: listaIndividualnihSala,
+                                initialData: null,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const SizedBox(
+                                        height: 120,
+                                        width: 120,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()));
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else if (snapshot.hasData) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: ListView.separated(
+                                          itemCount: snapshot.data!.length,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return SupervizorskiIndTile(
+                                              citaonicaId: 4,
+                                              indSalaData:
+                                                  snapshot.data![index],
+                                              funkcijaZakljucavanja:
+                                                  zakjlucajIndividualnuSalu,
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(
+                                            height: 20,
+                                            width: 40,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return const Text('Empty data');
+                                    }
+                                  } else {
+                                    return Text(
+                                        'State: ${snapshot.connectionState}');
+                                  }
+                                }),
                             const SizedBox(height: 30),
                             const Align(
                               alignment: Alignment.centerLeft,
@@ -94,22 +146,48 @@ class _SupervizorskiPregledSalaPageState
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(9.0),
-                              child: ListView.separated(
-                                itemCount: 2,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return const SupervizorskaGrupTile();
-                                },
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 20,
-                                  width: 40,
-                                ),
-                              ),
-                            ),
+                            FutureBuilder<List<GrupnaSala>>(
+                                future: listaGrupnihSala,
+                                initialData: null,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const SizedBox(
+                                        height: 120,
+                                        width: 120,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()));
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else if (snapshot.hasData) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: ListView.separated(
+                                          itemCount: snapshot.data!.length,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return const SupervizorskaGrupTile();
+                                          },
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(
+                                            height: 20,
+                                            width: 40,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return const Text('Empty data');
+                                    }
+                                  } else {
+                                    return Text(
+                                        'State: ${snapshot.connectionState}');
+                                  }
+                                }),
                             const SizedBox(height: 20),
                           ],
                         ),
@@ -123,5 +201,18 @@ class _SupervizorskiPregledSalaPageState
         ),
       ),
     );
+  }
+
+  void zakjlucajIndividualnuSalu(IndividualnaSala ind, int citaonicaId) async {
+    var odgovor = await individualneSaleService.azurirajIndividualnuSalu(
+        dioClient: dioCL,
+        individualnaSalaData: ind,
+        citaonicaId: citaonicaId.toString());
+    if (odgovor != null) {
+      setState(() {
+        listaIndividualnihSala =
+            individualneSaleService.getIndividualneSale(dioCL, '4');
+      });
+    }
   }
 }

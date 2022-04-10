@@ -7,10 +7,9 @@ class ObavjestenjeService {
       DioClient dioClient, String citaonicaId, String supervizorId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response obavjestenjaData = await dioClient.dio.get('/citaonice/' +
-          '${citaonicaId.toString()}/' +
-          // '${supervizorId.toString()}/' +
-          'obavjestenja');
+      Response obavjestenjaData = await dioClient.dio
+          .get('/citaonice/${citaonicaId.toString()}/obavjestenja');
+      // '${supervizorId.toString()}/' +
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');

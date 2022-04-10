@@ -1,8 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
 import 'package:web_aplikacija/api/mjesta_service.dart';
 import 'package:web_aplikacija/models/clanarina.dart';
@@ -59,7 +62,9 @@ class _KreiranjeIdividualneSalePageState
       color: Colors.white,
       child: Stack(
         children: [
-          (slika == null) ? Container() : Image.memory(slika!),
+          (slika == null)
+              ? Container()
+              : Align(alignment: Alignment.center, child: Image.memory(slika!)),
           Positioned(
             top: 14,
             child: Align(
@@ -264,7 +269,19 @@ class _KreiranjeIdividualneSalePageState
               mjestoInfo: item));
         }
         await Future.wait(futures);
+        FormData f = FormData.fromMap({
+          'slika': MultipartFile.fromBytes(slika!.toList(),
+              contentType: MediaType('image', 'png'), filename: 'index')
+        });
 
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        Dio dioSlika = Dio();
+        dioSlika.options.headers['Authorization'] =
+            'Bearer ${prefs.getString('accessToken')}';
+        await dioSlika.post(
+          'http://localhost:8080/api/v1/individualne-sale/$kreiranaIndividualnaSalaId/slika',
+          data: f,
+        );
         return true;
       } else {
         return false;

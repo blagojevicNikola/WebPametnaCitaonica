@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
 import 'package:web_aplikacija/api/supervizor_service.dart';
@@ -15,6 +14,7 @@ import '../api/grupne_sale_service.dart';
 import '../models/citaonica.dart';
 import '../models/individualna_sala.dart';
 import '../models/nalog.dart';
+import '../models/radno_vrijeme.dart';
 import '../widgets/supervizor_tile.dart';
 
 class UredjivanjeCitaonicePage extends StatefulWidget {
@@ -43,12 +43,30 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   late Future<List<GrupnaSala>> grupneSaleData;
   late Future<List<Nalog>> supervizoriData;
 
+  List<RadnoVrijemeUDanu> radnoVr = <RadnoVrijemeUDanu>[
+    RadnoVrijemeUDanu(id: 1),
+    RadnoVrijemeUDanu(id: 2),
+    RadnoVrijemeUDanu(id: 3),
+    RadnoVrijemeUDanu(id: 4),
+    RadnoVrijemeUDanu(id: 5),
+    RadnoVrijemeUDanu(id: 6),
+    RadnoVrijemeUDanu(id: 7),
+  ];
+
   CitaonicaService citService = CitaonicaService();
   DioClient dioCL = DioClient();
 
   @override
   void initState() {
     super.initState();
+    for (int i = 0; i < radnoVr.length; i++) {
+      int pozicija = widget.citData.radnoVrijeme
+          .indexWhere((element) => element.id == i + 1);
+      if (pozicija != -1) {
+        radnoVr[i].pocetak = widget.citData.radnoVrijeme[pozicija].pocetak;
+        radnoVr[i].kraj = widget.citData.radnoVrijeme[pozicija].kraj;
+      }
+    }
     individualneSaleData =
         indSaleService.getIndividualneSale(dioCL, widget.citData.id.toString());
     grupneSaleData =
@@ -163,8 +181,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            UnosRadnogVremena(
-                                radnoVr: widget.citData.radnoVrijeme),
+                            UnosRadnogVremena(radnoVr: radnoVr),
                             const SizedBox(height: 30),
                             const Align(
                               alignment: Alignment.centerLeft,
@@ -290,6 +307,8 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                             GrupnaSala temp =
                                                 snapshot.data![index];
                                             return GrupnaSalaTile(
+                                              citaonicaId:
+                                                  widget.citData.id.toString(),
                                               grupnaSalaData: temp,
                                               index: temp.id,
                                               funkcijaBrisanja:
@@ -536,6 +555,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   }
 
   Citaonica azurirajCitaonicu(Citaonica cit) {
+    cit.radnoVrijeme.removeWhere(radnoVrijemeIsNull);
     return Citaonica(
         name: nazivController.text.toString(),
         adresa: adresaController.text.toString(),
@@ -545,6 +565,14 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
         phoneNumber: telefonController.text.toString(),
         administratorId: cit.administratorId,
         mail: emailController.text.toString());
+  }
+
+  bool radnoVrijemeIsNull(RadnoVrijemeUDanu element) {
+    if (element.id == null || element.pocetak == null || element.kraj == null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void obrisiIndividualnuSalu(int? salaIndex) async {

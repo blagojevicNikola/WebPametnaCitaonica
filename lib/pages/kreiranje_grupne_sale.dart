@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/grupne_sale_service.dart';
+import 'package:web_aplikacija/api/karakteristike_sale_service.dart';
 import 'package:web_aplikacija/constants/config.dart';
+import 'package:web_aplikacija/models/karakteristike.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/widgets/dodavanje_karakteristika_sale.dart';
 
@@ -31,18 +33,28 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
   final kodController = TextEditingController(text: '');
 
   GrupneSaleService grupSale = GrupneSaleService();
+  KarakteristikeSaleService karakteristikeSaleService =
+      KarakteristikeSaleService();
   DioClient dioCL = DioClient();
 
-  List<KarakteristikeSale> listaPostojecihKarakteristika = <KarakteristikeSale>[
-    KarakteristikeSale(naziv: 'tv', karakteristikaId: 1),
-    KarakteristikeSale(naziv: 'projektor', karakteristikaId: 3),
-    KarakteristikeSale(naziv: 'wifi', karakteristikaId: 2),
-    KarakteristikeSale(naziv: 'struja', karakteristikaId: 4),
-    KarakteristikeSale(naziv: 'voda', karakteristikaId: 5),
-  ];
+  late Future<List<Karakteristike>> listaPostojecihKarakteristika;
+  //  <KarakteristikeSale>[
+  //   KarakteristikeSale(naziv: 'tv', karakteristikaId: 1),
+  //   KarakteristikeSale(naziv: 'projektor', karakteristikaId: 3),
+  //   KarakteristikeSale(naziv: 'wifi', karakteristikaId: 2),
+  //   KarakteristikeSale(naziv: 'struja', karakteristikaId: 4),
+  //   KarakteristikeSale(naziv: 'voda', karakteristikaId: 5),
+  // ];
 
   List<KarakteristikeSale> listaDodatihPostojecih = <KarakteristikeSale>[];
   List<KarakteristikeSale> listaDodatihKreiranih = <KarakteristikeSale>[];
+
+  @override
+  void initState() {
+    super.initState();
+    listaPostojecihKarakteristika =
+        karakteristikeSaleService.getKarakteristike(dioCL);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,14 +146,42 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                                         fontSize: 40, color: defaultPlava)),
                               ),
                             ),
-                            DodavanjeKarakteristikaSale(
-                              listaPostojecihKarakteristika:
-                                  listaPostojecihKarakteristika,
-                              listaDodatihKreiranihKarakteristika:
-                                  listaDodatihKreiranih,
-                              listaDodatihPostojecihKarakteristika:
-                                  listaDodatihPostojecih,
-                            ),
+                            FutureBuilder<List<Karakteristike>>(
+                                future: listaPostojecihKarakteristika,
+                                initialData: null,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const SizedBox(
+                                        height: 120,
+                                        width: 120,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()));
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else if (snapshot.hasData) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: DodavanjeKarakteristikaSale(
+                                          listaPostojecihKarakteristika:
+                                              snapshot.data!,
+                                          listaDodatihKreiranihKarakteristika:
+                                              listaDodatihKreiranih,
+                                          listaDodatihPostojecihKarakteristika:
+                                              listaDodatihPostojecih,
+                                        ),
+                                      );
+                                    } else {
+                                      return const Text('Empty data');
+                                    }
+                                  } else {
+                                    return Text(
+                                        'State: ${snapshot.connectionState}');
+                                  }
+                                }),
                             const SizedBox(height: 30),
                           ],
                         ),
@@ -173,6 +213,14 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                             onPressed: () async {
                               //print('Citaonica $citaonicaId');
                               if (ispravnostInformacijaSale()) {
+                                //await dodajNoveKarakteristike();
+                                List<KarakteristikeSale> temp =
+                                    <KarakteristikeSale>[];
+                                for (var item in listaDodatihPostojecih) {
+                                  temp.add(KarakteristikeSale(
+                                    karakteristikaId: item.karakteristikaId,
+                                  ));
+                                }
                                 Response? res = await grupSale.createGrupnaSala(
                                     dioClient: dioCL,
                                     citaonicaId: widget.citaonicaId.toString(),
@@ -184,7 +232,7 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                                         qrKod: kodController.text.toString(),
                                         opis: opisController.text.toString(),
                                         clanarine: <Clanarina>[],
-                                        karakteristike: <KarakteristikeSale>[],
+                                        karakteristike: temp,
                                         statusId: 1));
                                 if (res != null) {
                                   if (res.statusCode == 200) {
@@ -216,6 +264,15 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
     } else {
       return true;
     }
+  }
+
+  Future<void> dodajNoveKarakteristike() async {
+    var futures = <Future>[];
+    for (var item in listaDodatihKreiranih) {
+      futures.add(karakteristikeSaleService.createKarakteristika(
+          dioClient: dioCL, karakteristikaInfo: item));
+    }
+    await Future.wait(futures);
   }
 
   GrupnaSala kreiranjeSale() {

@@ -1,14 +1,19 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/api/grupne_sale_service.dart';
+import 'package:web_aplikacija/api/karakteristike_sale_service.dart';
+import 'package:web_aplikacija/models/argumenti_izmjene_grupne_sale.dart';
+import 'package:web_aplikacija/models/karakteristike.dart';
+import '../api/dio_client.dart';
 import '../models/grupna_sala.dart';
 import '../models/karakteristike_sale.dart';
 import '../widgets/dodavanje_karakteristika_sale.dart';
 import '../widgets/information_field.dart';
 
 class IzmjenaGrupneSalePage extends StatefulWidget {
-  GrupnaSala grupnaSalaData;
+  final ArgumentiIzmjeneGrupneSale data;
 
-  IzmjenaGrupneSalePage({Key? key, required this.grupnaSalaData})
-      : super(key: key);
+  const IzmjenaGrupneSalePage({Key? key, required this.data}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _IzmjenaGrupneSalePageState();
@@ -16,20 +21,33 @@ class IzmjenaGrupneSalePage extends StatefulWidget {
 }
 
 class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
-  TextEditingController? nazivSaleController;
-  TextEditingController? qrCodeSaleController;
-  TextEditingController? brojMjestaSaleController;
-  TextEditingController? opisSaleController;
-  List<KarakteristikeSale> listaPostojecihKarakteristika = <KarakteristikeSale>[
-    KarakteristikeSale(naziv: 'tv', karakteristikaId: 1),
-    KarakteristikeSale(naziv: 'projektor', karakteristikaId: 3),
-    KarakteristikeSale(naziv: 'wifi', karakteristikaId: 2),
-    KarakteristikeSale(naziv: 'struja', karakteristikaId: 4),
-    KarakteristikeSale(naziv: 'voda', karakteristikaId: 5),
-  ];
+  TextEditingController nazivSaleController = TextEditingController();
+  TextEditingController qrCodeSaleController= TextEditingController();
+  TextEditingController brojMjestaSaleController= TextEditingController();
+  TextEditingController opisSaleController= TextEditingController();
+  // List<Karakteristike> listaPostojecihKarakteristika = <Karakteristike>[
+  //   Karakteristike(naziv: 'tv', id: 1),
+  //   Karakteristike(naziv: 'projektor', id: 3),
+  //   Karakteristike(naziv: 'wifi', id: 2),
+  //   Karakteristike(naziv: 'struja', id: 4),
+  //   Karakteristike(naziv: 'voda', id: 5),
+  // ];
+
+  late Future<List<Karakteristike>> listaPostojecihKarakteristika;
 
   List<KarakteristikeSale> listaDodatihPostojecih = <KarakteristikeSale>[];
   List<KarakteristikeSale> listaDodatihKreiranih = <KarakteristikeSale>[];
+  KarakteristikeSaleService karakteristikeSaleService =
+      KarakteristikeSaleService();
+  GrupneSaleService grupneSaleService = GrupneSaleService();
+  DioClient dioCL = DioClient();
+
+  @override
+  void initState() {
+    super.initState();
+    listaPostojecihKarakteristika =
+        karakteristikeSaleService.getKarakteristike(dioCL);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,16 +109,7 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               labelInformation: 'Naziv sale',
                               control: nazivSaleController =
                                   TextEditingController(
-                                      text: widget.grupnaSalaData.naziv),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(9),
-                            child: InformationField(
-                              labelInformation: 'QR Code',
-                              control: qrCodeSaleController =
-                                  TextEditingController(
-                                      text: widget.grupnaSalaData.qrKod),
+                                      text: widget.data.grupnaSalaData.naziv),
                             ),
                           ),
                           Padding(
@@ -109,9 +118,18 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               labelInformation: 'Broj mjesta',
                               control: brojMjestaSaleController =
                                   TextEditingController(
-                                text:
-                                    widget.grupnaSalaData.brojMjesta.toString(),
+                                text: widget.data.grupnaSalaData.brojMjesta
+                                    .toString(),
                               ),
+                            ),
+                          ),
+                            Padding(
+                            padding: const EdgeInsets.all(9),
+                            child: InformationField(
+                              labelInformation: 'QR Code',
+                              control: qrCodeSaleController =
+                                  TextEditingController(
+                                      text: widget.data.grupnaSalaData.qrKod),
                             ),
                           ),
                           Padding(
@@ -120,17 +138,43 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               labelInformation: 'Opis',
                               control: opisSaleController =
                                   TextEditingController(
-                                      text: widget.grupnaSalaData.opis),
+                                      text: widget.data.grupnaSalaData.opis),
                             ),
                           ),
-                          DodavanjeKarakteristikaSale(
-                            listaPostojecihKarakteristika:
-                                listaPostojecihKarakteristika,
-                            listaDodatihKreiranihKarakteristika:
-                                listaDodatihKreiranih,
-                            listaDodatihPostojecihKarakteristika:
-                                listaDodatihPostojecih,
-                          ),
+                          FutureBuilder<List<Karakteristike>>(
+                              future: listaPostojecihKarakteristika,
+                              initialData: null,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const SizedBox(
+                                      height: 120,
+                                      width: 120,
+                                      child: Center(
+                                          child: CircularProgressIndicator()));
+                                } else if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else if (snapshot.hasData) {
+                                    return Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: DodavanjeKarakteristikaSale(
+                                          listaPostojecihKarakteristika:
+                                              snapshot.data!,
+                                          listaDodatihKreiranihKarakteristika:
+                                              listaDodatihKreiranih,
+                                          listaDodatihPostojecihKarakteristika:
+                                              widget.data.grupnaSalaData.karakteristike,
+                                        ));
+                                  } else {
+                                    return const Text('Empty data');
+                                  }
+                                } else {
+                                  return Text(
+                                      'State: ${snapshot.connectionState}');
+                                }
+                              }),
                           const SizedBox(height: 30),
                           Padding(
                             padding: const EdgeInsets.all(9.0),
@@ -158,7 +202,28 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                                   style: TextStyle(
                                       fontSize: 21, color: Colors.white),
                                 ),
-                                onPressed: () async {},
+                                onPressed: () async {
+                                  if (ispravnostInformacijaSale()) {
+                                    Response? odgovor = await updateSala();
+                                    if (odgovor != null) {
+                                      if (odgovor.statusCode == 200) {
+                                        Navigator.of(context).pop();
+                                      } else {
+                                        const snackBar = SnackBar(
+                                          backgroundColor:
+                                              Color.fromARGB(255, 185, 44, 34),
+                                          content: Text(
+                                            'Greska pri izmjeni sale!',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        );
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    }
+                                  }
+                                },
                               ),
                             ),
                           )
@@ -173,5 +238,31 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
         ],
       ),
     ));
+  }
+
+  bool ispravnostInformacijaSale() {
+    if (nazivSaleController.text.isEmpty ||
+        qrCodeSaleController.text.isEmpty ||
+        brojMjestaSaleController.text.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<Response?> updateSala() async {
+    Response? odgovor = await grupneSaleService.azurirajGrupnuSalu(
+        dioClient: dioCL,
+        grupnaSalaData: GrupnaSala(
+            id: widget.data.grupnaSalaData.id
+            naziv: nazivSaleController.text.toString(),
+            qrKod: qrCodeSaleController.text.toString(),
+            brojMjesta: int.parse(brojMjestaSaleController.text.toString()),
+            opis: opisSaleController.text.toString()
+            statusId: 1,
+            clanarine: widget.data.grupnaSalaData.clanarine,
+            karakteristike: widget.data.grupnaSalaData.karakteristike),
+        citaonicaId: widget.data.citaonicaId);
+    return odgovor;
   }
 }

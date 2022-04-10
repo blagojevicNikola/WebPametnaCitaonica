@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/models/karakteristike.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/widgets/information_field.dart';
 
@@ -11,7 +12,7 @@ class DodavanjeKarakteristikaSale extends StatefulWidget {
       required this.listaDodatihPostojecihKarakteristika,
       required this.listaDodatihKreiranihKarakteristika})
       : super(key: key);
-  final List<KarakteristikeSale> listaPostojecihKarakteristika;
+  final List<Karakteristike> listaPostojecihKarakteristika;
   final List<KarakteristikeSale> listaDodatihPostojecihKarakteristika;
   final List<KarakteristikeSale> listaDodatihKreiranihKarakteristika;
 
@@ -130,11 +131,13 @@ class _DodavanjeKarakteristikaSaleState
     var result = listaDodatihPostojecihKarakteristika
         .any((element) => sadrzi(element.naziv!, nazivTemp));
     if (!result) {
+      int index = (widget.listaPostojecihKarakteristika.indexWhere(
+        (element) => element.naziv == nazivTemp,
+      ));
       setState(() {
-        listaDodatihPostojecihKarakteristika
-            .add(widget.listaPostojecihKarakteristika.singleWhere(
-          (element) => element.naziv == nazivTemp,
-        ));
+        listaDodatihPostojecihKarakteristika.add(KarakteristikeSale(
+            karakteristikaId: widget.listaPostojecihKarakteristika[index].id,
+            naziv: widget.listaPostojecihKarakteristika[index].naziv));
       });
     }
   }

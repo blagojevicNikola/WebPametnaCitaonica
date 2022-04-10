@@ -6,6 +6,7 @@ import 'package:web_aplikacija/supervizor/pages/odjava_supervizor.dart';
 import 'package:web_aplikacija/supervizor/pages/promjena_informacija_citaonice.dart';
 
 import 'package:web_aplikacija/supervizor/pages/slanje_notifikacija.dart';
+import 'package:web_aplikacija/wrappers/supervizorska_izmjena_citaonice_wrapper.dart';
 import 'package:web_aplikacija/wrappers/supervizorski_pregled_sale_wrapper.dart';
 //import 'package:web_aplikacija/supervizor/pages/promjena_informacija_prazan.dart';
 
@@ -23,7 +24,7 @@ class _SupervizorHomePageState extends State<SupervizorHomePage> {
   List<Widget> screens = [
     const SupervizorskiPregledSaleWrapper(),
     const SlanjeNotifikacija(),
-    PromjenaInformacijaCitaonice(),
+    const SupervizorskaIzmjenaCitaoniceWrapperPage(),
     const PromjenaLozinkePage(),
     const OdjavaSupervizorPage()
     // const Lozinka(),

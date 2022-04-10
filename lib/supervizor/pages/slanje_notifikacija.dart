@@ -24,6 +24,15 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
   Obavjestenje obavjestenje = Obavjestenje(naslov: '', tekstNotifikacije: '');
   DioClient dioCL = DioClient();
 
+  late Future<List<Obavjestenje>> listaObavjestenja;
+
+  @override
+  void initState() {
+    listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '3');
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     //double visina = MediaQuery.of(context).size.height;
@@ -93,7 +102,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                           //left: MediaQuery.of(context).size.width * 0.30,
                           // right: MediaQuery.of(context).size.width * 0.30,
                           top: 15,
@@ -200,7 +209,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                     top: 0,
                     bottom: 10),
                 child: FutureBuilder<List<Obavjestenje>>(
-                    future: obavjService.getObavjestenja(dioCL, '3', '4'),
+                    future: listaObavjestenja,
                     initialData: null,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -266,8 +275,8 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
         obavjestenjeInfo: Obavjestenje(
             naslov: obavjestenje.naslov,
             tekstNotifikacije: obavjestenje.tekstNotifikacije),
-        supervizorId: '4',
-        citaonicaId: '3');
+        supervizorId: '3',
+        citaonicaId: '12');
   }
 
   void refreshPage() {

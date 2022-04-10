@@ -124,7 +124,7 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
     obavjService.deleteObavjestenje(
         dioClient: dioCL,
         obavjestenjeId: widget.obavjestenjeData.idObavjestenja.toString(),
-        citaonicaId: '3');
+        citaonicaId: '12');
     setState(() {});
   }
 

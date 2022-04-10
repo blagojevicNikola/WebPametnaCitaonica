@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/api/odjava_admin_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OdjavaPage extends StatefulWidget {
   const OdjavaPage({Key? key}) : super(key: key);
@@ -55,10 +57,17 @@ class _OdjavaPageState extends State<OdjavaPage> {
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () async {
-                                  odjaviSe();
-                                  //Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false);
-                                  Navigator.popUntil(
-                                      context, ModalRoute.withName("login"));
+                                  Response? response;
+                                  response = await odjaviSe();
+                                  if (response != null) {
+                                    if (response.statusCode == 201) {
+                                      SharedPreferences pref =
+                                          await SharedPreferences.getInstance();
+                                      pref.clear();
+                                      Navigator.popUntil(
+                                          context, ModalRoute.withName("/"));
+                                    }
+                                  }
                                 },
                                 child: const Text('OK'),
                               ),
@@ -83,7 +92,8 @@ class _OdjavaPageState extends State<OdjavaPage> {
     );
   }
 
-  void odjaviSe() {
-    odjavaService.createOdjava(dioClient: dioCL);
+  Future<Response?> odjaviSe() async {
+    var response = await odjavaService.createOdjava(dioClient: dioCL);
+    return response;
   }
 }

@@ -30,8 +30,8 @@ class _SupervizorskiPregledSalaPageState
   @override
   void initState() {
     listaIndividualnihSala =
-        individualneSaleService.getIndividualneSale(dioCL, '4');
-    listaGrupnihSala = grupneSaleService.getGrupneSale(dioCL, '4');
+        individualneSaleService.getIndividualneSale(dioCL, '12');
+    listaGrupnihSala = grupneSaleService.getGrupneSale(dioCL, '12');
     super.initState();
   }
 
@@ -211,7 +211,7 @@ class _SupervizorskiPregledSalaPageState
     if (odgovor != null) {
       setState(() {
         listaIndividualnihSala =
-            individualneSaleService.getIndividualneSale(dioCL, '4');
+            individualneSaleService.getIndividualneSale(dioCL, '12');
       });
     }
   }

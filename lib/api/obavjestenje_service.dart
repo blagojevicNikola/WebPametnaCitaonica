@@ -34,10 +34,10 @@ class ObavjestenjeService {
 
     try {
       Response response = await dioClient.dio.post(
-        '/supervizori/' +
-            '${supervizorId.toString()}/' +
-            // '${supervizorId.toString()}/' +
-            'obavjestenja',
+        '/citaonice/'
+        '${citaonicaId.toString()}/'
+        // '${supervizorId.toString()}/' +
+        'obavjestenja',
         data: obavjestenjeInfo.toJson(),
       );
 
@@ -56,10 +56,10 @@ class ObavjestenjeService {
       required String obavjestenjeId,
       required String citaonicaId}) async {
     try {
-      await dioClient.dio.delete(
-          // '/citaonice/' +
-          // '${citaonicaId.toString()}/' +
-          '/obavjestenja/' + '${obavjestenjeId.toString()}/');
+      await dioClient.dio.delete('/citaonice/'
+              '${citaonicaId.toString()}/' +
+          '/obavjestenja/' +
+          '${obavjestenjeId.toString()}/');
     } catch (e) {
       print('Error deleting user: $e');
     }

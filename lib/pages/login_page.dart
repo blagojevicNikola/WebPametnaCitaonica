@@ -234,22 +234,32 @@ class _LoginDemoState extends State<LoginDemo> {
                             dioCL, emailLogin, lozinkaLogin);
                         if (response != null) {
                           if (response.statusCode == 201) {
-                            Navigator.pushNamed(context, 'adminhome');
-                            /*Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const MyHomePage(
-                                    title: 'Administratorska App'),
-                              ),
-                            );*/
+                            if (response.data['uloga'] == 'ADMIN') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const MyHomePage(
+                                      title: 'Administratorska App'),
+                                ),
+                              );
+                            } else {}
                           }
                         }
                       } else if (izbor == 'Supervizor') {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const SupervizorHomePage(
-                                    title: 'Supervizorska App')));
+                        var response = await authService.postLogin(
+                            dioCL, emailLogin, lozinkaLogin);
+                        if (response != null) {
+                          if (response.statusCode == 201) {
+                            if (response.data['uloga'] == 'SUPERVIZOR') {
+                              //Navigator.pushNamed(context, 'supervizorhome');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const SupervizorHomePage(
+                                          title: 'Supervizorska App')));
+                            } else {}
+                          }
+                        }
                       }
                     }
                   },

@@ -19,17 +19,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        //home: const LoginDemo(),
-        initialRoute: '/login',
+        home: const LoginDemo(),
+        //initialRoute: '/login',
         // const SupervizorHomePage(title: 'Supervizorska app'),
         debugShowCheckedModeBanner: false,
         //home: const MyHomePage(title: 'Administratorska app'),
-        routes: {
-          'login': (context) => const LoginDemo(),
-          'adminhome': ((context) => const MyHomePage(
+        routes: {'login': (context) => const LoginDemo()});
+    /*routes: {
+          '/login': ((context) => const LoginDemo())
+          /*'adminhome': ((context) => const MyHomePage(
                 title: 'test',
-              ))
-        });
+              )),
+          'supervizorhome': ((context) => const SupervizorHomePage(
+                title: 'test2',
+              ))*/
+        });*/
   }
 }
 

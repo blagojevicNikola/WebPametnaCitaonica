@@ -46,7 +46,7 @@ class _PromjenaInformacijaCitaoniceState
   DioClient dioCL = DioClient();
   @override
   void initState() {
-    citaonica = citaonicaService.getJednaCitaonica(dioCL, '4');
+    citaonica = citaonicaService.getJednaCitaonica(dioCL, '12');
     super.initState();
   }
 
@@ -313,14 +313,15 @@ class _PromjenaInformacijaCitaoniceState
     Response? odgovor = await citaonicaService.azurirajCitaonicu(
         dioClient: dioCL,
         citaonicaInfo: Citaonica(
-            name: nazivController.text.toString(),
-            mail: emailController.text.toString(),
-            phoneNumber: telefonController.text.toString(),
-            adresa: adresaController.text.toString(),
-            radnoVrijeme: radnoVr,
-            vlasnik: vlasnikController.text.toString(),
-            administratorId: 1),
-        index: widget.citaonicaId.toString());
+          name: nazivController.text.toString(),
+          mail: emailController.text.toString(),
+          phoneNumber: telefonController.text.toString(),
+          adresa: adresaController.text.toString(),
+          radnoVrijeme: radnoVr,
+          vlasnik: vlasnikController.text.toString(),
+          //administratorId: 1),
+        ),
+        index: '12'); //widget.citaonicaId.toString());
     return odgovor;
   }
 }

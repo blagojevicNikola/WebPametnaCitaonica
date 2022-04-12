@@ -23,12 +23,10 @@ ObavjestenjeService obavjService = ObavjestenjeService();
 class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
   Obavjestenje obavjestenje = Obavjestenje(naslov: '', tekstNotifikacije: '');
   DioClient dioCL = DioClient();
-
   late Future<List<Obavjestenje>> listaObavjestenja;
-
   @override
   void initState() {
-    listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '3');
+    listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '1');
 
     super.initState();
   }
@@ -155,7 +153,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                                         Navigator.pop(
                                           context,
                                         );
-                                        setState(() {});
+                                        refreshPage();
                                       },
                                       child: const Text('OK'),
                                     ),
@@ -198,7 +196,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                       style: ElevatedButton.styleFrom(
                           primary: const Color.fromARGB(255, 129, 189, 238)),
                       onPressed: () {
-                        setState(() {});
+                        refreshPage();
                       },
                       child: const Text('Osvježi listu',
                           style: TextStyle(fontSize: 20)))),
@@ -210,6 +208,8 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                     bottom: 10),
                 child: FutureBuilder<List<Obavjestenje>>(
                     future: listaObavjestenja,
+                    //obavjService.getObavjestenja(dioCL, '12', '1'),
+
                     initialData: null,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -237,7 +237,10 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return ObavjestenjeCard(
-                                        list[index], refreshPage);
+                                        obavjestenjeData: list[index],
+                                        index: snapshot
+                                            .data![index].idObavjestenja,
+                                        funkcijaBrisanja: obrisiObavjestenje);
                                   },
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(
@@ -280,6 +283,41 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
   }
 
   void refreshPage() {
-    setState(() {});
+    setState(() {
+      listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '1');
+    });
+  }
+
+  void obrisiObavjestenje(int? ind) async {
+    var response = await obavjService.deleteObavjestenje(
+        dioClient: dioCL, obavjestenjeId: ind.toString(), citaonicaId: '12');
+    if (response!.statusCode == 200) {
+      setState(() {
+        listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '1');
+      });
+    }
+    if (response.statusCode == 404) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Obavještenje'),
+          content: const Text(
+              'Ovo obavještenje ne postoji ! Vjerovatno ga je drugi supervizor već obrisao !',
+              style: TextStyle(fontSize: 20)),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Da'),
+            ),
+          ],
+        ),
+      );
+
+      setState(() {
+        listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '1');
+      });
+    }
   }
 }

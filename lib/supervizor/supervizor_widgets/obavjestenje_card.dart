@@ -4,25 +4,18 @@ import '../pages/slanje_notifikacija.dart';
 
 import '../supervizor_models/obavjestenje.dart';
 
-class ObavjestenjeCard extends StatefulWidget {
+class ObavjestenjeCard extends StatelessWidget {
   final Obavjestenje obavjestenjeData;
-  final void Function() callback;
+  int? index;
 
-  const ObavjestenjeCard(this.obavjestenjeData, this.callback, {Key? key})
-      : super(key: key);
+  final Function(int?) funkcijaBrisanja;
 
-  @override
-  _ObavjestenjeCardState createState() => _ObavjestenjeCardState();
-}
-
-//class _OdjavaPageState extends State<OdjavaPage> {
-
-class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
-  // final Obavjestenje obavjestenjeData;
-  //_ObavjestenjeCardState(this.obavjestenjeData);
-  DioClient dioCL = DioClient();
-
-  int counter = 0;
+  ObavjestenjeCard({
+    Key? key,
+    required this.obavjestenjeData,
+    required this.index,
+    required this.funkcijaBrisanja,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +29,14 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
               padding: const EdgeInsets.only(
                   left: 10, right: 10, top: 15, bottom: 10),
               child: Text(
-                widget.obavjestenjeData.naslov,
+                obavjestenjeData.naslov,
                 style: TextStyle(fontSize: 30, color: Colors.white),
               )),
           Padding(
               padding: const EdgeInsets.only(
                   left: 10, right: 10, top: 15, bottom: 10),
               child: Text(
-                widget.obavjestenjeData.tekstNotifikacije,
+                obavjestenjeData.tekstNotifikacije,
                 style: TextStyle(fontSize: 16, color: Colors.white),
               )),
           /* Padding(
@@ -53,14 +46,14 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
           Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Text(
-                '\n\nVrijeme : ${widget.obavjestenjeData.vrijemeSlanja!.hour < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.hour}' : widget.obavjestenjeData.vrijemeSlanja!.hour}'
-                ':${widget.obavjestenjeData.vrijemeSlanja!.minute < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.minute}' : widget.obavjestenjeData.vrijemeSlanja!.minute}'
-                ':${widget.obavjestenjeData.vrijemeSlanja!.second < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.second}' : widget.obavjestenjeData.vrijemeSlanja!.second}'
-                '       Datum: ${widget.obavjestenjeData.vrijemeSlanja!.day < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.day}' : widget.obavjestenjeData.vrijemeSlanja!.day}'
+                '\n\nVrijeme : ${obavjestenjeData.vrijemeSlanja!.hour < 10 ? '0${obavjestenjeData.vrijemeSlanja!.hour}' : obavjestenjeData.vrijemeSlanja!.hour}'
+                ':${obavjestenjeData.vrijemeSlanja!.minute < 10 ? '0${obavjestenjeData.vrijemeSlanja!.minute}' : obavjestenjeData.vrijemeSlanja!.minute}'
+                ':${obavjestenjeData.vrijemeSlanja!.second < 10 ? '0${obavjestenjeData.vrijemeSlanja!.second}' : obavjestenjeData.vrijemeSlanja!.second}'
+                '       Datum: ${obavjestenjeData.vrijemeSlanja!.day < 10 ? '0${obavjestenjeData.vrijemeSlanja!.day}' : obavjestenjeData.vrijemeSlanja!.day}'
                 '.'
-                '${widget.obavjestenjeData.vrijemeSlanja!.month < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.month}' : widget.obavjestenjeData.vrijemeSlanja!.month}'
+                '${obavjestenjeData.vrijemeSlanja!.month < 10 ? '0${obavjestenjeData.vrijemeSlanja!.month}' : obavjestenjeData.vrijemeSlanja!.month}'
                 '.'
-                '${widget.obavjestenjeData.vrijemeSlanja!.year}.',
+                '${obavjestenjeData.vrijemeSlanja!.year}.',
                 style: TextStyle(fontSize: 16, color: Colors.white),
               )),
           Container(
@@ -88,12 +81,8 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
                         actions: <Widget>[
                           TextButton(
                             onPressed: () async {
-                              obrisiObavjestenje();
-                              await Future.delayed(
-                                  const Duration(milliseconds: 00));
-
+                              funkcijaBrisanja(index);
                               Navigator.pop(context);
-                              widget.callback();
 
                               /*Navigator.pushReplacement(
                                   context,
@@ -110,25 +99,10 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
                         ],
                       ),
                     );
-                    setState(() {
-                      counter++;
-                    });
                   },
                   child: const Text('Obriši', style: TextStyle(fontSize: 20)),
                 ),
               )),
         ]));
-  }
-
-  void obrisiObavjestenje() {
-    obavjService.deleteObavjestenje(
-        dioClient: dioCL,
-        obavjestenjeId: widget.obavjestenjeData.idObavjestenja.toString(),
-        citaonicaId: '12');
-    setState(() {});
-  }
-
-  void refresh() {
-    setState(() {});
   }
 }

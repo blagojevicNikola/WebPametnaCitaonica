@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_aplikacija/api/dio_client.dart';
-import 'package:web_aplikacija/api/odjava_admin_service.dart';
+import 'package:web_aplikacija/api/odjava_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OdjavaPage extends StatefulWidget {

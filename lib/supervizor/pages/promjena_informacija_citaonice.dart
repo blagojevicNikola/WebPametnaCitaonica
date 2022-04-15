@@ -46,7 +46,7 @@ class _PromjenaInformacijaCitaoniceState
   DioClient dioCL = DioClient();
   @override
   void initState() {
-    citaonica = citaonicaService.getJednaCitaonica(dioCL, '12');
+    citaonica = citaonicaService.getJednaCitaonica(dioCL, '1');
     super.initState();
   }
 

@@ -30,8 +30,8 @@ class _SupervizorskiPregledSalaPageState
   @override
   void initState() {
     listaIndividualnihSala =
-        individualneSaleService.getIndividualneSale(dioCL, '12');
-    listaGrupnihSala = grupneSaleService.getGrupneSale(dioCL, '12');
+        individualneSaleService.getIndividualneSale(dioCL, '1');
+    listaGrupnihSala = grupneSaleService.getGrupneSale(dioCL, '1');
     super.initState();
   }
 
@@ -112,7 +112,7 @@ class _SupervizorskiPregledSalaPageState
                                               const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
                                             return SupervizorskiIndTile(
-                                              citaonicaId: 4,
+                                              citaonicaId: 1,
                                               indSalaData:
                                                   snapshot.data![index],
                                               funkcijaZakljucavanja:
@@ -211,7 +211,7 @@ class _SupervizorskiPregledSalaPageState
     if (odgovor != null) {
       setState(() {
         listaIndividualnihSala =
-            individualneSaleService.getIndividualneSale(dioCL, '12');
+            individualneSaleService.getIndividualneSale(dioCL, '1');
       });
     }
   }

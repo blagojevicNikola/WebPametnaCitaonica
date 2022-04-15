@@ -26,7 +26,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
   late Future<List<Obavjestenje>> listaObavjestenja;
   @override
   void initState() {
-    listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '1');
+    listaObavjestenja = obavjService.getObavjestenja(dioCL, '1', '2');
 
     super.initState();
   }
@@ -278,22 +278,22 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
         obavjestenjeInfo: Obavjestenje(
             naslov: obavjestenje.naslov,
             tekstNotifikacije: obavjestenje.tekstNotifikacije),
-        supervizorId: '3',
-        citaonicaId: '12');
+        supervizorId: '2',
+        citaonicaId: '1');
   }
 
   void refreshPage() {
     setState(() {
-      listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '1');
+      listaObavjestenja = obavjService.getObavjestenja(dioCL, '1', '2');
     });
   }
 
   void obrisiObavjestenje(int? ind) async {
     var response = await obavjService.deleteObavjestenje(
-        dioClient: dioCL, obavjestenjeId: ind.toString(), citaonicaId: '12');
+        dioClient: dioCL, obavjestenjeId: ind.toString(), citaonicaId: '1');
     if (response!.statusCode == 200) {
       setState(() {
-        listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '1');
+        listaObavjestenja = obavjService.getObavjestenja(dioCL, '1', '2');
       });
     }
     if (response.statusCode == 404) {
@@ -316,7 +316,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
       );
 
       setState(() {
-        listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '1');
+        listaObavjestenja = obavjService.getObavjestenja(dioCL, '1', '2');
       });
     }
   }

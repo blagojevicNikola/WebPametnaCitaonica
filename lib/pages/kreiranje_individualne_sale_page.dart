@@ -41,6 +41,7 @@ class _KreiranjeIdividualneSalePageState
   IndividualneSaleService indSaleService = IndividualneSaleService();
   MjestaService mjestaService = MjestaService();
   DioClient dioCL = DioClient();
+  GlobalKey keySlike = GlobalKey();
 
   @override
   void dispose() {
@@ -59,6 +60,7 @@ class _KreiranjeIdividualneSalePageState
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: keySlike,
       color: Colors.white,
       child: Stack(
         children: [
@@ -94,6 +96,7 @@ class _KreiranjeIdividualneSalePageState
                   child: const Text('Dodaj mjesto'),
                   onPressed: () {
                     if (!ispravneInformacijeMjesta()) {
+                      print(getKoeficijentVelicineMjesta());
                       const snackBar = SnackBar(
                         backgroundColor: Color.fromARGB(255, 185, 44, 34),
                         content: Text(
@@ -263,10 +266,22 @@ class _KreiranjeIdividualneSalePageState
         kreiranaIndividualnaSalaId = salaTemp.id;
         var futures = <Future>[];
         for (var item in listaMjesta) {
+          double povrsinaMjesta = item.velicina * item.velicina * 100;
+          double povrsinaSale = getKoeficijentVelicineMjesta();
+          double procenat = (povrsinaMjesta / povrsinaSale);
           futures.add(mjestaService.createMjesta(
               dioClient: dioCL,
               individualnaSalaId: kreiranaIndividualnaSalaId.toString(),
-              mjestoInfo: item));
+              mjestoInfo: Mjesto(
+                  brojMjesta: item.brojMjesta,
+                  pozicija: PozicijaXY(
+                      x: item.pozicija.x / getSirinaSlike(),
+                      y: item.pozicija.y / getVisinaSlike()),
+                  ugao: item.ugao,
+                  qrCode: item.qrCode,
+                  statusId: item.statusId,
+                  uticnica: item.uticnica,
+                  velicina: procenat)));
         }
         await Future.wait(futures);
         FormData f = FormData.fromMap({
@@ -310,6 +325,24 @@ class _KreiranjeIdividualneSalePageState
     }
   }
 
+  double getKoeficijentVelicineMjesta() {
+    RenderBox? renderBoxSlika =
+        keySlike.currentContext!.findRenderObject() as RenderBox?;
+    return renderBoxSlika!.size.height * renderBoxSlika.size.width;
+  }
+
+  double getVisinaSlike() {
+    RenderBox? renderBoxSlika =
+        keySlike.currentContext!.findRenderObject() as RenderBox?;
+    return renderBoxSlika!.size.height;
+  }
+
+  double getSirinaSlike() {
+    RenderBox? renderBoxSlika =
+        keySlike.currentContext!.findRenderObject() as RenderBox?;
+    return renderBoxSlika!.size.width;
+  }
+
   bool ispravneInformacijeMjesta() {
     if (velicinaController.text.isEmpty ||
         ugaoController.text.isEmpty ||
@@ -328,12 +361,16 @@ class _KreiranjeIdividualneSalePageState
   }
 
   void dodajMjesto() {
+    // int a = int.parse(velicinaController.text.toString());
+    // int povrsinaMjesta = a * a * 100;
+    // int povrsinaSale = getKoeficijentVelicineMjesta().round();
+    // int procenat = (povrsinaMjesta / povrsinaSale).round();
     setState(() {
       listaMjesta.add(Mjesto(
           uticnica: true,
           statusId: 1,
           pozicija: PozicijaXY(x: 10.0, y: 50.0),
-          velicina: int.parse(velicinaController.text),
+          velicina: double.parse(velicinaController.text),
           ugao: int.parse(ugaoController.text),
           qrCode: qrCodeController.text,
           brojMjesta: int.parse(brojController.text)));

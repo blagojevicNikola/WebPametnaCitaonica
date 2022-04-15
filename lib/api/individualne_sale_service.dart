@@ -54,7 +54,7 @@ class IndividualneSaleService {
       '/citaonice/$citaonicaId/individualne-sale/$individualnaSalaId',
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 204) {
       return response.data;
     } else {
       throw Exception('Greska pri brisanju');

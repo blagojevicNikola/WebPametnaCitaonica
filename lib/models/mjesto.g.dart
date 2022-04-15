@@ -8,7 +8,7 @@ part of 'mjesto.dart';
 
 Mjesto _$MjestoFromJson(Map<String, dynamic> json) => Mjesto(
       pozicija: PozicijaXY.fromJson(json['pozicija'] as Map<String, dynamic>),
-      velicina: json['velicina'] as int,
+      velicina: (json['velicina'] as num).toDouble(),
       ugao: json['ugao'] as int,
       qrCode: json['kod'] as String,
       brojMjesta: json['brojMjesta'] as int,

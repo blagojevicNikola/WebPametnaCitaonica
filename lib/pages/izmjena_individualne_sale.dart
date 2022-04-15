@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../api/dio_client.dart';
@@ -30,6 +32,7 @@ class _IzmjenaIndividualneSalePageState
   final brojController = TextEditingController();
   final nazivSaleController = TextEditingController();
   DioClient dioCL = DioClient();
+  GlobalKey keySlike = GlobalKey();
 
   @override
   void initState() {
@@ -41,6 +44,7 @@ class _IzmjenaIndividualneSalePageState
   @override
   Widget build(BuildContext context) {
     return Container(
+        key: keySlike,
         color: Colors.white,
         child: FutureBuilder<List<Mjesto>>(
             future: listaPostojecihMjesta,
@@ -84,7 +88,9 @@ class _IzmjenaIndividualneSalePageState
                           children: [
                             TextButton(
                               child: const Text('Dodaj sliku'),
-                              onPressed: () {},
+                              onPressed: () {
+                                print(getKoeficijentVelicineMjesta());
+                              },
                             ),
                             TextButton(
                               child: const Text('Ukloni sliku'),
@@ -189,7 +195,9 @@ class _IzmjenaIndividualneSalePageState
                           top: item.pozicija.y,
                           child: PostojeceMjestoWidget(
                             index: item.brojMjesta,
-                            velicina: item.velicina,
+                            velicina: sqrt((item.velicina *
+                                    getKoeficijentVelicineMjesta()) /
+                                100),
                             ugao: item.ugao,
                           ),
                         ),
@@ -270,7 +278,7 @@ class _IzmjenaIndividualneSalePageState
           uticnica: true,
           statusId: 1,
           pozicija: PozicijaXY(x: 10.0, y: 50.0),
-          velicina: int.parse(velicinaController.text),
+          velicina: double.parse(velicinaController.text),
           ugao: int.parse(ugaoController.text),
           qrCode: qrCodeController.text,
           brojMjesta: int.parse(brojController.text)));
@@ -310,6 +318,18 @@ class _IzmjenaIndividualneSalePageState
         }
       }
       return true;
+    }
+  }
+
+  double getKoeficijentVelicineMjesta() {
+    RenderBox? renderBoxSlika =
+        keySlike.currentContext!.findRenderObject() as RenderBox?;
+    if (renderBoxSlika != null) {
+      print(renderBoxSlika.size.height * renderBoxSlika.size.width);
+      return renderBoxSlika.size.height * renderBoxSlika.size.width;
+    } else {
+      print('dddd');
+      return 1000.0;
     }
   }
 

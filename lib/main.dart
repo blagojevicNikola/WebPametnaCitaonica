@@ -44,6 +44,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+GlobalKey navigationRailKey = GlobalKey();
+
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   List<Widget> screens = [
@@ -60,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Row(
         children: <Widget>[
           NavigationRail(
+            key: navigationRailKey,
             groupAlignment: -1,
             //minWidth: 120,
             backgroundColor: const Color.fromARGB(255, 177, 211, 240),

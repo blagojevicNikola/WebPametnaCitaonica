@@ -222,10 +222,8 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                           itemBuilder: (context, index) {
                                             return IndividiualnaSalaTile(
                                               index: snapshot.data![index].id,
-                                              naziv:
-                                                  snapshot.data![index].naziv,
-                                              brojMjesta: snapshot
-                                                  .data![index].brojMjesta,
+                                              individualnaSalaData:
+                                                  snapshot.data![index],
                                               funkcijaBrisanja:
                                                   obrisiIndividualnuSalu,
                                             );

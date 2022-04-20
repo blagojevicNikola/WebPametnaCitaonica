@@ -91,17 +91,17 @@ class CitaonicaService {
       {required DioClient dioClient,
       required Citaonica citaonicaInfo,
       required String index}) async {
-    Response? temp;
     try {
-      Response response = await dioClient.dio.put(
+      Response? temp = await dioClient.dio.put(
         '/citaonice/$index',
         data: citaonicaInfo.toJson(),
       );
-      temp = response;
-    } catch (e) {
-      print('Error creating user: $e');
+      return temp;
+    } on DioError catch (err) {
+      rethrow;
+    } catch (err) {
+      throw Exception('Greska pri azuriranju citaonice!');
     }
-    return temp;
     //print('User created: ${response.data}');
   }
 }

@@ -235,7 +235,7 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                                         karakteristike: temp,
                                         statusId: 1));
                                 if (res != null) {
-                                  if (res.statusCode == 200) {
+                                  if (res.statusCode == 201) {
                                     Navigator.of(context).pop();
                                   }
                                 }

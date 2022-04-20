@@ -230,18 +230,46 @@ class _LoginDemoState extends State<LoginDemo> {
                               ));
                     } else {
                       if (izbor == 'Administrator') {
-                        var response = await authService.postLogin(
-                            dioCL, emailLogin, lozinkaLogin);
-                        if (response != null) {
-                          if (response.statusCode == 201) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const MyHomePage(
-                                    title: 'Administratorska App'),
-                              ),
-                            );
+                        try {
+                          var response = await authService.postLogin(
+                              dioCL, emailLogin, lozinkaLogin);
+                          if (response != null) {
+                            if (response.statusCode == 201) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const MyHomePage(
+                                      title: 'Administratorska App'),
+                                ),
+                              );
+                            }
                           }
+                        } on DioError catch (err) {
+                          if (err.response != null) {
+                            if (err.response!.statusCode == 403) {
+                              const snackBar = SnackBar(
+                                backgroundColor:
+                                    Color.fromARGB(255, 185, 44, 34),
+                                content: Text(
+                                  'Pogresno korisnicko ime/lozinka. Pokušaj ponovo!',
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          }
+                        } catch (err) {
+                          const snackBar = SnackBar(
+                            backgroundColor: Color.fromARGB(255, 185, 44, 34),
+                            content: Text(
+                              'Greška!',
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       } else if (izbor == 'Supervizor') {
                         Navigator.push(

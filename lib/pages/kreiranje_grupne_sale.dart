@@ -273,6 +273,7 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
           dioClient: dioCL, karakteristikaInfo: item));
     }
     await Future.wait(futures);
+    //ovdje mozda mogu sacuvati listu kreiranih karakteristika te ih ponovo poslati zajedno sa vec postojecim karakteristika
   }
 
   GrupnaSala kreiranjeSale() {

@@ -244,6 +244,32 @@ class _LoginDemoState extends State<LoginDemo> {
                               );
                             } else {}
                           }
+                        } on DioError catch (err) {
+                          if (err.response != null) {
+                            if (err.response!.statusCode == 403) {
+                              const snackBar = SnackBar(
+                                backgroundColor:
+                                    Color.fromARGB(255, 185, 44, 34),
+                                content: Text(
+                                  'Pogresno korisnicko ime/lozinka. Pokušaj ponovo!',
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          }
+                        } catch (err) {
+                          const snackBar = SnackBar(
+                            backgroundColor: Color.fromARGB(255, 185, 44, 34),
+                            content: Text(
+                              'Greška!',
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       } else if (izbor == 'Supervizor') {
                         var response = await authService.postLogin(

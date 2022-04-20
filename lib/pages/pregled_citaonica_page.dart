@@ -18,6 +18,13 @@ class PregledCitaonicaPage extends StatefulWidget {
 class _PregledCitaonicaPageState extends State<PregledCitaonicaPage> {
   CitaonicaService citService = CitaonicaService();
   DioClient dioCL = DioClient();
+  late Future<List<Citaonica>> listaCitaonica;
+
+  @override
+  void initState() {
+    super.initState();
+    listaCitaonica = citService.getCitaonice(dioCL);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +69,7 @@ class _PregledCitaonicaPageState extends State<PregledCitaonicaPage> {
                   ),
                   width: MediaQuery.of(context).size.width * 0.64,
                   child: FutureBuilder<List<Citaonica>>(
-                      future: citService.getCitaonice(dioCL),
+                      future: listaCitaonica,
                       initialData: null,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==

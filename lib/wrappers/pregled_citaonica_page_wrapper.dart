@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/models/argumenti_izmjene_grupne_sale.dart';
+import 'package:web_aplikacija/models/argumenti_izmjene_individualne_sale.dart';
 
 import 'package:web_aplikacija/models/citaonica.dart';
 import 'package:web_aplikacija/models/grupna_sala.dart';
+import 'package:web_aplikacija/models/individualna_sala.dart';
 import 'package:web_aplikacija/pages/dodavanje_supervizora_page.dart';
 import 'package:web_aplikacija/pages/kreiranje_grupne_sale.dart';
 import 'package:web_aplikacija/pages/kreiranje_individualne_sale_page.dart';
@@ -48,7 +50,8 @@ class _PregledCitaonicaWrapperPageState
                 break;
               case 'pregled/citaonica/izmjeni_ind':
                 builder = (BuildContext context) => IzmjenaIndividualneSalePage(
-                    individualnaSalaId: settings.arguments as int);
+                    argumenti:
+                        settings.arguments as ArgumentiIzmjeneIndividualneSale);
                 break;
               case 'pregled/citaonica/izmjeni_grup':
                 builder = (BuildContext context) => IzmjenaGrupneSalePage(

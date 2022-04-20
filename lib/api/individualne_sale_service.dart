@@ -64,12 +64,13 @@ class IndividualneSaleService {
   Future<IndividualnaSala?> azurirajIndividualnuSalu(
       {required DioClient dioClient,
       required IndividualnaSala individualnaSalaData,
-      required String citaonicaId}) async {
+      required String citaonicaId,
+      required String individualnaSalaId}) async {
     IndividualnaSala? retrievedIndividualnaSala;
 
     try {
       Response response = await dioClient.dio.put(
-        '/citaonice/$citaonicaId/individualne-sale/${individualnaSalaData.id}',
+        '/citaonice/$citaonicaId/individualne-sale/$individualnaSalaId',
         data: individualnaSalaData.toJson(),
       );
 

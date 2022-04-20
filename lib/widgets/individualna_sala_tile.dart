@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/models/argumenti_izmjene_individualne_sale.dart';
+import 'package:web_aplikacija/models/individualna_sala.dart';
 
 import '../constants/config.dart';
 
 class IndividiualnaSalaTile extends StatelessWidget {
   int? index;
-  final String naziv;
-  int? brojMjesta;
+  int citaonicaId;
+  IndividualnaSala individualnaSalaData;
   final Function(int?) funkcijaBrisanja;
 
   IndividiualnaSalaTile({
     Key? key,
-    required this.naziv,
-    this.brojMjesta,
+    required this.individualnaSalaData,
     required this.funkcijaBrisanja,
     required this.index,
+    required this.citaonicaId,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class IndividiualnaSalaTile extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(9.0, 0.0, 0.0, 0.0),
                   child: Text(
-                    naziv,
+                    individualnaSalaData.naziv,
                     style: const TextStyle(
                       fontSize: 24,
                       color: Color.fromARGB(255, 105, 105, 105),
@@ -48,7 +50,9 @@ class IndividiualnaSalaTile extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 3, 0),
                       child: Text(
-                        (brojMjesta == null) ? 'NaN' : '$brojMjesta',
+                        (individualnaSalaData.brojMjesta == null)
+                            ? 'NaN'
+                            : '${individualnaSalaData.brojMjesta}',
                         style: const TextStyle(
                           fontSize: 24,
                           color: defaultKarakteristike,
@@ -75,7 +79,10 @@ class IndividiualnaSalaTile extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).pushNamed(
                                 'pregled/citaonica/izmjeni_ind',
-                                arguments: index);
+                                arguments: ArgumentiIzmjeneIndividualneSale(
+                                    citaonicaId: citaonicaId,
+                                    individualnaSalaData:
+                                        individualnaSalaData));
                           },
                         ),
                       ),

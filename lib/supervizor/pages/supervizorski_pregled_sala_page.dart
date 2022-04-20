@@ -204,15 +204,15 @@ class _SupervizorskiPregledSalaPageState
   }
 
   void zakjlucajIndividualnuSalu(IndividualnaSala ind, int citaonicaId) async {
-    var odgovor = await individualneSaleService.azurirajIndividualnuSalu(
-        dioClient: dioCL,
-        individualnaSalaData: ind,
-        citaonicaId: citaonicaId.toString());
-    if (odgovor != null) {
-      setState(() {
-        listaIndividualnihSala =
-            individualneSaleService.getIndividualneSale(dioCL, '12');
-      });
-    }
+    // var odgovor = await individualneSaleService.azurirajIndividualnuSalu(
+    //     dioClient: dioCL,
+    //     individualnaSalaData: ind,
+    //     citaonicaId: citaonicaId.toString());
+    // if (odgovor != null) {
+    //   setState(() {
+    //     listaIndividualnihSala =
+    //         individualneSaleService.getIndividualneSale(dioCL, '4');
+    //   });
+    // }
   }
 }

@@ -44,7 +44,7 @@ class DioClient {
     final refreshToken = prefs.getString('refreshToken');
     final response =
         await dio.post('/refreshtoken', data: {'refreshToken': refreshToken});
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       prefs.setString('accessToken', response.data['accessToken']);
       prefs.setString('refreshToken', response.data['refreshToken']);
     }

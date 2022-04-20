@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
@@ -206,7 +207,21 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
                             ),
                             onPressed: () async {
                               if (ispravnostInformacijaCitaonice(radnoVr)) {
-                                kreirajCitaonicu();
+                                try {
+                                  kreirajCitaonicu();
+                                } catch (err) {
+                                  const snackBar = SnackBar(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 185, 44, 34),
+                                    content: Text(
+                                      'Greska pri kreiranju citaonice!',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  );
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
                               } else {
                                 const snackBar = SnackBar(
                                   backgroundColor:

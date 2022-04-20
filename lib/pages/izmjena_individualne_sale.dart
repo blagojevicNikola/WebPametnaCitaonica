@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
 import 'package:web_aplikacija/main.dart';
+import 'package:web_aplikacija/models/argumenti_izmjene_individualne_sale.dart';
 import 'package:web_aplikacija/models/individualna_sala.dart';
 
 import '../api/dio_client.dart';
@@ -17,8 +18,8 @@ import 'package:web_aplikacija/widgets/mjesto_widget.dart';
 
 class IzmjenaIndividualneSalePage extends StatefulWidget {
   //final List<Mjesto> listaPostojecihMjesta;
-  final IndividualnaSala individualnaSalaData;
-  IzmjenaIndividualneSalePage({Key? key, required this.individualnaSalaData})
+  final ArgumentiIzmjeneIndividualneSale argumenti;
+  const IzmjenaIndividualneSalePage({Key? key, required this.argumenti})
       : super(key: key);
 
   @override
@@ -49,10 +50,11 @@ class _IzmjenaIndividualneSalePageState
     //     mjestaService.getMjesta(dioCL, widget.individualnaSalaId.toString());
     odgovorServera = Future.wait([
       dohvatiSliku(),
-      mjestaService.getMjesta(dioCL, widget.individualnaSalaData.id.toString())
+      mjestaService.getMjesta(
+          dioCL, widget.argumenti.individualnaSalaData.id.toString())
     ]);
-    nazivSaleController =
-        TextEditingController(text: widget.individualnaSalaData.naziv);
+    nazivSaleController = TextEditingController(
+        text: widget.argumenti.individualnaSalaData.naziv);
   }
 
   @override
@@ -231,18 +233,28 @@ class _IzmjenaIndividualneSalePageState
                                   TextStyle(fontSize: 21, color: Colors.white),
                             ),
                             onPressed: () async {
-                              try {
-                                if (listaMjesta.isNotEmpty) {
-                                  await dodajNovaMjesta();
+                              if (spremnoZaSlanje(snapshot.data![1])) {
+                                try {
+                                  if (listaMjesta.isNotEmpty) {
+                                    await dodajNovaMjesta();
+                                  }
+                                  await azurirajPostojecaMjesta(
+                                      snapshot.data![1]);
+                                  if (nazivSaleController.text !=
+                                          widget.argumenti.individualnaSalaData
+                                              .naziv ||
+                                      listaMjesta.isNotEmpty) {
+                                    await azurirajIndividualnuSalu(
+                                        snapshot.data![1].length +
+                                            listaMjesta.length);
+                                  }
+
+                                  Navigator.of(context).pop();
+                                } on DioError catch (err) {
+                                  print(err.message);
+                                } catch (err) {
+                                  print(err);
                                 }
-                                await azurirajPostojecaMjesta(
-                                    snapshot.data![1]);
-                                await azurirajIndividualnuSalu();
-                                Navigator.of(context).pop();
-                              } on DioError catch (err) {
-                                print(err.message);
-                              } catch (err) {
-                                print(err);
                               }
                             },
                           ))
@@ -281,7 +293,7 @@ class _IzmjenaIndividualneSalePageState
 
   Future<Uint8List> dohvatiSliku() async {
     http.Response odgovor = await http.get(Uri.parse(
-        'http://localhost:8080/api/v1/individualne-sale/${widget.individualnaSalaData.id}/slika'));
+        'http://localhost:8080/api/v1/individualne-sale/${widget.argumenti.individualnaSalaData.id}/slika'));
     if (odgovor.statusCode == 200) {
       return odgovor.bodyBytes;
     } else {
@@ -379,12 +391,22 @@ class _IzmjenaIndividualneSalePageState
   //   }
   // }
 
-  Future<IndividualnaSala?> azurirajIndividualnuSalu() async {
+  Future<IndividualnaSala?> azurirajIndividualnuSalu(
+      int azuriranBrojMjesta) async {
     IndividualnaSala? odgovor =
         await individualneSaleService.azurirajIndividualnuSalu(
             dioClient: dioCL,
-            individualnaSalaData: widget.individualnaSalaData,
-            citaonicaId: '1');
+            individualnaSalaData: IndividualnaSala(
+              naziv: nazivSaleController.text.toString(),
+              clanarine: widget.argumenti.individualnaSalaData.clanarine,
+              karakteristike:
+                  widget.argumenti.individualnaSalaData.karakteristike,
+              opis: widget.argumenti.individualnaSalaData.opis,
+              brojMjesta: azuriranBrojMjesta,
+            ),
+            citaonicaId: widget.argumenti.citaonicaId.toString(),
+            individualnaSalaId:
+                widget.argumenti.individualnaSalaData.id.toString());
     return odgovor;
   }
 
@@ -403,7 +425,8 @@ class _IzmjenaIndividualneSalePageState
               ugao: item.ugao,
               qrCode: item.qrCode,
               statusId: item.statusId),
-          individualnaSalaId: widget.individualnaSalaData.id.toString(),
+          individualnaSalaId:
+              widget.argumenti.individualnaSalaData.id.toString(),
           mjestoId: item.id.toString()));
     }
     Future.wait(futurePostojecaMjesta);
@@ -412,11 +435,41 @@ class _IzmjenaIndividualneSalePageState
   Future<void> dodajNovaMjesta() async {
     var futureNovaMjesta = <Future>[];
     for (var item in listaMjesta) {
+      double povrsinaMjesta = item.velicina * item.velicina * 100;
+      double povrsinaSale = getKoeficijentVelicineMjesta();
+      double procenat = (povrsinaMjesta / povrsinaSale);
       futureNovaMjesta.add(mjestaService.createMjesta(
           dioClient: dioCL,
-          individualnaSalaId: widget.individualnaSalaData.id.toString(),
-          mjestoInfo: item));
+          individualnaSalaId:
+              widget.argumenti.individualnaSalaData.id.toString(),
+          mjestoInfo: Mjesto(
+              brojMjesta: item.brojMjesta,
+              ugao: item.ugao,
+              uticnica: item.uticnica,
+              qrCode: item.qrCode,
+              velicina: procenat,
+              pozicija: PozicijaXY(
+                  x: item.pozicija.x / getSirinaSlike(),
+                  y: item.pozicija.y / getVisinaSlike()),
+              statusId: item.statusId)));
     }
     await Future.wait(futureNovaMjesta);
+  }
+
+  bool spremnoZaSlanje(List<Mjesto> postojecaMjestaSale) {
+    if (nazivSaleController.text.isEmpty) {
+      return false;
+    } else {
+      for (var item in listaMjesta) {
+        if (postojecaMjestaSale.any((element) =>
+            (element.brojMjesta == item.brojMjesta ||
+                element.qrCode == item.qrCode))) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+    return true;
   }
 }

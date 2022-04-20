@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/models/argumenti_izmjene_individualne_sale.dart';
 import 'package:web_aplikacija/models/individualna_sala.dart';
 
 import '../constants/config.dart';
 
 class IndividiualnaSalaTile extends StatelessWidget {
   int? index;
+  int citaonicaId;
   IndividualnaSala individualnaSalaData;
   final Function(int?) funkcijaBrisanja;
 
@@ -13,6 +15,7 @@ class IndividiualnaSalaTile extends StatelessWidget {
     required this.individualnaSalaData,
     required this.funkcijaBrisanja,
     required this.index,
+    required this.citaonicaId,
   }) : super(key: key);
 
   @override
@@ -76,7 +79,10 @@ class IndividiualnaSalaTile extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).pushNamed(
                                 'pregled/citaonica/izmjeni_ind',
-                                arguments: individualnaSalaData);
+                                arguments: ArgumentiIzmjeneIndividualneSale(
+                                    citaonicaId: citaonicaId,
+                                    individualnaSalaData:
+                                        individualnaSalaData));
                           },
                         ),
                       ),

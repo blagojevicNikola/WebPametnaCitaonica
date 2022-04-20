@@ -266,14 +266,15 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
     }
   }
 
-  Future<void> dodajNoveKarakteristike() async {
-    var futures = <Future>[];
+  Future<List<KarakteristikeSale?>> dodajNoveKarakteristike() async {
+    var futures = <Future<KarakteristikeSale?>>[];
     for (var item in listaDodatihKreiranih) {
       futures.add(karakteristikeSaleService.createKarakteristika(
           dioClient: dioCL, karakteristikaInfo: item));
     }
-    await Future.wait(futures);
+    List<KarakteristikeSale?> noveKarak = await Future.wait(futures);
     //ovdje mozda mogu sacuvati listu kreiranih karakteristika te ih ponovo poslati zajedno sa vec postojecim karakteristika
+    return noveKarak;
   }
 
   GrupnaSala kreiranjeSale() {

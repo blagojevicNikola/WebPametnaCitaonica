@@ -214,6 +214,11 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                               //print('Citaonica $citaonicaId');
                               if (ispravnostInformacijaSale()) {
                                 //await dodajNoveKarakteristike();
+                                List<KarakteristikeSale?> tempKreirane;
+                                if (listaDodatihKreiranih.isNotEmpty) {
+                                  tempKreirane =
+                                      await dodajNoveKarakteristike();
+                                }
                                 List<KarakteristikeSale> temp =
                                     <KarakteristikeSale>[];
                                 for (var item in listaDodatihPostojecih) {

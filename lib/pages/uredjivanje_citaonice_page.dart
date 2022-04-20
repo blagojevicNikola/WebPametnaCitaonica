@@ -554,11 +554,11 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   }
 
   Citaonica azurirajCitaonicu(Citaonica cit) {
-    cit.radnoVrijeme.removeWhere(radnoVrijemeIsNull);
+    radnoVr.removeWhere(radnoVrijemeIsNull);
     return Citaonica(
         name: nazivController.text.toString(),
         adresa: adresaController.text.toString(),
-        radnoVrijeme: cit.radnoVrijeme,
+        radnoVrijeme: radnoVr,
         opis: cit.opis,
         vlasnik: cit.vlasnik,
         phoneNumber: telefonController.text.toString(),

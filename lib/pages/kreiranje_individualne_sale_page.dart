@@ -296,7 +296,7 @@ class _KreiranjeIdividualneSalePageState
         dioSlika.options.headers['Authorization'] =
             'Bearer ${prefs.getString('accessToken')}';
         await dioSlika.post(
-          'http://localhost:8080/api/v1/individualne-sale/$kreiranaIndividualnaSalaId/slika',
+          'http://pametna-citaonica.azurewebsites.net/api/v1/individualne-sale/$kreiranaIndividualnaSalaId/slika',
           data: f,
         );
         return true;
@@ -337,14 +337,14 @@ class _KreiranjeIdividualneSalePageState
     RenderBox? renderBoxSlika =
         keySlike.currentContext!.findRenderObject() as RenderBox?;
     print(renderBoxSlika!.size.height);
-    return renderBoxSlika!.size.height;
+    return renderBoxSlika.size.height;
   }
 
   double getSirinaSlike() {
     RenderBox? renderBoxSlika =
         keySlike.currentContext!.findRenderObject() as RenderBox?;
     print(renderBoxSlika!.size.width);
-    return renderBoxSlika!.size.width;
+    return renderBoxSlika.size.width;
   }
 
   bool ispravneInformacijeMjesta() {

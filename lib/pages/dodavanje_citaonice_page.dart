@@ -298,7 +298,7 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
       dioSlika.options.headers['Authorization'] =
           'Bearer ${prefs.getString('accessToken')}';
       await dioSlika.post(
-        'http://localhost:8080/api/v1/citaonice/${cit.id}/slika',
+        'http://pametna-citaonica.azurewebsites.net/api/v1/citaonice/${cit.id}/slika',
         data: f,
       );
     }

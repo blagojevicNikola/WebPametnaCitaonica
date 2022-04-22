@@ -293,7 +293,7 @@ class _IzmjenaIndividualneSalePageState
 
   Future<Uint8List> dohvatiSliku() async {
     http.Response odgovor = await http.get(Uri.parse(
-        'http://localhost:8080/api/v1/individualne-sale/${widget.argumenti.individualnaSalaData.id}/slika'));
+        'http://pametna-citaonica.azurewebsites.net/api/v1/individualne-sale/${widget.argumenti.individualnaSalaData.id}/slika'));
     if (odgovor.statusCode == 200) {
       return odgovor.bodyBytes;
     } else {

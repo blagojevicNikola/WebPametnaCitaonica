@@ -230,19 +230,21 @@ class _LoginDemoState extends State<LoginDemo> {
                               ));
                     } else {
                       if (izbor == 'Administrator') {
-                        var response = await authService.postLogin(
-                            dioCL, emailLogin, lozinkaLogin);
-                        if (response != null) {
-                          if (response.statusCode == 201) {
-                            if (response.data['uloga'] == 'ADMIN') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const MyHomePage(
-                                      title: 'Administratorska App'),
-                                ),
-                              );
-                            } else {}
+                        try {
+                          var response = await authService.postLogin(
+                              dioCL, emailLogin, lozinkaLogin);
+                          if (response != null) {
+                            if (response.statusCode == 201) {
+                              if (response.data['uloga'] == 'ADMIN') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const MyHomePage(
+                                        title: 'Administratorska App'),
+                                  ),
+                                );
+                              } else {}
+                            }
                           }
                         } on DioError catch (err) {
                           if (err.response != null) {

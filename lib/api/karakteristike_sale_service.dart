@@ -24,23 +24,21 @@ class KarakteristikeSaleService {
     }
   }
 
-  Future<KarakteristikeSale?> createKarakteristika(
+  Future<Karakteristike> createKarakteristika(
       {required DioClient dioClient,
-      required KarakteristikeSale karakteristikaInfo}) async {
-    KarakteristikeSale? retrievedKarakteristika;
-
+      required Karakteristike karakteristikaInfo}) async {
     try {
+      Karakteristike retrievedKarakteristika;
       Response response = await dioClient.dio
           .post('/karakteristike', data: karakteristikaInfo.toJson());
 
       //print('User created: ${response.data}');
 
-      retrievedKarakteristika = KarakteristikeSale.fromJson(response.data);
+      retrievedKarakteristika = Karakteristike.fromJson(response.data);
+      return retrievedKarakteristika;
     } catch (e) {
-      print('Error creating user: $e');
+      throw Exception('Greska pri dodavanju karakteristike');
     }
-
-    return retrievedKarakteristika;
   }
 
   Future<Response?> deleteKarakteristika(

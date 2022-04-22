@@ -234,7 +234,8 @@ class _LoginDemoState extends State<LoginDemo> {
                           var response = await authService.postLogin(
                               dioCL, emailLogin, lozinkaLogin);
                           if (response != null) {
-                            if (response.statusCode == 201) {
+                            if (response.statusCode == 201 &&
+                                response.data['uloga'] == 'ADMIN') {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -272,11 +273,18 @@ class _LoginDemoState extends State<LoginDemo> {
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       } else if (izbor == 'Supervizor') {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const SupervizorHomePage(
-                                    title: 'Supervizorska App')));
+                        var response = await authService.postLogin(
+                            dioCL, emailLogin, lozinkaLogin);
+                        if (response != null) {
+                          if (response.statusCode == 201 &&
+                              response.data['uloga'] == 'SUPERVIZOR') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const SupervizorHomePage(
+                                        title: 'Supervizorska App')));
+                          }
+                        }
                       }
                     }
                   },

@@ -8,6 +8,7 @@ import 'package:web_aplikacija/models/argumenti_supervizorske_izmjene_individual
 import 'package:web_aplikacija/models/clanarina.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/models/mjesto.dart';
+import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 import 'package:web_aplikacija/widgets/supervizorsko_mjesto_widget.dart';
 
 import '../../api/dio_client.dart';
@@ -42,7 +43,8 @@ class _SupervizorskiPregledIndividualneSalePageState
   @override
   void initState() {
     super.initState();
-    Future.wait([
+    print('$citaonicaIdGlobal');
+    odgovorServera = Future.wait([
       dohvatiSliku(),
       mjestaService.getMjesta(
           dioCL, widget.argumenti.individualnaSalaId.toString())
@@ -209,7 +211,7 @@ class _SupervizorskiPregledIndividualneSalePageState
 
   Future<Uint8List> dohvatiSliku() async {
     http.Response odgovor = await http.get(Uri.parse(
-        'http://localhost:8080/api/v1/individualne-sale/${widget.argumenti.individualnaSalaId}/slika'));
+        'http://localhost:8080/api/v1/individualne-sale/${widget.argumenti.individualnaSalaId.toString()}/slika'));
     if (odgovor.statusCode == 200) {
       return odgovor.bodyBytes;
     } else {

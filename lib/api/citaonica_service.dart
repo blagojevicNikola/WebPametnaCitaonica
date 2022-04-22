@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/models/citaonica.dart';
+import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 
 class CitaonicaService {
   Future<List<Citaonica>> getCitaonice(DioClient dioClient) async {
@@ -23,11 +24,11 @@ class CitaonicaService {
   }
 
   Future<Citaonica> getJednaCitaonica(
-      DioClient dioClient, String citaonicaId) async {
+      DioClient dioClient, String superivozrId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
       Response citaoniceData =
-          await dioClient.dio.get('/citaonice/$citaonicaId');
+          await dioClient.dio.get('/supervizori/$supervizorskiId/citaonica');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');

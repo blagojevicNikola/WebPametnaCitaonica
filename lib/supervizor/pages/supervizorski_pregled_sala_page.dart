@@ -9,6 +9,7 @@ import '../../api/dio_client.dart';
 import '../../constants/config.dart';
 import '../../models/grupna_sala.dart';
 import '../../widgets/supervizorski_grup_tile.dart';
+import '../supervizor_home_page.dart';
 
 class SupervizorskiPregledSalaPage extends StatefulWidget {
   const SupervizorskiPregledSalaPage({Key? key}) : super(key: key);
@@ -26,12 +27,14 @@ class _SupervizorskiPregledSalaPageState
   DioClient dioCL = DioClient();
   late Future<List<IndividualnaSala>> listaIndividualnihSala;
   late Future<List<GrupnaSala>> listaGrupnihSala;
-
+  late int localCitaonicaId;
   @override
   void initState() {
-    listaIndividualnihSala =
-        individualneSaleService.getIndividualneSale(dioCL, '4');
-    listaGrupnihSala = grupneSaleService.getGrupneSale(dioCL, '4');
+    listaIndividualnihSala = individualneSaleService.getIndividualneSale(
+        dioCL, citaonicaIdGlobal.toString());
+    listaGrupnihSala =
+        grupneSaleService.getGrupneSale(dioCL, citaonicaIdGlobal.toString());
+    localCitaonicaId = citaonicaIdGlobal!;
     super.initState();
   }
 
@@ -112,7 +115,7 @@ class _SupervizorskiPregledSalaPageState
                                               const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
                                             return SupervizorskiIndTile(
-                                              citaonicaId: 4,
+                                              citaonicaId: localCitaonicaId,
                                               indSalaData:
                                                   snapshot.data![index],
                                               funkcijaZakljucavanja:

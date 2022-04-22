@@ -281,8 +281,12 @@ class _LoginDemoState extends State<LoginDemo> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => const SupervizorHomePage(
-                                        title: 'Supervizorska App')));
+                                    builder: (_) => SupervizorHomePage(
+                                          title: 'Supervizorska App',
+                                          supervizorId: response.data['id'],
+                                          citaonicaId:
+                                              response.data['citaonicaId'],
+                                        )));
                           }
                         }
                       }

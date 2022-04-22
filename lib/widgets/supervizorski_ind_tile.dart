@@ -86,21 +86,6 @@ class SupervizorskiIndTile extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(9, 0, 9, 0),
-                      child: Material(
-                        borderRadius: BorderRadius.circular(40),
-                        color: Colors.transparent,
-                        child: IconButton(
-                          hoverColor: const Color.fromARGB(255, 224, 110, 102),
-                          splashColor: const Color.fromARGB(255, 235, 61, 48),
-                          color: const Color.fromARGB(255, 105, 105, 105),
-                          splashRadius: 25,
-                          icon: const Icon(Icons.lock),
-                          onPressed: () {},
-                        ),
-                      ),
-                    ),
                   ],
                 )
               ],

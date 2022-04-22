@@ -49,12 +49,13 @@ class SupervizorService {
   Future<Response?> deleteSupervizor(
       {required DioClient dioClient,
       required String citaonicaId,
-      required String supervizorId}) async {
+      required String supervizorId,
+      required String supervizorPassword}) async {
     Response? temp;
     try {
       temp = await dioClient.dio.delete(
-        '/citaonice/$citaonicaId/supervizori/$supervizorId',
-      );
+          '/citaonice/$citaonicaId/supervizori/$supervizorId',
+          data: {'lozinka': supervizorPassword});
     } catch (e) {
       print('Error deleting user: $e');
     }

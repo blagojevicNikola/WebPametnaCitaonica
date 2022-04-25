@@ -214,8 +214,14 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                               //print('Citaonica $citaonicaId');
                               if (ispravnostInformacijaSale()) {
                                 //await dodajNoveKarakteristike();
+<<<<<<< HEAD
                                 // List<KarakteristikeSale?> tempKreirane;
                                 /*if (listaDodatihKreiranih.isNotEmpty) {
+=======
+                                List<Karakteristike> tempKreirane =
+                                    <Karakteristike>[];
+                                if (listaDodatihKreiranih.isNotEmpty) {
+>>>>>>> 2bb9d709b0bbf581c079ce54050cd1f48aa963b0
                                   tempKreirane =
                                       await dodajNoveKarakteristike();
                                 }*/
@@ -225,6 +231,10 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                                   temp.add(KarakteristikeSale(
                                     karakteristikaId: item.karakteristikaId,
                                   ));
+                                }
+                                for (var item in tempKreirane) {
+                                  temp.add(KarakteristikeSale(
+                                      karakteristikaId: item.id));
                                 }
                                 Response? res = await grupSale.createGrupnaSala(
                                     dioClient: dioCL,
@@ -272,13 +282,14 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
     }
   }
 
-  Future<List<KarakteristikeSale?>> dodajNoveKarakteristike() async {
-    var futures = <Future<KarakteristikeSale?>>[];
+  Future<List<Karakteristike>> dodajNoveKarakteristike() async {
+    var futures = <Future<Karakteristike>>[];
     for (var item in listaDodatihKreiranih) {
       futures.add(karakteristikeSaleService.createKarakteristika(
-          dioClient: dioCL, karakteristikaInfo: item));
+          dioClient: dioCL,
+          karakteristikaInfo: Karakteristike(naziv: item.naziv)));
     }
-    List<KarakteristikeSale?> noveKarak = await Future.wait(futures);
+    List<Karakteristike> noveKarak = await Future.wait(futures);
     //ovdje mozda mogu sacuvati listu kreiranih karakteristika te ih ponovo poslati zajedno sa vec postojecim karakteristika
     return noveKarak;
   }

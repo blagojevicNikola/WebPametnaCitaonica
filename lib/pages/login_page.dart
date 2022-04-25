@@ -234,6 +234,7 @@ class _LoginDemoState extends State<LoginDemo> {
                           var response = await authService.postLogin(
                               dioCL, emailLogin, lozinkaLogin);
                           if (response != null) {
+<<<<<<< HEAD
                             if (response.statusCode == 201) {
                               if (response.data['uloga'] == 'ADMIN') {
                                 Navigator.push(
@@ -244,6 +245,17 @@ class _LoginDemoState extends State<LoginDemo> {
                                   ),
                                 );
                               } else {}
+=======
+                            if (response.statusCode == 201 &&
+                                response.data['uloga'] == 'ADMIN') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const MyHomePage(
+                                      title: 'Administratorska App'),
+                                ),
+                              );
+>>>>>>> 2bb9d709b0bbf581c079ce54050cd1f48aa963b0
                             }
                           }
                         } on DioError catch (err) {
@@ -277,6 +289,7 @@ class _LoginDemoState extends State<LoginDemo> {
                         var response = await authService.postLogin(
                             dioCL, emailLogin, lozinkaLogin);
                         if (response != null) {
+<<<<<<< HEAD
                           if (response.statusCode == 201) {
                             if (response.data['uloga'] == 'SUPERVIZOR') {
                               //Navigator.pushNamed(context, 'supervizorhome');
@@ -286,6 +299,19 @@ class _LoginDemoState extends State<LoginDemo> {
                                       builder: (_) => const SupervizorHomePage(
                                           title: 'Supervizorska App')));
                             } else {}
+=======
+                          if (response.statusCode == 201 &&
+                              response.data['uloga'] == 'SUPERVIZOR') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => SupervizorHomePage(
+                                          title: 'Supervizorska App',
+                                          supervizorId: response.data['id'],
+                                          citaonicaId:
+                                              response.data['citaonicaId'],
+                                        )));
+>>>>>>> 2bb9d709b0bbf581c079ce54050cd1f48aa963b0
                           }
                         }
                       }

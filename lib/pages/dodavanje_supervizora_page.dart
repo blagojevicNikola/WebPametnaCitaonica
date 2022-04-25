@@ -132,22 +132,24 @@ class DodavanjeSupervizoraPage extends StatelessWidget {
                           ),
                           onPressed: () async {
                             if (ispravneInformacijeSupervizora()) {
-                              final response =
-                                  await supervizorService.createSupervizor(
-                                dioClient: dioCL,
-                                citaonicaId: citaonicaId.toString(),
-                                supervizorInfo: Nalog(
-                                  ime: imeController.text.toString(),
-                                  prezime: prezimeController.text.toString(),
-                                  korisnickoIme:
-                                      korisnickoController.text.toString(),
-                                  mail: emailController.text.toString(),
-                                  lozinka: lozinkaController.text.toString(),
-                                ),
-                              );
-                              if (response != null) {
-                                Navigator.of(context).pop();
-                              } else {
+                              try {
+                                final response =
+                                    await supervizorService.createSupervizor(
+                                  dioClient: dioCL,
+                                  citaonicaId: citaonicaId.toString(),
+                                  supervizorInfo: Nalog(
+                                    ime: imeController.text.toString(),
+                                    prezime: prezimeController.text.toString(),
+                                    korisnickoIme:
+                                        korisnickoController.text.toString(),
+                                    mail: emailController.text.toString(),
+                                    lozinka: lozinkaController.text.toString(),
+                                  ),
+                                );
+                                if (response != null) {
+                                  Navigator.of(context).pop();
+                                } else {}
+                              } catch (err) {
                                 const snackBar = SnackBar(
                                   backgroundColor:
                                       Color.fromARGB(255, 185, 44, 34),

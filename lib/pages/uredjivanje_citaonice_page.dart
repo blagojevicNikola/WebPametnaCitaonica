@@ -654,7 +654,8 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
     final brisanje = await supervizorService.deleteSupervizor(
         dioClient: dioCL,
         citaonicaId: widget.citData.id.toString(),
-        supervizorId: supervizorId.toString());
+        supervizorId: supervizorId.toString(),
+        supervizorPassword: '');
     if (brisanje != null) {
       if (brisanje.statusCode == 204) {
         setState(() {

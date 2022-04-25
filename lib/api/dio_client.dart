@@ -9,35 +9,37 @@ class DioClient {
       baseUrl: "http://pametna-citaonica.azurewebsites.net/api/v1"));
 
   DioClient() {
-    dio.interceptors.add(QueuedInterceptorsWrapper(
-      onError: (error, hendler) async {
-        if (error.response?.statusCode == 403 ||
-            error.response?.statusCode == 401) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          var options = error.response!.requestOptions;
-          if (prefs.getString('accessToken') !=
-              options.headers['Authorization'].toString().split(' ')[1]) {
-            options.headers['Authorization'] =
-                'Bearer ${prefs.getString('accessToken')}';
-            var odgovor1 = await _retry(options);
-            hendler.resolve(odgovor1);
+    dio.interceptors
+      ..add(LogInterceptor(responseBody: false))
+      ..add(QueuedInterceptorsWrapper(
+        onError: (error, hendler) async {
+          if (error.response?.statusCode == 403 ||
+              error.response?.statusCode == 401) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            var options = error.response!.requestOptions;
+            if (prefs.getString('accessToken') !=
+                options.headers['Authorization'].toString().split(' ')[1]) {
+              options.headers['Authorization'] =
+                  'Bearer ${prefs.getString('accessToken')}';
+              var odgovor1 = await _retry(options);
+              hendler.resolve(odgovor1);
+              return;
+            }
+            await refreshToken();
+            final odgovor2 = await _retry(options);
+            hendler.resolve(odgovor2);
             return;
           }
-          await refreshToken();
-          final odgovor2 = await _retry(options);
-          hendler.resolve(odgovor2);
-          return;
-        }
-        hendler.next(error);
-      },
-      onRequest: (options, hendler) async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        options.headers['Authorization'] =
-            'Bearer ${prefs.getString('accessToken')}';
+          hendler.next(error);
+        },
+        onRequest: (options, hendler) async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          options.headers['Authorization'] =
+              'Bearer ${prefs.getString('accessToken')}';
 
-        hendler.next(options);
-      },
-    ));
+          hendler.next(options);
+        },
+      ));
   }
 
   Future<void> refreshToken() async {

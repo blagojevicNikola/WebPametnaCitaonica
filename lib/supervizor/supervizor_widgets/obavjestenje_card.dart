@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 import '../../api/dio_client.dart';
 import '../pages/slanje_notifikacija.dart';
 
 import '../supervizor_models/obavjestenje.dart';
 
 class ObavjestenjeCard extends StatefulWidget {
+  final int index;
   final Obavjestenje obavjestenjeData;
-  final void Function() callback;
+  final Function(int) funkcijaBrisanja;
 
-  const ObavjestenjeCard(this.obavjestenjeData, this.callback, {Key? key})
+  const ObavjestenjeCard(
+      {required this.index,
+      required this.obavjestenjeData,
+      required this.funkcijaBrisanja,
+      Key? key})
       : super(key: key);
 
   @override
@@ -88,12 +94,8 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
                         actions: <Widget>[
                           TextButton(
                             onPressed: () async {
-                              obrisiObavjestenje();
-                              await Future.delayed(
-                                  const Duration(milliseconds: 00));
-
                               Navigator.pop(context);
-                              widget.callback();
+                              widget.funkcijaBrisanja(widget.index);
 
                               /*Navigator.pushReplacement(
                                   context,
@@ -110,25 +112,10 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
                         ],
                       ),
                     );
-                    setState(() {
-                      counter++;
-                    });
                   },
                   child: const Text('Obriši', style: TextStyle(fontSize: 20)),
                 ),
               )),
         ]));
-  }
-
-  void obrisiObavjestenje() {
-    obavjService.deleteObavjestenje(
-        dioClient: dioCL,
-        obavjestenjeId: widget.obavjestenjeData.idObavjestenja.toString(),
-        citaonicaId: '12');
-    setState(() {});
-  }
-
-  void refresh() {
-    setState(() {});
   }
 }

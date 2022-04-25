@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 import '../../api/dio_client.dart';
 import '../supervizor_models/obavjestenje.dart';
 import 'package:dio/dio.dart';
@@ -18,6 +19,8 @@ class SlanjeNotifikacija extends StatefulWidget {
   }
 }
 
+int idObavjestenjaZaBrisanje = -1;
+
 ObavjestenjeService obavjService = ObavjestenjeService();
 
 class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
@@ -28,7 +31,8 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
 
   @override
   void initState() {
-    listaObavjestenja = obavjService.getObavjestenja(dioCL, '12', '3');
+    listaObavjestenja = obavjService.getObavjestenja(
+        dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
 
     super.initState();
   }
@@ -155,7 +159,6 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                                         Navigator.pop(
                                           context,
                                         );
-                                        setState(() {});
                                       },
                                       child: const Text('OK'),
                                     ),
@@ -198,7 +201,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                       style: ElevatedButton.styleFrom(
                           primary: const Color.fromARGB(255, 129, 189, 238)),
                       onPressed: () {
-                        setState(() {});
+                        refreshPage();
                       },
                       child: const Text('Osvježi listu',
                           style: TextStyle(fontSize: 20)))),
@@ -236,8 +239,13 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
+                                    idObavjestenjaZaBrisanje =
+                                        list[index].idObavjestenja as int;
                                     return ObavjestenjeCard(
-                                        list[index], refreshPage);
+                                      index: list[index].idObavjestenja as int,
+                                      obavjestenjeData: list[index],
+                                      funkcijaBrisanja: obrisiObavjestenje,
+                                    );
                                   },
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(
@@ -275,11 +283,29 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
         obavjestenjeInfo: Obavjestenje(
             naslov: obavjestenje.naslov,
             tekstNotifikacije: obavjestenje.tekstNotifikacije),
-        supervizorId: '3',
-        citaonicaId: '12');
+        supervizorId: supervizorskiId as int,
+        citaonicaId: citaonicaIdGlobal as int);
+    setState(() {
+      listaObavjestenja = obavjService.getObavjestenja(
+          dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
+    });
   }
 
   void refreshPage() {
-    setState(() {});
+    setState(() {
+      listaObavjestenja = obavjService.getObavjestenja(
+          dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
+    });
+  }
+
+  void obrisiObavjestenje(int id) {
+    obavjService.deleteObavjestenje(
+        dioClient: dioCL,
+        obavjestenjeId: id,
+        citaonicaId: citaonicaIdGlobal as int);
+    setState(() {
+      listaObavjestenja = obavjService.getObavjestenja(
+          dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
+    });
   }
 }

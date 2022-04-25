@@ -50,9 +50,6 @@ class _OdjavaSupervizorPageState extends State<OdjavaSupervizorPage> {
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () async {
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.remove('email');
                                   final pref =
                                       await SharedPreferences.getInstance();
                                   await pref.clear();

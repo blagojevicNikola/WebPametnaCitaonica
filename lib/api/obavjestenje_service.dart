@@ -4,9 +4,11 @@ import 'package:web_aplikacija/supervizor/supervizor_models/obavjestenje.dart';
 
 class ObavjestenjeService {
   Future<List<Obavjestenje>> getObavjestenja(
-      DioClient dioClient, String citaonicaId, String supervizorId) async {
+      DioClient dioClient, int citaonicaId, int supervizorId) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
+      print('citaonicaid $citaonicaId');
+      print('supervizorid $supervizorId');
       Response obavjestenjaData = await dioClient.dio
           .get('/citaonice/${citaonicaId.toString()}/obavjestenja');
       // '${supervizorId.toString()}/' +
@@ -28,8 +30,8 @@ class ObavjestenjeService {
   Future<Obavjestenje?> createObavjestenje(
       {required DioClient dioClient,
       required Obavjestenje obavjestenjeInfo,
-      required String citaonicaId,
-      required String supervizorId}) async {
+      required int citaonicaId,
+      required int supervizorId}) async {
     Obavjestenje? retrievedObavjestenje;
 
     try {
@@ -53,8 +55,8 @@ class ObavjestenjeService {
 
   Future<void> deleteObavjestenje(
       {required DioClient dioClient,
-      required String obavjestenjeId,
-      required String citaonicaId}) async {
+      required int obavjestenjeId,
+      required int citaonicaId}) async {
     try {
       await dioClient.dio.delete('/citaonice/'
               '${citaonicaId.toString()}/' +

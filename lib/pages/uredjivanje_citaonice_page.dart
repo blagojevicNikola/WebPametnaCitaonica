@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
 import 'package:web_aplikacija/api/supervizor_service.dart';
@@ -221,11 +222,10 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                               const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
                                             return IndividiualnaSalaTile(
+                                              citaonicaId: widget.citData.id!,
                                               index: snapshot.data![index].id,
-                                              naziv:
-                                                  snapshot.data![index].naziv,
-                                              brojMjesta: snapshot
-                                                  .data![index].brojMjesta,
+                                              individualnaSalaData:
+                                                  snapshot.data![index],
                                               funkcijaBrisanja:
                                                   obrisiIndividualnuSalu,
                                             );
@@ -512,12 +512,61 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                       fontSize: 21, color: Colors.white),
                                 ),
                                 onPressed: () async {
-                                  Citaonica temp =
-                                      azurirajCitaonicu(widget.citData);
-                                  citService.azurirajCitaonicu(
-                                      dioClient: dioCL,
-                                      citaonicaInfo: temp,
-                                      index: widget.citData.id.toString());
+                                  try {
+                                    Citaonica temp =
+                                        azurirajCitaonicu(widget.citData);
+                                    Response? odgovor =
+                                        await citService.azurirajCitaonicu(
+                                            dioClient: dioCL,
+                                            citaonicaInfo: temp,
+                                            index:
+                                                widget.citData.id.toString());
+                                    if (odgovor != null) {
+                                      if (odgovor.statusCode == 200 ||
+                                          odgovor.statusCode == 201) {
+                                        const snackBar = SnackBar(
+                                          duration: Duration(seconds: 2),
+                                          backgroundColor:
+                                              Color.fromARGB(255, 47, 180, 63),
+                                          content: Text(
+                                            'Citaonica je uspjesno azurirana!',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        );
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    }
+                                  } on DioError catch (err) {
+                                    if (err.response != null) {
+                                      const snackBar = SnackBar(
+                                        duration: Duration(seconds: 2),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 185, 44, 34),
+                                        content: Text(
+                                          'Pogresno definisane informacije citaonice!',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    }
+                                  } catch (err) {
+                                    const snackBar = SnackBar(
+                                      duration: Duration(seconds: 2),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 185, 44, 34),
+                                      content: Text(
+                                        'Greska pri azuriranju citaonice!',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    );
+
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
                                 },
                               ),
                             ),
@@ -555,11 +604,11 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   }
 
   Citaonica azurirajCitaonicu(Citaonica cit) {
-    cit.radnoVrijeme.removeWhere(radnoVrijemeIsNull);
+    radnoVr.removeWhere(radnoVrijemeIsNull);
     return Citaonica(
         name: nazivController.text.toString(),
         adresa: adresaController.text.toString(),
-        radnoVrijeme: cit.radnoVrijeme,
+        radnoVrijeme: radnoVr,
         opis: cit.opis,
         vlasnik: cit.vlasnik,
         phoneNumber: telefonController.text.toString(),
@@ -605,7 +654,8 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
     final brisanje = await supervizorService.deleteSupervizor(
         dioClient: dioCL,
         citaonicaId: widget.citData.id.toString(),
-        supervizorId: supervizorId.toString());
+        supervizorId: supervizorId.toString(),
+        supervizorPassword: '');
     if (brisanje != null) {
       if (brisanje.statusCode == 204) {
         setState(() {

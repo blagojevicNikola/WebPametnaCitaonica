@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/auth_service.dart';
 import 'package:web_aplikacija/main.dart';
+import 'package:web_aplikacija/pages/zaboravljena_lozinka_page.dart';
 
 import '../api/dio_client.dart';
 import '../supervizor/supervizor_home_page.dart';
@@ -166,8 +167,8 @@ class _LoginDemoState extends State<LoginDemo> {
                         filled: true,
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        labelText: 'E-mail',
-                        hintText: 'Unesite email'),
+                        labelText: 'Korisničko ime',
+                        hintText: 'Unesite korisničko ime'),
                   ),
                 ),
               ),
@@ -230,11 +231,12 @@ class _LoginDemoState extends State<LoginDemo> {
                               ));
                     } else {
                       if (izbor == 'Administrator') {
-                        var response = await authService.postLogin(
-                            dioCL, emailLogin, lozinkaLogin);
-                        if (response != null) {
-                          if (response.statusCode == 201) {
-                            if (response.data['uloga'] == 'ADMIN') {
+                        try {
+                          var response = await authService.postLogin(
+                              dioCL, emailLogin, lozinkaLogin);
+                          if (response != null) {
+                            if (response.statusCode == 201 &&
+                                response.data['uloga'] == 'ADMIN') {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -242,22 +244,50 @@ class _LoginDemoState extends State<LoginDemo> {
                                       title: 'Administratorska App'),
                                 ),
                               );
-                            } else {}
+                            }
                           }
+                        } on DioError catch (err) {
+                          if (err.response != null) {
+                            if (err.response!.statusCode == 403) {
+                              const snackBar = SnackBar(
+                                backgroundColor:
+                                    Color.fromARGB(255, 185, 44, 34),
+                                content: Text(
+                                  'Pogresno korisnicko ime/lozinka. Pokušaj ponovo!',
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          }
+                        } catch (err) {
+                          const snackBar = SnackBar(
+                            backgroundColor: Color.fromARGB(255, 185, 44, 34),
+                            content: Text(
+                              'Greška!',
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       } else if (izbor == 'Supervizor') {
                         var response = await authService.postLogin(
                             dioCL, emailLogin, lozinkaLogin);
                         if (response != null) {
-                          if (response.statusCode == 201) {
-                            if (response.data['uloga'] == 'SUPERVIZOR') {
-                              //Navigator.pushNamed(context, 'supervizorhome');
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const SupervizorHomePage(
-                                          title: 'Supervizorska App')));
-                            } else {}
+                          if (response.statusCode == 201 &&
+                              response.data['uloga'] == 'SUPERVIZOR') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => SupervizorHomePage(
+                                          title: 'Supervizorska App',
+                                          supervizorId: response.data['id'],
+                                          citaonicaId:
+                                              response.data['citaonicaId'],
+                                        )));
                           }
                         }
                       }
@@ -270,13 +300,12 @@ class _LoginDemoState extends State<LoginDemo> {
                 ),
               ),
               FlatButton(
-                onPressed: () {},
-                /*onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const ZaboravljenaLozinka()));
-                  },*/
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const ZaboravljenaLozinka()));
+                },
                 child: Text(
                   'Zaboravili ste lozinku?',
                   style: TextStyle(color: Colors.blue[800], fontSize: 15),

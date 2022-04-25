@@ -12,7 +12,7 @@ class SupervizorskoMjestoWidget extends StatelessWidget {
 
   final int id;
   final int index;
-  final int velicina;
+  final double velicina;
   final int ugao;
   //final Mjesto mjestoDat;
 
@@ -22,38 +22,56 @@ class SupervizorskoMjestoWidget extends StatelessWidget {
   }
 
   Widget buildIcon() {
-    return InkWell(
-      onTap: () {},
-      child: Stack(
-        children: [
-          Transform.rotate(
-            angle: ugao * math.pi / 180,
-            child: Icon(Icons.event_seat,
-                color: const Color.fromARGB(255, 88, 88, 88),
-                size: velicina.toDouble()),
-          ),
-          Positioned(
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(1),
-              decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.8),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              width: velicina * 0.4,
-              height: velicina * 0.4,
-              child: Text(
-                '$index',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: velicina * 0.3,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )
-        ],
+    return Stack(children: [
+      Transform.rotate(
+        angle: ugao * math.pi / 180,
+        child: InkWell(
+          onTap: () {
+            print('Milosa Skobica cekam!');
+          },
+          child: Icon(Icons.event_seat,
+              color: const Color.fromARGB(255, 88, 88, 88), size: velicina),
+        ),
       ),
-    );
+      Positioned(
+          right: 0,
+          child: Container(
+            padding: const EdgeInsets.all(1),
+            decoration: BoxDecoration(
+              color: Colors.red.withOpacity(0.8),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            width: velicina * 0.4,
+            height: velicina * 0.4,
+            child: Text(
+              '$index',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: velicina * 0.3,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          )),
+      // Positioned(
+      //   right: 0,
+      //   child: Container(
+      //     padding: const EdgeInsets.all(1),
+      //     decoration: BoxDecoration(
+      //       color: Colors.red.withOpacity(0.8),
+      //       borderRadius: BorderRadius.circular(20),
+      //     ),
+      //     width: velicina * 0.4,
+      //     height: velicina * 0.4,
+      //     child: Text(
+      //       '$index',
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: velicina * 0.3,
+      //       ),
+      //       textAlign: TextAlign.center,
+      //     ),
+      //   ),
+      // )
+    ]);
   }
 }

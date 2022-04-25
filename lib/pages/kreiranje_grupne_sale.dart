@@ -214,12 +214,22 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                               //print('Citaonica $citaonicaId');
                               if (ispravnostInformacijaSale()) {
                                 //await dodajNoveKarakteristike();
+                                List<Karakteristike> tempKreirane =
+                                    <Karakteristike>[];
+                                if (listaDodatihKreiranih.isNotEmpty) {
+                                  tempKreirane =
+                                      await dodajNoveKarakteristike();
+                                }
                                 List<KarakteristikeSale> temp =
                                     <KarakteristikeSale>[];
                                 for (var item in listaDodatihPostojecih) {
                                   temp.add(KarakteristikeSale(
                                     karakteristikaId: item.karakteristikaId,
                                   ));
+                                }
+                                for (var item in tempKreirane) {
+                                  temp.add(KarakteristikeSale(
+                                      karakteristikaId: item.id));
                                 }
                                 Response? res = await grupSale.createGrupnaSala(
                                     dioClient: dioCL,
@@ -233,9 +243,10 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                                         opis: opisController.text.toString(),
                                         clanarine: <Clanarina>[],
                                         karakteristike: temp,
-                                        statusId: 1));
+                                        dostupno: true));
                                 if (res != null) {
-                                  if (res.statusCode == 200) {
+                                  if (res.statusCode == 201 ||
+                                      res.statusCode == 200) {
                                     Navigator.of(context).pop();
                                   }
                                 }
@@ -266,13 +277,16 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
     }
   }
 
-  Future<void> dodajNoveKarakteristike() async {
-    var futures = <Future>[];
+  Future<List<Karakteristike>> dodajNoveKarakteristike() async {
+    var futures = <Future<Karakteristike>>[];
     for (var item in listaDodatihKreiranih) {
       futures.add(karakteristikeSaleService.createKarakteristika(
-          dioClient: dioCL, karakteristikaInfo: item));
+          dioClient: dioCL,
+          karakteristikaInfo: Karakteristike(naziv: item.naziv)));
     }
-    await Future.wait(futures);
+    List<Karakteristike> noveKarak = await Future.wait(futures);
+    //ovdje mozda mogu sacuvati listu kreiranih karakteristika te ih ponovo poslati zajedno sa vec postojecim karakteristika
+    return noveKarak;
   }
 
   GrupnaSala kreiranjeSale() {
@@ -283,6 +297,6 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
         opis: opisController.text.toString(),
         clanarine: <Clanarina>[],
         karakteristike: <KarakteristikeSale>[],
-        statusId: 1);
+        dostupno: true);
   }
 }

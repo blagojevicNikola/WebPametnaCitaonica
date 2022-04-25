@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/pages/login_page.dart';
 import 'package:web_aplikacija/pages/pregled_citaonica_page.dart';
@@ -8,7 +10,17 @@ import 'package:web_aplikacija/wrappers/pregled_citaonica_page_wrapper.dart';
 import 'package:web_aplikacija/wrappers/promjena_lozinke_wrapper_page.dart';
 import 'package:web_aplikacija/wrappers/supervizorski_pregled_sale_wrapper.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -55,6 +67,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+GlobalKey navigationRailKey = GlobalKey();
+
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   List<Widget> screens = [
@@ -71,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Row(
         children: <Widget>[
           NavigationRail(
+            key: navigationRailKey,
             groupAlignment: -1,
             //minWidth: 120,
             backgroundColor: const Color.fromARGB(255, 177, 211, 240),

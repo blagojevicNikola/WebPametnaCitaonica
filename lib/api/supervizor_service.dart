@@ -9,7 +9,7 @@ class SupervizorService {
     // Perform GET request to the endpoint "/users/<id>"
     try {
       Response supervizoriData =
-          await dioClient.dio.get('/citaonice/$citaonicaId/supervizori');
+          await dioClient.dio.get('/citaonice/$citaonicaId/supervizori/');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -33,7 +33,7 @@ class SupervizorService {
 
     try {
       Response response = await dioClient.dio.post(
-          '/citaonice/$citaonicaId/supervizori',
+          '/citaonice/$citaonicaId/supervizori/',
           data: supervizorInfo.toJson());
 
       //print('User created: ${response.data}');
@@ -49,12 +49,13 @@ class SupervizorService {
   Future<Response?> deleteSupervizor(
       {required DioClient dioClient,
       required String citaonicaId,
-      required String supervizorId}) async {
+      required String supervizorId,
+      required String supervizorPassword}) async {
     Response? temp;
     try {
       temp = await dioClient.dio.delete(
-        '/citaonice/$citaonicaId/supervizori/$supervizorId',
-      );
+          '/citaonice/$citaonicaId/supervizori/$supervizorId',
+          data: {'lozinka': supervizorPassword});
     } catch (e) {
       print('Error deleting user: $e');
     }

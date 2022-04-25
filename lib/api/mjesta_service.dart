@@ -8,7 +8,7 @@ class MjestaService {
     // Perform GET request to the endpoint "/users/<id>"
     try {
       Response citaoniceData = await dioClient.dio
-          .get('/individualne-sale/$individualnaSalaId/mjesta');
+          .get('/individualne-sale/$individualnaSalaId/mjesta/');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -32,7 +32,7 @@ class MjestaService {
 
     try {
       Response response = await dioClient.dio.post(
-          '/individualne-sale/$individualnaSalaId/mjesta',
+          '/individualne-sale/$individualnaSalaId/mjesta/',
           data: mjestoInfo.toJson());
 
       //print('User created: ${response.data}');
@@ -75,5 +75,19 @@ class MjestaService {
     }
     return temp;
     //print('User created: ${response.data}');
+  }
+
+  Future<Response?> zakljucajMjesto(
+      {required DioClient dioClient,
+      required bool dostupno,
+      required String individualnaSalaId,
+      required String mjestoId}) async {
+    try {
+      Response? temp = await dioClient.dio
+          .patch('/mjesta/$mjestoId/dostupnost/', data: {'dostupno': dostupno});
+      return temp;
+    } catch (err) {
+      rethrow;
+    }
   }
 }

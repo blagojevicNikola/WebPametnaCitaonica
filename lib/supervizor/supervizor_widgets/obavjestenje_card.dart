@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 import '../../api/dio_client.dart';
 import '../pages/slanje_notifikacija.dart';
 
 import '../supervizor_models/obavjestenje.dart';
 
 class ObavjestenjeCard extends StatelessWidget {
+  final int index;
   final Obavjestenje obavjestenjeData;
-  int? index;
+  final Function(int) funkcijaBrisanja;
 
-  final Function(int?) funkcijaBrisanja;
-
-  ObavjestenjeCard({
-    Key? key,
-    required this.obavjestenjeData,
-    required this.index,
-    required this.funkcijaBrisanja,
-  }) : super(key: key);
+  const ObavjestenjeCard(
+      {required this.index,
+      required this.obavjestenjeData,
+      required this.funkcijaBrisanja,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +81,8 @@ class ObavjestenjeCard extends StatelessWidget {
                         actions: <Widget>[
                           TextButton(
                             onPressed: () async {
-                              funkcijaBrisanja(index);
                               Navigator.pop(context);
+                              funkcijaBrisanja(index);
 
                               /*Navigator.pushReplacement(
                                   context,

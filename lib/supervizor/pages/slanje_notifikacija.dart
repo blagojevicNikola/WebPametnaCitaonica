@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 import '../../api/dio_client.dart';
 import '../supervizor_models/obavjestenje.dart';
 import 'package:dio/dio.dart';
@@ -18,6 +19,8 @@ class SlanjeNotifikacija extends StatefulWidget {
   }
 }
 
+int idObavjestenjaZaBrisanje = -1;
+
 ObavjestenjeService obavjService = ObavjestenjeService();
 
 class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
@@ -26,7 +29,8 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
   late Future<List<Obavjestenje>> listaObavjestenja;
   @override
   void initState() {
-    listaObavjestenja = obavjService.getObavjestenja(dioCL, '1', '2');
+    listaObavjestenja = obavjService.getObavjestenja(
+        dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
 
     super.initState();
   }
@@ -153,7 +157,6 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                                         Navigator.pop(
                                           context,
                                         );
-                                        refreshPage();
                                       },
                                       child: const Text('OK'),
                                     ),
@@ -236,11 +239,13 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
+                                    idObavjestenjaZaBrisanje =
+                                        list[index].idObavjestenja as int;
                                     return ObavjestenjeCard(
-                                        obavjestenjeData: list[index],
-                                        index: snapshot
-                                            .data![index].idObavjestenja,
-                                        funkcijaBrisanja: obrisiObavjestenje);
+                                      index: list[index].idObavjestenja as int,
+                                      obavjestenjeData: list[index],
+                                      funkcijaBrisanja: obrisiObavjestenje,
+                                    );
                                   },
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(
@@ -278,46 +283,29 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
         obavjestenjeInfo: Obavjestenje(
             naslov: obavjestenje.naslov,
             tekstNotifikacije: obavjestenje.tekstNotifikacije),
-        supervizorId: '2',
-        citaonicaId: '1');
+        supervizorId: supervizorskiId as int,
+        citaonicaId: citaonicaIdGlobal as int);
+    setState(() {
+      listaObavjestenja = obavjService.getObavjestenja(
+          dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
+    });
   }
 
   void refreshPage() {
     setState(() {
-      listaObavjestenja = obavjService.getObavjestenja(dioCL, '1', '2');
+      listaObavjestenja = obavjService.getObavjestenja(
+          dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
     });
   }
 
-  void obrisiObavjestenje(int? ind) async {
-    var response = await obavjService.deleteObavjestenje(
-        dioClient: dioCL, obavjestenjeId: ind.toString(), citaonicaId: '1');
-    if (response!.statusCode == 200) {
-      setState(() {
-        listaObavjestenja = obavjService.getObavjestenja(dioCL, '1', '2');
-      });
-    }
-    if (response.statusCode == 404) {
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Obavještenje'),
-          content: const Text(
-              'Ovo obavještenje ne postoji ! Vjerovatno ga je drugi supervizor već obrisao !',
-              style: TextStyle(fontSize: 20)),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Da'),
-            ),
-          ],
-        ),
-      );
-
-      setState(() {
-        listaObavjestenja = obavjService.getObavjestenja(dioCL, '1', '2');
-      });
-    }
+  void obrisiObavjestenje(int id) {
+    obavjService.deleteObavjestenje(
+        dioClient: dioCL,
+        obavjestenjeId: id,
+        citaonicaId: citaonicaIdGlobal as int);
+    setState(() {
+      listaObavjestenja = obavjService.getObavjestenja(
+          dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
+    });
   }
 }

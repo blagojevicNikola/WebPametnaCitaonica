@@ -8,7 +8,7 @@ class IndividualneSaleService {
     // Perform GET request to the endpoint "/users/<id>"
     try {
       Response saleData = await dioClient.dio
-          .get('/citaonice/${citaonicaId.toString()}/individualne-sale');
+          .get('/citaonice/${citaonicaId.toString()}/individualne-sale/');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -54,7 +54,7 @@ class IndividualneSaleService {
       '/citaonice/$citaonicaId/individualne-sale/$individualnaSalaId',
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 204) {
       return response.data;
     } else {
       throw Exception('Greska pri brisanju');
@@ -64,12 +64,13 @@ class IndividualneSaleService {
   Future<IndividualnaSala?> azurirajIndividualnuSalu(
       {required DioClient dioClient,
       required IndividualnaSala individualnaSalaData,
-      required String citaonicaId}) async {
+      required String citaonicaId,
+      required String individualnaSalaId}) async {
     IndividualnaSala? retrievedIndividualnaSala;
 
     try {
       Response response = await dioClient.dio.put(
-        '/citaonice/$citaonicaId/individualne-sale/${individualnaSalaData.id}',
+        '/citaonice/$citaonicaId/individualne-sale/$individualnaSalaId',
         data: individualnaSalaData.toJson(),
       );
 

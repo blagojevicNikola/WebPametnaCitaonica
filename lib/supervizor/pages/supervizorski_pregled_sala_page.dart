@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/grupne_sale_service.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
@@ -9,6 +12,7 @@ import '../../api/dio_client.dart';
 import '../../constants/config.dart';
 import '../../models/grupna_sala.dart';
 import '../../widgets/supervizorski_grup_tile.dart';
+import '../supervizor_home_page.dart';
 
 class SupervizorskiPregledSalaPage extends StatefulWidget {
   const SupervizorskiPregledSalaPage({Key? key}) : super(key: key);
@@ -26,12 +30,14 @@ class _SupervizorskiPregledSalaPageState
   DioClient dioCL = DioClient();
   late Future<List<IndividualnaSala>> listaIndividualnihSala;
   late Future<List<GrupnaSala>> listaGrupnihSala;
-
+  late int localCitaonicaId;
   @override
   void initState() {
-    listaIndividualnihSala =
-        individualneSaleService.getIndividualneSale(dioCL, '1');
-    listaGrupnihSala = grupneSaleService.getGrupneSale(dioCL, '1');
+    listaIndividualnihSala = individualneSaleService.getIndividualneSale(
+        dioCL, citaonicaIdGlobal.toString());
+    listaGrupnihSala =
+        grupneSaleService.getGrupneSale(dioCL, citaonicaIdGlobal.toString());
+    localCitaonicaId = citaonicaIdGlobal!;
     super.initState();
   }
 
@@ -112,11 +118,9 @@ class _SupervizorskiPregledSalaPageState
                                               const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
                                             return SupervizorskiIndTile(
-                                              citaonicaId: 1,
+                                              citaonicaId: localCitaonicaId,
                                               indSalaData:
                                                   snapshot.data![index],
-                                              funkcijaZakljucavanja:
-                                                  zakjlucajIndividualnuSalu,
                                             );
                                           },
                                           separatorBuilder: (context, index) =>
@@ -171,7 +175,12 @@ class _SupervizorskiPregledSalaPageState
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
-                                            return const SupervizorskaGrupTile();
+                                            return SupervizorskaGrupTile(
+                                              citaonicaId:
+                                                  localCitaonicaId.toString(),
+                                              grupnaSalaData:
+                                                  snapshot.data![index],
+                                            );
                                           },
                                           separatorBuilder: (context, index) =>
                                               const SizedBox(
@@ -201,18 +210,5 @@ class _SupervizorskiPregledSalaPageState
         ),
       ),
     );
-  }
-
-  void zakjlucajIndividualnuSalu(IndividualnaSala ind, int citaonicaId) async {
-    var odgovor = await individualneSaleService.azurirajIndividualnuSalu(
-        dioClient: dioCL,
-        individualnaSalaData: ind,
-        citaonicaId: citaonicaId.toString());
-    if (odgovor != null) {
-      setState(() {
-        listaIndividualnihSala =
-            individualneSaleService.getIndividualneSale(dioCL, '1');
-      });
-    }
   }
 }

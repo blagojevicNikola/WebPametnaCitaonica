@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/citaonica_service.dart';
 import 'package:web_aplikacija/api/dio_client.dart';
+import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 
 import '../../constants/config.dart';
 import '../../models/citaonica.dart';
@@ -46,7 +47,8 @@ class _PromjenaInformacijaCitaoniceState
   DioClient dioCL = DioClient();
   @override
   void initState() {
-    citaonica = citaonicaService.getJednaCitaonica(dioCL, '1');
+    citaonica =
+        citaonicaService.getJednaCitaonica(dioCL, supervizorskiId!.toString());
     super.initState();
   }
 

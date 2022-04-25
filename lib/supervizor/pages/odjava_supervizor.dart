@@ -50,15 +50,12 @@ class _OdjavaSupervizorPageState extends State<OdjavaSupervizorPage> {
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () async {
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.remove('email');
                                   final pref =
                                       await SharedPreferences.getInstance();
                                   await pref.clear();
                                   //Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false);
-                                  Navigator.popUntil(
-                                      context, ModalRoute.withName("/"));
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, "login", (r) => false);
                                 },
                                 child: const Text('OK'),
                               ),

@@ -11,13 +11,23 @@ import 'package:web_aplikacija/wrappers/supervizorski_pregled_sale_wrapper.dart'
 //import 'package:web_aplikacija/supervizor/pages/promjena_informacija_prazan.dart';
 
 class SupervizorHomePage extends StatefulWidget {
-  const SupervizorHomePage({Key? key, required this.title}) : super(key: key);
-
+  const SupervizorHomePage(
+      {Key? key,
+      required this.title,
+      required this.supervizorId,
+      required this.citaonicaId})
+      : super(key: key);
+  final int citaonicaId;
+  final int supervizorId;
   final String title;
 
   @override
   State<SupervizorHomePage> createState() => _SupervizorHomePageState();
 }
+
+int? supervizorskiId;
+int? citaonicaIdGlobal;
+GlobalKey supervizorNavigationRailKey = GlobalKey();
 
 class _SupervizorHomePageState extends State<SupervizorHomePage> {
   int _selectedIndex = 0;
@@ -30,14 +40,23 @@ class _SupervizorHomePageState extends State<SupervizorHomePage> {
     // const Lozinka(),
     // const Odjava()
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    supervizorskiId = widget.supervizorId;
+    citaonicaIdGlobal = widget.citaonicaId;
+  }
+
   @override
   Widget build(BuildContext context) {
     //double visina = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: const Color(0xFFD6F4F4),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Row(
         children: <Widget>[
           NavigationRail(
+            key: supervizorNavigationRailKey,
             groupAlignment: -1,
             //minWidth: 120,
             backgroundColor: const Color.fromARGB(255, 177, 211, 240),

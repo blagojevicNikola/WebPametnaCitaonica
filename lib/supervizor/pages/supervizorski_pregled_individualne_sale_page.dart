@@ -1,16 +1,20 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
 import 'package:web_aplikacija/models/argumenti_supervizorske_izmjene_individualne_sale.dart';
 import 'package:web_aplikacija/models/clanarina.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/models/mjesto.dart';
+import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 import 'package:web_aplikacija/widgets/supervizorsko_mjesto_widget.dart';
 
 import '../../api/dio_client.dart';
 import '../../api/mjesta_service.dart';
 
+import '../../main.dart';
 import '../../models/individualna_sala.dart';
 
 class SupervizorskiPregledIndividualneSalePage extends StatefulWidget {
@@ -34,24 +38,61 @@ class _SupervizorskiPregledIndividualneSalePageState
   late TextEditingController _nazivSaleController;
   IndividualneSaleService individualneSaleService = IndividualneSaleService();
   DioClient dioCL = DioClient();
+  late Future<List<dynamic>> odgovorServera;
 
   @override
   void initState() {
     super.initState();
-    listaPostojecihMjesta = mjestaService.getMjesta(
-        dioCL, widget.argumenti.individualnaSalaId.toString());
+    print('$citaonicaIdGlobal');
+    odgovorServera = Future.wait([
+      dohvatiSliku(),
+      mjestaService.getMjesta(
+          dioCL, widget.argumenti.individualnaSalaId.toString())
+    ]);
     _nazivSaleController =
         TextEditingController(text: widget.argumenti.nazivIndividualneSale);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white,
-        child: FutureBuilder<List<Mjesto>>(
-            future: listaPostojecihMjesta,
+    return SingleChildScrollView(
+        child: Column(
+      children: [
+        Row(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: TextButton(
+                child: const Text('Nazad'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: 10),
+                Row(
+                  children: [
+                    const Text('Naziv sale: '),
+                    SizedBox(
+                      width: 200,
+                      child: TextField(
+                        controller: _nazivSaleController,
+                        style: const TextStyle(fontSize: 19, height: 1.1),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+        FutureBuilder<List<dynamic>>(
+            future: odgovorServera,
             initialData: null,
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SizedBox(
                     height: 120,
@@ -63,49 +104,22 @@ class _SupervizorskiPregledIndividualneSalePageState
                 } else if (snapshot.hasData) {
                   return Stack(
                     children: [
-                      (slika == null) ? Container() : Image.memory(slika!),
-                      Positioned(
-                        top: 14,
-                        child: Align(
-                            alignment: Alignment.center,
-                            child: TextButton(
-                              child: const Text('Nazad'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            )),
-                      ),
-                      Positioned(
-                        top: 14,
-                        left: 120,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(width: 10),
-                            Row(
-                              children: [
-                                const Text('Naziv sale: '),
-                                SizedBox(
-                                  width: 200,
-                                  child: TextField(
-                                    controller: _nazivSaleController,
-                                    style: const TextStyle(
-                                        fontSize: 19, height: 1.1),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
+                      Align(
+                        alignment: Alignment.center,
+                        child: Image.memory(
+                          snapshot.data![0],
                         ),
                       ),
-                      for (var item in snapshot.data!)
+                      for (var item in snapshot.data![1])
                         Positioned(
-                          left: item.pozicija.x,
-                          top: item.pozicija.y,
+                          left: item.pozicija.x * getSirinaSlike(),
+                          top: item.pozicija.y * getVisinaSlike(),
                           child: SupervizorskoMjestoWidget(
                             id: item.id!,
                             index: item.brojMjesta,
-                            velicina: item.velicina,
+                            velicina: sqrt((item.velicina *
+                                    getKoeficijentVelicineMjesta()) /
+                                100),
                             ugao: item.ugao,
                           ),
                         ),
@@ -162,7 +176,9 @@ class _SupervizorskiPregledIndividualneSalePageState
               } else {
                 return const Center(child: Text('Greska'));
               }
-            }));
+            }),
+      ],
+    ));
   }
 
   bool ispravneInformacijeSale() {
@@ -184,11 +200,60 @@ class _SupervizorskiPregledIndividualneSalePageState
           clanarine: <Clanarina>[],
           karakteristike: <KarakteristikeSale>[]),
       citaonicaId: widget.argumenti.citaonicaId.toString(),
+      individualnaSalaId: widget.argumenti.individualnaSalaId.toString(),
     );
     if (odgovor != null) {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<Uint8List> dohvatiSliku() async {
+    http.Response odgovor = await http.get(Uri.parse(
+        'https://localhost:8443/api/v1/individualne-sale/${widget.argumenti.individualnaSalaId.toString()}/slika/'));
+    if (odgovor.statusCode == 200) {
+      return odgovor.bodyBytes;
+    } else {
+      return Uint8List(0);
+    }
+  }
+
+  double getKoeficijentVelicineMjesta() {
+    RenderBox? renderBoxNavRail = supervizorNavigationRailKey.currentContext!
+        .findRenderObject() as RenderBox?;
+    if (renderBoxNavRail != null) {
+      double widthOfImage =
+          MediaQuery.of(context).size.width - renderBoxNavRail.size.width;
+      return (widthOfImage * 0.5625) * widthOfImage;
+    } else {
+      print('dddd');
+      return 0;
+    }
+  }
+
+  double getSirinaSlike() {
+    RenderBox? renderBoxNavRail = supervizorNavigationRailKey.currentContext!
+        .findRenderObject() as RenderBox?;
+
+    if (renderBoxNavRail != null) {
+      return MediaQuery.of(context).size.width - renderBoxNavRail.size.width;
+    } else {
+      print('dddd');
+      return 0;
+    }
+  }
+
+  double getVisinaSlike() {
+    RenderBox? renderBoxNavRail = supervizorNavigationRailKey.currentContext!
+        .findRenderObject() as RenderBox?;
+
+    if (renderBoxNavRail != null) {
+      return (MediaQuery.of(context).size.width - renderBoxNavRail.size.width) *
+          0.5625;
+    } else {
+      print('dddd');
+      return 0;
     }
   }
 }

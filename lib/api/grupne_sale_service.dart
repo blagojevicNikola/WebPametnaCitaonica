@@ -9,7 +9,7 @@ class GrupneSaleService {
     // Perform GET request to the endpoint "/users/<id>"
     try {
       Response saleData = await dioClient.dio
-          .get('/citaonice/${citaonicaId.toString()}/grupne-sale');
+          .get('/citaonice/${citaonicaId.toString()}/grupne-sale/');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -33,7 +33,7 @@ class GrupneSaleService {
 
     try {
       Response response = await dioClient.dio.post(
-        '/citaonice/$citaonicaId/grupne-sale',
+        '/citaonice/$citaonicaId/grupne-sale/',
         data: sala.toJson(),
       );
 
@@ -55,7 +55,7 @@ class GrupneSaleService {
       '/citaonice/$citaonicaId/grupne-sale/$grupnaSalaId',
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 204) {
       return response.data;
     } else {
       throw Exception('Greska pri brisanju');
@@ -81,5 +81,21 @@ class GrupneSaleService {
     }
 
     return temp;
+  }
+
+  Future<Response?> zakljucajGrupnuSalu(
+      {required DioClient dioClient,
+      required bool dostupno,
+      required String citaonicaId,
+      required String grupnaSalaId}) async {
+    try {
+      Response? temp;
+      temp = await dioClient.dio.patch('/grupne-sale/$grupnaSalaId/dostupnost/',
+          data: {'dostupno': dostupno});
+
+      return temp;
+    } catch (err) {
+      rethrow;
+    }
   }
 }

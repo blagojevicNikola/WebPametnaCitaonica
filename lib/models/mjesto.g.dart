@@ -8,11 +8,11 @@ part of 'mjesto.dart';
 
 Mjesto _$MjestoFromJson(Map<String, dynamic> json) => Mjesto(
       pozicija: PozicijaXY.fromJson(json['pozicija'] as Map<String, dynamic>),
-      velicina: json['velicina'] as int,
+      velicina: (json['velicina'] as num).toDouble(),
       ugao: json['ugao'] as int,
       qrCode: json['kod'] as String,
       brojMjesta: json['brojMjesta'] as int,
-      statusId: json['statusId'] as int,
+      dostupno: json['dostupno'] as bool,
       uticnica: json['uticnica'] as bool,
       id: json['id'] as int?,
     );
@@ -24,6 +24,6 @@ Map<String, dynamic> _$MjestoToJson(Mjesto instance) => <String, dynamic>{
       'velicina': instance.velicina,
       'ugao': instance.ugao,
       'uticnica': instance.uticnica,
-      'statusId': instance.statusId,
+      'dostupno': instance.dostupno,
       'pozicija': instance.pozicija,
     };

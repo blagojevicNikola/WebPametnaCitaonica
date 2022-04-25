@@ -3,43 +3,42 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DioClient {
   final Dio dio = Dio(BaseOptions(
-    baseUrl: "http://pametna-citaonica.azurewebsites.net/api/v1",
+    baseUrl: "https://localhost:8443/api/v1",
   ));
-  Dio tokenDio = Dio(BaseOptions(
-      baseUrl: "http://pametna-citaonica.azurewebsites.net/api/v1"));
+  Dio tokenDio = Dio(BaseOptions(baseUrl: "https://localhost:8443/api/v1"));
 
   DioClient() {
     dio.interceptors
-      ..add(LogInterceptor(responseBody: false))
-      ..add(QueuedInterceptorsWrapper(
-        onError: (error, hendler) async {
-          if (error.response?.statusCode == 403 ||
-              error.response?.statusCode == 401) {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            var options = error.response!.requestOptions;
-            if (prefs.getString('accessToken') !=
-                options.headers['Authorization'].toString().split(' ')[1]) {
-              options.headers['Authorization'] =
-                  'Bearer ${prefs.getString('accessToken')}';
-              var odgovor1 = await _retry(options);
-              hendler.resolve(odgovor1);
-              return;
-            }
-            await refreshToken();
-            final odgovor2 = await _retry(options);
-            hendler.resolve(odgovor2);
+        // ..add(LogInterceptor(responseBody: false))
+        .add(QueuedInterceptorsWrapper(
+      onError: (error, hendler) async {
+        if (error.response?.statusCode == 403 ||
+            error.response?.statusCode == 401) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          var options = error.response!.requestOptions;
+          if (prefs.getString('accessToken') !=
+              options.headers['Authorization'].toString().split(' ')[1]) {
+            options.headers['Authorization'] =
+                'Bearer ${prefs.getString('accessToken')}';
+            var odgovor1 = await _retry(options);
+            hendler.resolve(odgovor1);
             return;
           }
-          hendler.next(error);
-        },
-        onRequest: (options, hendler) async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          options.headers['Authorization'] =
-              'Bearer ${prefs.getString('accessToken')}';
+          await refreshToken();
+          final odgovor2 = await _retry(options);
+          hendler.resolve(odgovor2);
+          return;
+        }
+        hendler.next(error);
+      },
+      onRequest: (options, hendler) async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        options.headers['Authorization'] =
+            'Bearer ${prefs.getString('accessToken')}';
 
-          hendler.next(options);
-        },
-      ));
+        hendler.next(options);
+      },
+    ));
   }
 
   Future<void> refreshToken() async {

@@ -2,7 +2,12 @@
 
 import 'package:flutter/material.dart';
 
-import 'login_page.dart';
+import 'package:web_aplikacija/api/dio_client.dart';
+import 'package:web_aplikacija/api/promjena_lozinke_service.dart';
+import 'package:web_aplikacija/models/promjena_lozinke.dart';
+
+import '../../pages/login_page.dart';
+//import 'login_page.dart';
 
 class PromjenaLozinkePage extends StatefulWidget {
   const PromjenaLozinkePage({Key? key}) : super(key: key);
@@ -12,10 +17,12 @@ class PromjenaLozinkePage extends StatefulWidget {
 }
 
 class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
-  String unosEmail = '',
-      unosLozinka = '',
-      novaLozinka = '',
-      novaLozinkaPotvrda = '';
+  String unosLozinka = '', novaLozinka = '', novaLozinkaPotvrda = '';
+
+  DioClient dioCl = DioClient();
+  PromjenaLozinkeService promjenaLozinkeService = PromjenaLozinkeService();
+  PromjenaLozinke promjenaLozinkeInfo =
+      PromjenaLozinke(staraLozinka: '', novaLozinka: '');
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,24 +39,6 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
       child: ListView(
         // child: Column(
         children: <Widget>[
-          Padding(
-            //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 10),
-            child: TextFormField(
-              onChanged: (text) {
-                unosEmail = text;
-              },
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email, color: Colors.blue[700]),
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: const OutlineInputBorder(),
-                  labelText: 'E-mail',
-                  labelStyle: TextStyle(color: Colors.grey[700]),
-                  hintText: 'Unesite vašu email adresu'),
-            ),
-          ),
           Padding(
             //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
             padding: const EdgeInsets.only(
@@ -116,8 +105,7 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(primary: Colors.blue[700]),
               onPressed: () async {
-                if (unosEmail.isEmpty ||
-                    unosLozinka.isEmpty ||
+                if (unosLozinka.isEmpty ||
                     novaLozinka.isEmpty ||
                     novaLozinkaPotvrda.isEmpty) {
                   showDialog<String>(
@@ -125,20 +113,6 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
                     builder: (BuildContext context) => AlertDialog(
                       title: const Text('Neispravan unos'),
                       content: const Text('Morate popuniti sve podatke'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
-                } else if (emailLogin != unosEmail) {
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('Neispravan email'),
-                      content: const Text('Unijeli ste netačan email !'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () => Navigator.pop(context, 'OK'),
@@ -206,25 +180,9 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
                     ),
                   );
                 } else {
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('Uspješna promjena lozinke'),
-                      content: const Text(
-                          'Čestitamo, uspješno ste promjenili lozinku !'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            var nav = Navigator.of(context);
-                            //Navigator.pop(context, 'OK');
-                            nav.pop();
-                            nav.pop();
-                          },
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
+                  promjenaLozinkeInfo.staraLozinka = unosLozinka;
+                  promjenaLozinkeInfo.novaLozinka = novaLozinkaPotvrda;
+                  promjeniLozinku();
                 }
               },
               child: const Text(
@@ -236,5 +194,66 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
         ],
       ),
     );
+  }
+
+  void promjeniLozinku() async {
+    var response = await promjenaLozinkeService.promjeniLozinku(
+        dioClient: dioCl, promjenaLozinkeData: promjenaLozinkeInfo);
+    if (response?.statusCode == 200 || response?.statusCode == 200) {
+      lozinkaLogin = novaLozinkaPotvrda;
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Uspješna promjena lozinke'),
+          content: const Text('Čestitamo, uspješno ste promjenili lozinku !'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, "login", (r) => false);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else if (response?.statusCode == 403) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Greška'),
+          content: const Text('Trenutna lozinka nije ispravna !'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                var nav = Navigator.of(context);
+                //Navigator.pop(context, 'OK');
+                nav.pop();
+                //nav.pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Greška'),
+          content: const Text('Greška na serveru !'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                var nav = Navigator.of(context);
+                //Navigator.pop(context, 'OK');
+                nav.pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

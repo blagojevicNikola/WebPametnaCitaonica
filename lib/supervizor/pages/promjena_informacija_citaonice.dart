@@ -47,12 +47,8 @@ class _PromjenaInformacijaCitaoniceState
   DioClient dioCL = DioClient();
   @override
   void initState() {
-<<<<<<< HEAD
-    citaonica = citaonicaService.getJednaCitaonica(dioCL, '12');
-=======
     citaonica =
         citaonicaService.getJednaCitaonica(dioCL, supervizorskiId!.toString());
->>>>>>> 2bb9d709b0bbf581c079ce54050cd1f48aa963b0
     super.initState();
   }
 

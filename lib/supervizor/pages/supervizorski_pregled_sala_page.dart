@@ -30,17 +30,11 @@ class _SupervizorskiPregledSalaPageState
   late int localCitaonicaId;
   @override
   void initState() {
-<<<<<<< HEAD
-    listaIndividualnihSala =
-        individualneSaleService.getIndividualneSale(dioCL, '12');
-    listaGrupnihSala = grupneSaleService.getGrupneSale(dioCL, '12');
-=======
     listaIndividualnihSala = individualneSaleService.getIndividualneSale(
         dioCL, citaonicaIdGlobal.toString());
     listaGrupnihSala =
         grupneSaleService.getGrupneSale(dioCL, citaonicaIdGlobal.toString());
     localCitaonicaId = citaonicaIdGlobal!;
->>>>>>> 2bb9d709b0bbf581c079ce54050cd1f48aa963b0
     super.initState();
   }
 

@@ -296,7 +296,7 @@ class _KreiranjeIdividualneSalePageState
         dioSlika.options.headers['Authorization'] =
             'Bearer ${prefs.getString('accessToken')}';
         await dioSlika.post(
-          'http://pametna-citaonica.azurewebsites.net/api/v1/individualne-sale/$kreiranaIndividualnaSalaId/slika',
+          'https://localhost:8443/api/v1/individualne-sale/$kreiranaIndividualnaSalaId/slika',
           data: f,
         );
         return true;

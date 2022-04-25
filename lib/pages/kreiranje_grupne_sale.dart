@@ -214,17 +214,12 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                               //print('Citaonica $citaonicaId');
                               if (ispravnostInformacijaSale()) {
                                 //await dodajNoveKarakteristike();
-<<<<<<< HEAD
-                                // List<KarakteristikeSale?> tempKreirane;
-                                /*if (listaDodatihKreiranih.isNotEmpty) {
-=======
                                 List<Karakteristike> tempKreirane =
                                     <Karakteristike>[];
                                 if (listaDodatihKreiranih.isNotEmpty) {
->>>>>>> 2bb9d709b0bbf581c079ce54050cd1f48aa963b0
                                   tempKreirane =
                                       await dodajNoveKarakteristike();
-                                }*/
+                                }
                                 List<KarakteristikeSale> temp =
                                     <KarakteristikeSale>[];
                                 for (var item in listaDodatihPostojecih) {

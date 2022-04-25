@@ -64,8 +64,8 @@ class _OdjavaPageState extends State<OdjavaPage> {
                                       SharedPreferences pref =
                                           await SharedPreferences.getInstance();
                                       pref.clear();
-                                      Navigator.popUntil(
-                                          context, ModalRoute.withName("/"));
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, "login", (r) => false);
                                     }
                                   }
                                 },

@@ -57,8 +57,8 @@ class _OdjavaSupervizorPageState extends State<OdjavaSupervizorPage> {
                                       await SharedPreferences.getInstance();
                                   await pref.clear();
                                   //Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false);
-                                  Navigator.popUntil(
-                                      context, ModalRoute.withName("/"));
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, "login", (r) => false);
                                 },
                                 child: const Text('OK'),
                               ),

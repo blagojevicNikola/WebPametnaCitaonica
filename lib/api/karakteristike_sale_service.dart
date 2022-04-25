@@ -8,7 +8,7 @@ class KarakteristikeSaleService {
   Future<List<Karakteristike>> getKarakteristike(DioClient dioClient) async {
     // Perform GET request to the endpoint "/users/<id>"
     try {
-      Response karakteristikeData = await dioClient.dio.get('/karakteristike');
+      Response karakteristikeData = await dioClient.dio.get('/karakteristike/');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');
@@ -30,7 +30,7 @@ class KarakteristikeSaleService {
     try {
       Karakteristike retrievedKarakteristika;
       Response response = await dioClient.dio
-          .post('/karakteristike', data: karakteristikaInfo.toJson());
+          .post('/karakteristike/', data: karakteristikaInfo.toJson());
 
       //print('User created: ${response.data}');
 

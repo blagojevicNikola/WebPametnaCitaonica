@@ -296,7 +296,7 @@ class _KreiranjeIdividualneSalePageState
         dioSlika.options.headers['Authorization'] =
             'Bearer ${prefs.getString('accessToken')}';
         await dioSlika.post(
-          'https://localhost:8443/api/v1/individualne-sale/$kreiranaIndividualnaSalaId/slika',
+          'https://localhost:8443/api/v1/individualne-sale/$kreiranaIndividualnaSalaId/slika/',
           data: f,
         );
         return true;
@@ -336,15 +336,13 @@ class _KreiranjeIdividualneSalePageState
   double getVisinaSlike() {
     RenderBox? renderBoxSlika =
         keySlike.currentContext!.findRenderObject() as RenderBox?;
-    print(renderBoxSlika!.size.height);
-    return renderBoxSlika.size.height;
+    return renderBoxSlika!.size.height;
   }
 
   double getSirinaSlike() {
     RenderBox? renderBoxSlika =
         keySlike.currentContext!.findRenderObject() as RenderBox?;
-    print(renderBoxSlika!.size.width);
-    return renderBoxSlika.size.width;
+    return renderBoxSlika!.size.width;
   }
 
   bool ispravneInformacijeMjesta() {

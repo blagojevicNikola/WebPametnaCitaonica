@@ -10,7 +10,7 @@ class AuthService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
-      Response? temp = await dioClient.dio.post('/prijava',
+      Response? temp = await dioClient.dio.post('/prijava/',
           data: {"korisnickoIme": username, "lozinka": password});
 
       // Prints the raw data returned by the server

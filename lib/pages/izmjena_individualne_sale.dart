@@ -293,7 +293,7 @@ class _IzmjenaIndividualneSalePageState
 
   Future<Uint8List> dohvatiSliku() async {
     http.Response odgovor = await http.get(Uri.parse(
-        'https://localhost:8443/api/v1/individualne-sale/${widget.argumenti.individualnaSalaData.id}/slika'));
+        'https://localhost:8443/api/v1/individualne-sale/${widget.argumenti.individualnaSalaData.id}/slika/'));
     if (odgovor.statusCode == 200) {
       return odgovor.bodyBytes;
     } else {

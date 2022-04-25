@@ -45,7 +45,7 @@ class DioClient {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final refreshToken = prefs.getString('refreshToken');
     final response =
-        await dio.post('/refreshtoken', data: {'refreshToken': refreshToken});
+        await dio.post('/refreshtoken/', data: {'refreshToken': refreshToken});
     if (response.statusCode == 201) {
       prefs.setString('accessToken', response.data['accessToken']);
       prefs.setString('refreshToken', response.data['refreshToken']);

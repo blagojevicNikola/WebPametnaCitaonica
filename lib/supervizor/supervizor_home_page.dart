@@ -27,6 +27,7 @@ class SupervizorHomePage extends StatefulWidget {
 
 int? supervizorskiId;
 int? citaonicaIdGlobal;
+GlobalKey supervizorNavigationRailKey = GlobalKey();
 
 class _SupervizorHomePageState extends State<SupervizorHomePage> {
   int _selectedIndex = 0;
@@ -51,10 +52,11 @@ class _SupervizorHomePageState extends State<SupervizorHomePage> {
   Widget build(BuildContext context) {
     //double visina = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: const Color(0xFFD6F4F4),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Row(
         children: <Widget>[
           NavigationRail(
+            key: supervizorNavigationRailKey,
             groupAlignment: -1,
             //minWidth: 120,
             backgroundColor: const Color.fromARGB(255, 177, 211, 240),

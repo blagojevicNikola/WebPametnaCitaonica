@@ -112,8 +112,8 @@ class _SupervizorskiPregledIndividualneSalePageState
                       ),
                       for (var item in snapshot.data![1])
                         Positioned(
-                          left: item.pozicija.x / getSirinaSlike(),
-                          top: item.pozicija.y / getVisinaSlike(),
+                          left: item.pozicija.x * getSirinaSlike(),
+                          top: item.pozicija.y * getVisinaSlike(),
                           child: SupervizorskoMjestoWidget(
                             id: item.id!,
                             index: item.brojMjesta,
@@ -211,7 +211,7 @@ class _SupervizorskiPregledIndividualneSalePageState
 
   Future<Uint8List> dohvatiSliku() async {
     http.Response odgovor = await http.get(Uri.parse(
-        'http://localhost:8080/api/v1/individualne-sale/${widget.argumenti.individualnaSalaId.toString()}/slika'));
+        'https://localhost:8443/api/v1/individualne-sale/${widget.argumenti.individualnaSalaId.toString()}/slika/'));
     if (odgovor.statusCode == 200) {
       return odgovor.bodyBytes;
     } else {
@@ -220,8 +220,8 @@ class _SupervizorskiPregledIndividualneSalePageState
   }
 
   double getKoeficijentVelicineMjesta() {
-    RenderBox? renderBoxNavRail =
-        navigationRailKey.currentContext!.findRenderObject() as RenderBox?;
+    RenderBox? renderBoxNavRail = supervizorNavigationRailKey.currentContext!
+        .findRenderObject() as RenderBox?;
     if (renderBoxNavRail != null) {
       double widthOfImage =
           MediaQuery.of(context).size.width - renderBoxNavRail.size.width;
@@ -233,8 +233,8 @@ class _SupervizorskiPregledIndividualneSalePageState
   }
 
   double getSirinaSlike() {
-    RenderBox? renderBoxNavRail =
-        navigationRailKey.currentContext!.findRenderObject() as RenderBox?;
+    RenderBox? renderBoxNavRail = supervizorNavigationRailKey.currentContext!
+        .findRenderObject() as RenderBox?;
 
     if (renderBoxNavRail != null) {
       return MediaQuery.of(context).size.width - renderBoxNavRail.size.width;
@@ -245,8 +245,8 @@ class _SupervizorskiPregledIndividualneSalePageState
   }
 
   double getVisinaSlike() {
-    RenderBox? renderBoxNavRail =
-        navigationRailKey.currentContext!.findRenderObject() as RenderBox?;
+    RenderBox? renderBoxNavRail = supervizorNavigationRailKey.currentContext!
+        .findRenderObject() as RenderBox?;
 
     if (renderBoxNavRail != null) {
       return (MediaQuery.of(context).size.width - renderBoxNavRail.size.width) *

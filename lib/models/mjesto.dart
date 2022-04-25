@@ -14,7 +14,7 @@ class Mjesto {
   double velicina;
   int ugao;
   bool uticnica;
-  int statusId;
+  bool dostupno;
   PozicijaXY pozicija;
 
   Mjesto(
@@ -23,7 +23,7 @@ class Mjesto {
       required this.ugao,
       required this.qrCode,
       required this.brojMjesta,
-      required this.statusId,
+      required this.dostupno,
       required this.uticnica,
       this.id});
 

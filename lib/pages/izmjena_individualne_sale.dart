@@ -282,7 +282,7 @@ class _IzmjenaIndividualneSalePageState
     setState(() {
       listaMjesta.add(Mjesto(
           uticnica: true,
-          statusId: 1,
+          dostupno: true,
           pozicija: PozicijaXY(x: 10.0, y: 50.0),
           velicina: double.parse(velicinaController.text),
           ugao: int.parse(ugaoController.text),
@@ -424,7 +424,7 @@ class _IzmjenaIndividualneSalePageState
               uticnica: item.uticnica,
               ugao: item.ugao,
               qrCode: item.qrCode,
-              statusId: item.statusId),
+              dostupno: item.dostupno),
           individualnaSalaId:
               widget.argumenti.individualnaSalaData.id.toString(),
           mjestoId: item.id.toString()));
@@ -451,7 +451,7 @@ class _IzmjenaIndividualneSalePageState
               pozicija: PozicijaXY(
                   x: item.pozicija.x / getSirinaSlike(),
                   y: item.pozicija.y / getVisinaSlike()),
-              statusId: item.statusId)));
+              dostupno: item.dostupno)));
     }
     await Future.wait(futureNovaMjesta);
   }

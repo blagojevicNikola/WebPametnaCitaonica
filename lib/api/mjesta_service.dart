@@ -76,4 +76,18 @@ class MjestaService {
     return temp;
     //print('User created: ${response.data}');
   }
+
+  Future<Response?> zakljucajMjesto(
+      {required DioClient dioClient,
+      required bool dostupno,
+      required String individualnaSalaId,
+      required String mjestoId}) async {
+    try {
+      Response? temp = await dioClient.dio
+          .patch('/mjesta/$mjestoId/dostupnost/', data: {'dostupno': dostupno});
+      return temp;
+    } catch (err) {
+      rethrow;
+    }
+  }
 }

@@ -7,11 +7,9 @@ import '../models/individualna_sala.dart';
 class SupervizorskiIndTile extends StatelessWidget {
   final IndividualnaSala indSalaData;
   final int citaonicaId;
-  final Function(IndividualnaSala, int) funkcijaZakljucavanja;
   const SupervizorskiIndTile({
     required this.indSalaData,
     required this.citaonicaId,
-    required this.funkcijaZakljucavanja,
     Key? key,
   }) : super(key: key);
 

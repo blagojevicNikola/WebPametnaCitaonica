@@ -82,4 +82,20 @@ class GrupneSaleService {
 
     return temp;
   }
+
+  Future<Response?> zakljucajGrupnuSalu(
+      {required DioClient dioClient,
+      required bool dostupno,
+      required String citaonicaId,
+      required String grupnaSalaId}) async {
+    try {
+      Response? temp;
+      temp = await dioClient.dio.patch('/grupne-sale/$grupnaSalaId/dostupnost/',
+          data: {'dostupno': dostupno});
+
+      return temp;
+    } catch (err) {
+      rethrow;
+    }
+  }
 }

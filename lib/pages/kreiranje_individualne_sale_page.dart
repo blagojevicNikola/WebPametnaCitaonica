@@ -281,7 +281,7 @@ class _KreiranjeIdividualneSalePageState
                       y: item.pozicija.y / getVisinaSlike()),
                   ugao: item.ugao,
                   qrCode: item.qrCode,
-                  statusId: item.statusId,
+                  dostupno: item.dostupno,
                   uticnica: item.uticnica,
                   velicina: procenat)));
         }
@@ -370,7 +370,7 @@ class _KreiranjeIdividualneSalePageState
     setState(() {
       listaMjesta.add(Mjesto(
           uticnica: true,
-          statusId: 1,
+          dostupno: true,
           pozicija: PozicijaXY(x: 10.0, y: 50.0),
           velicina: double.parse(velicinaController.text),
           ugao: int.parse(ugaoController.text),

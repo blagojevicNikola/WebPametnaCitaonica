@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/grupne_sale_service.dart';
 import 'package:web_aplikacija/api/individualne_sale_service.dart';
@@ -118,8 +121,6 @@ class _SupervizorskiPregledSalaPageState
                                               citaonicaId: localCitaonicaId,
                                               indSalaData:
                                                   snapshot.data![index],
-                                              funkcijaZakljucavanja:
-                                                  zakjlucajIndividualnuSalu,
                                             );
                                           },
                                           separatorBuilder: (context, index) =>
@@ -174,7 +175,12 @@ class _SupervizorskiPregledSalaPageState
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
-                                            return const SupervizorskaGrupTile();
+                                            return SupervizorskaGrupTile(
+                                              citaonicaId:
+                                                  localCitaonicaId.toString(),
+                                              grupnaSalaData:
+                                                  snapshot.data![index],
+                                            );
                                           },
                                           separatorBuilder: (context, index) =>
                                               const SizedBox(
@@ -204,18 +210,5 @@ class _SupervizorskiPregledSalaPageState
         ),
       ),
     );
-  }
-
-  void zakjlucajIndividualnuSalu(IndividualnaSala ind, int citaonicaId) async {
-    // var odgovor = await individualneSaleService.azurirajIndividualnuSalu(
-    //     dioClient: dioCL,
-    //     individualnaSalaData: ind,
-    //     citaonicaId: citaonicaId.toString());
-    // if (odgovor != null) {
-    //   setState(() {
-    //     listaIndividualnihSala =
-    //         individualneSaleService.getIndividualneSale(dioCL, '4');
-    //   });
-    // }
   }
 }

@@ -4,23 +4,25 @@ import 'package:web_aplikacija/api/grupne_sale_service.dart';
 import 'package:web_aplikacija/api/karakteristike_sale_service.dart';
 import 'package:web_aplikacija/models/argumenti_izmjene_grupne_sale.dart';
 import 'package:web_aplikacija/models/karakteristike.dart';
-import '../api/dio_client.dart';
-import '../models/grupna_sala.dart';
-import '../models/karakteristike_sale.dart';
-import '../widgets/dodavanje_karakteristika_sale.dart';
-import '../widgets/information_field.dart';
+import '../../api/dio_client.dart';
+import '../../models/grupna_sala.dart';
+import '../../models/karakteristike_sale.dart';
+import '../../widgets/information_field.dart';
+import '../../widgets/supervizorsko_dodavanje_karakteristika_sale.dart';
 
-class IzmjenaGrupneSalePage extends StatefulWidget {
-  final ArgumentiIzmjeneGrupneSale data;
+class SupervizorskiPregledGrupneSalePage extends StatefulWidget {
+  final ArgumentiIzmjeneGrupneSale argumenti;
 
-  const IzmjenaGrupneSalePage({Key? key, required this.data}) : super(key: key);
+  const SupervizorskiPregledGrupneSalePage({Key? key, required this.argumenti})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return _IzmjenaGrupneSalePageState();
+    return _SupervizorskiPregledGrupneSalePageState();
   }
 }
 
-class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
+class _SupervizorskiPregledGrupneSalePageState
+    extends State<SupervizorskiPregledGrupneSalePage> {
   TextEditingController nazivSaleController = TextEditingController();
   TextEditingController qrCodeSaleController = TextEditingController();
   TextEditingController brojMjestaSaleController = TextEditingController();
@@ -36,7 +38,7 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
   late Future<List<Karakteristike>> listaPostojecihKarakteristika;
 
   List<KarakteristikeSale> listaDodatihPostojecih = <KarakteristikeSale>[];
-  List<KarakteristikeSale> listaDodatihKreiranih = <KarakteristikeSale>[];
+
   KarakteristikeSaleService karakteristikeSaleService =
       KarakteristikeSaleService();
   GrupneSaleService grupneSaleService = GrupneSaleService();
@@ -109,7 +111,8 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               labelInformation: 'Naziv sale',
                               control: nazivSaleController =
                                   TextEditingController(
-                                      text: widget.data.grupnaSalaData.naziv),
+                                      text: widget
+                                          .argumenti.grupnaSalaData.naziv),
                             ),
                           ),
                           Padding(
@@ -118,7 +121,7 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               labelInformation: 'Broj mjesta',
                               control: brojMjestaSaleController =
                                   TextEditingController(
-                                text: widget.data.grupnaSalaData.brojMjesta
+                                text: widget.argumenti.grupnaSalaData.brojMjesta
                                     .toString(),
                               ),
                             ),
@@ -129,7 +132,8 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               labelInformation: 'QR Code',
                               control: qrCodeSaleController =
                                   TextEditingController(
-                                      text: widget.data.grupnaSalaData.qrKod),
+                                      text: widget
+                                          .argumenti.grupnaSalaData.qrKod),
                             ),
                           ),
                           Padding(
@@ -138,7 +142,8 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                               labelInformation: 'Opis',
                               control: opisSaleController =
                                   TextEditingController(
-                                      text: widget.data.grupnaSalaData.opis),
+                                      text:
+                                          widget.argumenti.grupnaSalaData.opis),
                             ),
                           ),
                           FutureBuilder<List<Karakteristike>>(
@@ -159,13 +164,12 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                                   } else if (snapshot.hasData) {
                                     return Padding(
                                         padding: const EdgeInsets.all(9.0),
-                                        child: DodavanjeKarakteristikaSale(
+                                        child:
+                                            SupervizorskoDodavanjeKarakteristikaSale(
                                           listaPostojecihKarakteristika:
                                               snapshot.data!,
-                                          listaDodatihKreiranihKarakteristika:
-                                              listaDodatihKreiranih,
                                           listaDodatihPostojecihKarakteristika:
-                                              widget.data.grupnaSalaData
+                                              widget.argumenti.grupnaSalaData
                                                   .karakteristike,
                                         ));
                                   } else {
@@ -251,36 +255,21 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
     }
   }
 
-  Future<List<Karakteristike>> dodajNoveKarakteristike() async {
-    var futures = <Future<Karakteristike>>[];
-    for (var item in listaDodatihKreiranih) {
-      futures.add(karakteristikeSaleService.createKarakteristika(
-          dioClient: dioCL,
-          karakteristikaInfo: Karakteristike(naziv: item.naziv)));
-    }
-    List<Karakteristike> noveKarak = await Future.wait(futures);
-    //ovdje mozda mogu sacuvati listu kreiranih karakteristika te ih ponovo poslati zajedno sa vec postojecim karakteristika
-    return noveKarak;
-  }
-
   Future<Response?> updateSala() async {
-    List<Karakteristike> noveKarakteristike = await dodajNoveKarakteristike();
-    List<KarakteristikeSale> temp = <KarakteristikeSale>[];
-    for (var item in noveKarakteristike) {
-      temp.add(KarakteristikeSale(karakteristikaId: item.id));
-    }
     Response? odgovor = await grupneSaleService.azurirajGrupnuSalu(
         dioClient: dioCL,
         grupnaSalaData: GrupnaSala(
-            id: widget.data.grupnaSalaData.id,
-            naziv: nazivSaleController.text.toString(),
-            qrKod: qrCodeSaleController.text.toString(),
-            brojMjesta: int.parse(brojMjestaSaleController.text.toString()),
-            opis: opisSaleController.text.toString(),
-            dostupno: widget.data.grupnaSalaData.dostupno,
-            clanarine: widget.data.grupnaSalaData.clanarine,
-            karakteristike: widget.data.grupnaSalaData.karakteristike + temp),
-        citaonicaId: widget.data.citaonicaId);
+          id: widget.argumenti.grupnaSalaData.id,
+          naziv: nazivSaleController.text.toString(),
+          qrKod: qrCodeSaleController.text.toString(),
+          brojMjesta: int.parse(brojMjestaSaleController.text.toString()),
+          opis: opisSaleController.text.toString(),
+          dostupno: widget.argumenti.grupnaSalaData.dostupno,
+          clanarine: widget.argumenti.grupnaSalaData.clanarine,
+          karakteristike: widget.argumenti.grupnaSalaData.karakteristike +
+              listaDodatihPostojecih,
+        ),
+        citaonicaId: widget.argumenti.citaonicaId);
     return odgovor;
   }
 }

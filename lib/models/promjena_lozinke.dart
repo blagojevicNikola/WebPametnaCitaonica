@@ -13,6 +13,6 @@ class PromjenaLozinke {
   });
 
   factory PromjenaLozinke.fromJson(Map<String, dynamic> json) =>
-      _$PromjenaLozinkeRequestFromJson(json);
-  Map<String, dynamic> toJson() => _$PromjenaLozinkeRequestToJson(this);
+      _$PromjenaLozinkeFromJson(json);
+  Map<String, dynamic> toJson() => _$PromjenaLozinkeToJson(this);
 }

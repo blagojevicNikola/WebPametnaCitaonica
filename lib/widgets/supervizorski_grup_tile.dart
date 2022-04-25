@@ -1,13 +1,20 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:web_aplikacija/api/dio_client.dart';
+import 'package:web_aplikacija/api/grupne_sale_service.dart';
+import 'package:web_aplikacija/models/argumenti_izmjene_grupne_sale.dart';
 
 import '../constants/config.dart';
+import '../models/grupna_sala.dart';
 
-class SupervizorskaGrupTile extends StatelessWidget {
+class SupervizorskaGrupTile extends StatefulWidget {
   // final String naziv;
   // final int brojMjesta;
   // final bool tv;
   // final bool projektor;
   // final bool klima;
+  final String citaonicaId;
+  final GrupnaSala grupnaSalaData;
 
   const SupervizorskaGrupTile({
     Key? key,
@@ -16,13 +23,33 @@ class SupervizorskaGrupTile extends StatelessWidget {
     // required this.tv,
     // required this.projektor,
     // required this.klima,
+    required this.citaonicaId,
+    required this.grupnaSalaData,
   }) : super(key: key);
+
+  @override
+  State<SupervizorskaGrupTile> createState() => _SupervizorskaGrupTileState();
+}
+
+class _SupervizorskaGrupTileState extends State<SupervizorskaGrupTile> {
+  GrupneSaleService grupneSaleService = GrupneSaleService();
+  DioClient dioCL = DioClient();
+
+  late bool dostupnaSala;
+
+  @override
+  void initState() {
+    dostupnaSala = widget.grupnaSalaData.dostupno;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: (dostupnaSala == true)
+            ? Colors.white
+            : const Color.fromARGB(255, 222, 222, 222),
         borderRadius: BorderRadius.circular(21),
       ),
       width: double.infinity,
@@ -34,11 +61,11 @@ class SupervizorskaGrupTile extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(9.0, 0.0, 0.0, 0.0),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(9.0, 0.0, 0.0, 0.0),
                 child: Text(
-                  'Grupna Sala 1',
-                  style: TextStyle(
+                  widget.grupnaSalaData.naziv,
+                  style: const TextStyle(
                     fontSize: 24,
                     color: Color.fromARGB(255, 105, 105, 105),
                   ),
@@ -47,12 +74,12 @@ class SupervizorskaGrupTile extends StatelessWidget {
               const SizedBox(width: 15),
               Row(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 3, 0),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 3, 0),
                     child: Text(
-                      '3',
-                      style:
-                          TextStyle(fontSize: 24, color: defaultKarakteristike),
+                      widget.grupnaSalaData.brojMjesta.toString(),
+                      style: const TextStyle(
+                          fontSize: 24, color: defaultKarakteristike),
                     ),
                   ),
                   const Padding(
@@ -60,45 +87,6 @@ class SupervizorskaGrupTile extends StatelessWidget {
                     child: Icon(Icons.person,
                         size: 24, color: defaultKarakteristike),
                   ),
-                  const Padding(
-                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: (true == true)
-                          ? Icon(
-                              Icons.tv,
-                              size: 24,
-                              color: defaultKarakteristike,
-                            )
-                          : Icon(
-                              Icons.tv_off,
-                              size: 24,
-                              color: defaultKarakteristike,
-                            )),
-                  const Padding(
-                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: (true == true)
-                          ? Icon(
-                              Icons.camera_indoor_outlined,
-                              size: 24,
-                              color: defaultKarakteristike,
-                            )
-                          : Icon(
-                              Icons.sensors_off_outlined,
-                              size: 24,
-                              color: defaultKarakteristike,
-                            )),
-                  const Padding(
-                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: (true == true)
-                          ? Icon(
-                              Icons.ad_units_outlined,
-                              size: 24,
-                              color: defaultKarakteristike,
-                            )
-                          : Icon(
-                              Icons.ac_unit_outlined,
-                              size: 24,
-                              color: defaultKarakteristike,
-                            )),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(9, 0, 9, 0),
                     child: Material(
@@ -107,7 +95,12 @@ class SupervizorskaGrupTile extends StatelessWidget {
                         color: const Color.fromARGB(255, 105, 105, 105),
                         splashRadius: 25,
                         icon: const Icon(Icons.edit),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('pregled_grupne_sale',
+                              arguments: ArgumentiIzmjeneGrupneSale(
+                                  citaonicaId: widget.citaonicaId,
+                                  grupnaSalaData: widget.grupnaSalaData));
+                        },
                       ),
                     ),
                   ),
@@ -116,12 +109,33 @@ class SupervizorskaGrupTile extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: IconButton(
-                        hoverColor: const Color.fromARGB(255, 224, 110, 102),
-                        splashColor: const Color.fromARGB(255, 235, 61, 48),
+                        color: const Color.fromARGB(255, 105, 105, 105),
+                        splashRadius: 25,
+                        icon: const Icon(Icons.library_books_outlined),
+                        onPressed: () {
+                          print('Pa hej, i ja cekam milosa');
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(9, 0, 9, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: IconButton(
+                        hoverColor: (dostupnaSala == false)
+                            ? const Color.fromARGB(255, 118, 198, 122)
+                            : const Color.fromARGB(255, 224, 110, 102),
+                        splashColor: (dostupnaSala == false)
+                            ? const Color.fromARGB(255, 57, 218, 65)
+                            : const Color.fromARGB(255, 235, 61, 48),
                         color: const Color.fromARGB(255, 105, 105, 105),
                         splashRadius: 25,
                         icon: const Icon(Icons.lock),
-                        onPressed: () {},
+                        onPressed: () async {
+                          await zakljucajGrupnuSalu(
+                              widget.grupnaSalaData.id!, !dostupnaSala);
+                        },
                       ),
                     ),
                   ),
@@ -132,5 +146,21 @@ class SupervizorskaGrupTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> zakljucajGrupnuSalu(int grupnaSalaId, bool dostupno) async {
+    Response? temp = await grupneSaleService.zakljucajGrupnuSalu(
+        dioClient: dioCL,
+        dostupno: dostupno,
+        citaonicaId: widget.citaonicaId,
+        grupnaSalaId: grupnaSalaId.toString());
+    if (temp != null) {
+      if (temp.statusCode == 200) {
+        widget.grupnaSalaData.dostupno = dostupno;
+        setState(() {
+          dostupnaSala = !dostupnaSala;
+        });
+      }
+    }
   }
 }

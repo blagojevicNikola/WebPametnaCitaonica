@@ -243,7 +243,7 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                                         opis: opisController.text.toString(),
                                         clanarine: <Clanarina>[],
                                         karakteristike: temp,
-                                        statusId: 1));
+                                        dostupno: true));
                                 if (res != null) {
                                   if (res.statusCode == 201 ||
                                       res.statusCode == 200) {
@@ -297,6 +297,6 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
         opis: opisController.text.toString(),
         clanarine: <Clanarina>[],
         karakteristike: <KarakteristikeSale>[],
-        statusId: 1);
+        dostupno: true);
   }
 }

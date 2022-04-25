@@ -109,6 +109,20 @@ class _SupervizorskaGrupTileState extends State<SupervizorskaGrupTile> {
                     child: Material(
                       color: Colors.transparent,
                       child: IconButton(
+                        color: const Color.fromARGB(255, 105, 105, 105),
+                        splashRadius: 25,
+                        icon: const Icon(Icons.library_books_outlined),
+                        onPressed: () {
+                          print('Pa hej, i ja cekam milosa');
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(9, 0, 9, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: IconButton(
                         hoverColor: (dostupnaSala == false)
                             ? const Color.fromARGB(255, 118, 198, 122)
                             : const Color.fromARGB(255, 224, 110, 102),

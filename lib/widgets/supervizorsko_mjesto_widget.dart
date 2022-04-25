@@ -25,8 +25,13 @@ class SupervizorskoMjestoWidget extends StatelessWidget {
     return Stack(children: [
       Transform.rotate(
         angle: ugao * math.pi / 180,
-        child: Icon(Icons.event_seat,
-            color: const Color.fromARGB(255, 88, 88, 88), size: velicina),
+        child: InkWell(
+          onTap: () {
+            print('Milosa Skobica cekam!');
+          },
+          child: Icon(Icons.event_seat,
+              color: const Color.fromARGB(255, 88, 88, 88), size: velicina),
+        ),
       ),
       Positioned(
           right: 0,

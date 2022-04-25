@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/auth_service.dart';
 import 'package:web_aplikacija/main.dart';
+import 'package:web_aplikacija/pages/zaboravljena_lozinka_page.dart';
 
 import '../api/dio_client.dart';
 import '../supervizor/supervizor_home_page.dart';
@@ -299,13 +300,12 @@ class _LoginDemoState extends State<LoginDemo> {
                 ),
               ),
               FlatButton(
-                onPressed: () {},
-                /*onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const ZaboravljenaLozinka()));
-                  },*/
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const ZaboravljenaLozinka()));
+                },
                 child: Text(
                   'Zaboravili ste lozinku?',
                   style: TextStyle(color: Colors.blue[800], fontSize: 15),

@@ -211,11 +211,7 @@ class _SupervizorskiPregledIndividualneSalePageState
 
   Future<Uint8List> dohvatiSliku() async {
     http.Response odgovor = await http.get(Uri.parse(
-<<<<<<< HEAD
-        'https://localhost:8443/api/v1/individualne-sale/${widget.argumenti.individualnaSalaId.toString()}/slika'));
-=======
         'https://localhost:8443/api/v1/individualne-sale/${widget.argumenti.individualnaSalaId.toString()}/slika/'));
->>>>>>> d923b53128e459f61960729183033ea4de69ca58
     if (odgovor.statusCode == 200) {
       return odgovor.bodyBytes;
     } else {

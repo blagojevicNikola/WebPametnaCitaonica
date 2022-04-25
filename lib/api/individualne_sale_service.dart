@@ -8,7 +8,7 @@ class IndividualneSaleService {
     // Perform GET request to the endpoint "/users/<id>"
     try {
       Response saleData = await dioClient.dio
-          .get('/citaonice/${citaonicaId.toString()}/individualne-sale');
+          .get('/citaonice/${citaonicaId.toString()}/individualne-sale/');
 
       // Prints the raw data returned by the server
       //print('User Info: ${userData.data}');

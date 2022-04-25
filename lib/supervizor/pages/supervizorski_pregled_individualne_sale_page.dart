@@ -211,7 +211,11 @@ class _SupervizorskiPregledIndividualneSalePageState
 
   Future<Uint8List> dohvatiSliku() async {
     http.Response odgovor = await http.get(Uri.parse(
+<<<<<<< HEAD
         'https://localhost:8443/api/v1/individualne-sale/${widget.argumenti.individualnaSalaId.toString()}/slika'));
+=======
+        'https://localhost:8443/api/v1/individualne-sale/${widget.argumenti.individualnaSalaId.toString()}/slika/'));
+>>>>>>> d923b53128e459f61960729183033ea4de69ca58
     if (odgovor.statusCode == 200) {
       return odgovor.bodyBytes;
     } else {
@@ -220,8 +224,8 @@ class _SupervizorskiPregledIndividualneSalePageState
   }
 
   double getKoeficijentVelicineMjesta() {
-    RenderBox? renderBoxNavRail =
-        navigationRailKey.currentContext!.findRenderObject() as RenderBox?;
+    RenderBox? renderBoxNavRail = supervizorNavigationRailKey.currentContext!
+        .findRenderObject() as RenderBox?;
     if (renderBoxNavRail != null) {
       double widthOfImage =
           MediaQuery.of(context).size.width - renderBoxNavRail.size.width;
@@ -233,8 +237,8 @@ class _SupervizorskiPregledIndividualneSalePageState
   }
 
   double getSirinaSlike() {
-    RenderBox? renderBoxNavRail =
-        navigationRailKey.currentContext!.findRenderObject() as RenderBox?;
+    RenderBox? renderBoxNavRail = supervizorNavigationRailKey.currentContext!
+        .findRenderObject() as RenderBox?;
 
     if (renderBoxNavRail != null) {
       return MediaQuery.of(context).size.width - renderBoxNavRail.size.width;
@@ -245,8 +249,8 @@ class _SupervizorskiPregledIndividualneSalePageState
   }
 
   double getVisinaSlike() {
-    RenderBox? renderBoxNavRail =
-        navigationRailKey.currentContext!.findRenderObject() as RenderBox?;
+    RenderBox? renderBoxNavRail = supervizorNavigationRailKey.currentContext!
+        .findRenderObject() as RenderBox?;
 
     if (renderBoxNavRail != null) {
       return (MediaQuery.of(context).size.width - renderBoxNavRail.size.width) *

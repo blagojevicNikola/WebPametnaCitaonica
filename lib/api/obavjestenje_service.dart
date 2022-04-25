@@ -10,7 +10,7 @@ class ObavjestenjeService {
       print('citaonicaid $citaonicaId');
       print('supervizorid $supervizorId');
       Response obavjestenjaData = await dioClient.dio
-          .get('/citaonice/${citaonicaId.toString()}/obavjestenja');
+          .get('/citaonice/${citaonicaId.toString()}/obavjestenja/');
       // '${supervizorId.toString()}/' +
 
       // Prints the raw data returned by the server

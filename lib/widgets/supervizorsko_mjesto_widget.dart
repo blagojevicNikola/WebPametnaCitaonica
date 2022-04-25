@@ -47,26 +47,26 @@ class SupervizorskoMjestoWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           )),
-      Positioned(
-        right: 0,
-        child: Container(
-          padding: const EdgeInsets.all(1),
-          decoration: BoxDecoration(
-            color: Colors.red.withOpacity(0.8),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          width: velicina * 0.4,
-          height: velicina * 0.4,
-          child: Text(
-            '$index',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: velicina * 0.3,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      )
+      // Positioned(
+      //   right: 0,
+      //   child: Container(
+      //     padding: const EdgeInsets.all(1),
+      //     decoration: BoxDecoration(
+      //       color: Colors.red.withOpacity(0.8),
+      //       borderRadius: BorderRadius.circular(20),
+      //     ),
+      //     width: velicina * 0.4,
+      //     height: velicina * 0.4,
+      //     child: Text(
+      //       '$index',
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: velicina * 0.3,
+      //       ),
+      //       textAlign: TextAlign.center,
+      //     ),
+      //   ),
+      // )
     ]);
   }
 }

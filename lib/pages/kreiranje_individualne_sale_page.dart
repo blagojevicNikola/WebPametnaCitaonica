@@ -42,6 +42,7 @@ class _KreiranjeIdividualneSalePageState
   MjestaService mjestaService = MjestaService();
   DioClient dioCL = DioClient();
   GlobalKey keySlike = GlobalKey();
+  List<bool> listaOpcija = <bool>[false];
 
   @override
   void dispose() {
@@ -63,6 +64,7 @@ class _KreiranjeIdividualneSalePageState
       child: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
                 child: const Text('Nazad'),
@@ -98,6 +100,17 @@ class _KreiranjeIdividualneSalePageState
                       } else {
                         dodajMjesto();
                       }
+                    },
+                  ),
+                  ToggleButtons(
+                    children: const [
+                      Icon(Icons.delete),
+                    ],
+                    isSelected: listaOpcija,
+                    onPressed: (int index) {
+                      setState(() {
+                        listaOpcija[index] = !listaOpcija[index];
+                      });
                     },
                   ),
                   const SizedBox(width: 30),
@@ -197,6 +210,8 @@ class _KreiranjeIdividualneSalePageState
                     index: listaMjesta.indexOf(item),
                     onDragEnd: onDragEnd,
                     mjestoDat: item,
+                    obrisiMjesto: ukloniMjesto,
+                    opcijaBrisanjaUkljucena: listaOpcija[0],
                   ),
                 ),
               Positioned(
@@ -250,6 +265,41 @@ class _KreiranjeIdividualneSalePageState
       listaMjesta[index].pozicija.x += offset.dx;
       listaMjesta[index].pozicija.y += offset.dy;
     });
+  }
+
+  void ukloniMjesto(int index) {
+    showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text("Da li želite da obrišete mjesto?"),
+          actions: [
+            TextButton(
+              child: const Text('Izađi'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text('Potvrdi'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            )
+          ],
+        );
+      },
+    ).then(
+      (value) {
+        if (value == true) {
+          setState(
+            () {
+              listaMjesta.removeAt(index);
+            },
+          );
+        }
+      },
+    );
   }
 
   Future<bool> kreirajIndividualnuSalu() async {
@@ -309,7 +359,8 @@ class _KreiranjeIdividualneSalePageState
   }
 
   void pickImage() async {
-    var picked = await FilePicker.platform.pickFiles();
+    var picked = await FilePicker.platform
+        .pickFiles(allowedExtensions: ['png'], type: FileType.custom);
     if (picked != null) {
       setState(() {
         slika = picked.files.first.bytes;

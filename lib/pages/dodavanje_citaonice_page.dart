@@ -305,7 +305,8 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
   }
 
   void pickImage() async {
-    var picked = await FilePicker.platform.pickFiles();
+    var picked = await FilePicker.platform
+        .pickFiles(allowedExtensions: ['png'], type: FileType.custom);
     if (picked != null) {
       setState(() {
         slika = picked.files.first.bytes;

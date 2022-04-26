@@ -5,7 +5,7 @@ import '../pages/slanje_notifikacija.dart';
 
 import '../supervizor_models/obavjestenje.dart';
 
-class ObavjestenjeCard extends StatefulWidget {
+class ObavjestenjeCard extends StatelessWidget {
   final int index;
   final Obavjestenje obavjestenjeData;
   final Function(int) funkcijaBrisanja;
@@ -20,19 +20,6 @@ class ObavjestenjeCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ObavjestenjeCardState createState() => _ObavjestenjeCardState();
-}
-
-//class _OdjavaPageState extends State<OdjavaPage> {
-
-class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
-  // final Obavjestenje obavjestenjeData;
-  //_ObavjestenjeCardState(this.obavjestenjeData);
-  DioClient dioCL = DioClient();
-
-  int counter = 0;
-
-  @override
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
@@ -44,14 +31,14 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
               padding: const EdgeInsets.only(
                   left: 10, right: 10, top: 15, bottom: 10),
               child: Text(
-                widget.obavjestenjeData.naslov,
+                obavjestenjeData.naslov,
                 style: TextStyle(fontSize: 30, color: Colors.white),
               )),
           Padding(
               padding: const EdgeInsets.only(
                   left: 10, right: 10, top: 15, bottom: 10),
               child: Text(
-                widget.obavjestenjeData.tekstNotifikacije,
+                obavjestenjeData.tekstNotifikacije,
                 style: TextStyle(fontSize: 16, color: Colors.white),
               )),
           /* Padding(
@@ -61,14 +48,14 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
           Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Text(
-                '\n\nVrijeme : ${widget.obavjestenjeData.vrijemeSlanja!.hour < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.hour}' : widget.obavjestenjeData.vrijemeSlanja!.hour}'
-                ':${widget.obavjestenjeData.vrijemeSlanja!.minute < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.minute}' : widget.obavjestenjeData.vrijemeSlanja!.minute}'
-                ':${widget.obavjestenjeData.vrijemeSlanja!.second < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.second}' : widget.obavjestenjeData.vrijemeSlanja!.second}'
-                '       Datum: ${widget.obavjestenjeData.vrijemeSlanja!.day < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.day}' : widget.obavjestenjeData.vrijemeSlanja!.day}'
+                '\n\nVrijeme : ${obavjestenjeData.vrijemeSlanja!.hour < 10 ? '0${obavjestenjeData.vrijemeSlanja!.hour}' : obavjestenjeData.vrijemeSlanja!.hour}'
+                ':${obavjestenjeData.vrijemeSlanja!.minute < 10 ? '0${obavjestenjeData.vrijemeSlanja!.minute}' : obavjestenjeData.vrijemeSlanja!.minute}'
+                ':${obavjestenjeData.vrijemeSlanja!.second < 10 ? '0${obavjestenjeData.vrijemeSlanja!.second}' : obavjestenjeData.vrijemeSlanja!.second}'
+                '       Datum: ${obavjestenjeData.vrijemeSlanja!.day < 10 ? '0${obavjestenjeData.vrijemeSlanja!.day}' : obavjestenjeData.vrijemeSlanja!.day}'
                 '.'
-                '${widget.obavjestenjeData.vrijemeSlanja!.month < 10 ? '0${widget.obavjestenjeData.vrijemeSlanja!.month}' : widget.obavjestenjeData.vrijemeSlanja!.month}'
+                '${obavjestenjeData.vrijemeSlanja!.month < 10 ? '0${obavjestenjeData.vrijemeSlanja!.month}' : obavjestenjeData.vrijemeSlanja!.month}'
                 '.'
-                '${widget.obavjestenjeData.vrijemeSlanja!.year}.',
+                '${obavjestenjeData.vrijemeSlanja!.year}.',
                 style: TextStyle(fontSize: 16, color: Colors.white),
               )),
           Container(
@@ -97,8 +84,13 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
                           TextButton(
                             onPressed: () async {
                               Navigator.pop(context);
-                              widget.funkcijaBrisanja(widget.index);
-                              widget.funkcijaOsvjezavanja;
+                              funkcijaBrisanja(index);
+
+                              /*Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          super.widget));*/
                             },
                             child: const Text('Da'),
                           ),

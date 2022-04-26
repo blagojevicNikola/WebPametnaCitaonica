@@ -8,22 +8,28 @@ class MjestoWidget extends StatelessWidget {
     required this.onDragEnd,
     required this.index,
     required this.mjestoDat,
+    required this.obrisiMjesto,
+    required this.opcijaBrisanjaUkljucena,
   }) : super(key: key);
 
   final void Function(Offset, int) onDragEnd;
+  final void Function(int) obrisiMjesto;
+  final bool opcijaBrisanjaUkljucena;
   final int index;
   final Mjesto mjestoDat;
 
   @override
   Widget build(BuildContext context) {
-    return Draggable(
-      child: buildIcon(),
-      feedback: buildIcon(),
-      onDraggableCanceled: (velocity, drag) {
-        RenderBox renderBox = context.findRenderObject() as RenderBox;
-        onDragEnd(renderBox.globalToLocal(drag), index);
-      },
-    );
+    return (opcijaBrisanjaUkljucena == false)
+        ? Draggable(
+            child: buildIcon(),
+            feedback: buildIcon(),
+            onDraggableCanceled: (velocity, drag) {
+              RenderBox renderBox = context.findRenderObject() as RenderBox;
+              onDragEnd(renderBox.globalToLocal(drag), index);
+            },
+          )
+        : InkWell(onTap: () => obrisiMjesto(index), child: buildIcon());
   }
 
   Widget buildIcon() {

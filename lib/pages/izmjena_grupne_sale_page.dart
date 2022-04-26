@@ -155,7 +155,11 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                                 } else if (snapshot.connectionState ==
                                     ConnectionState.done) {
                                   if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
+                                    return const Center(
+                                        child: Text('ERROR',
+                                            style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 25)));
                                   } else if (snapshot.hasData) {
                                     return Padding(
                                         padding: const EdgeInsets.all(9.0),
@@ -205,24 +209,40 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                                 ),
                                 onPressed: () async {
                                   if (ispravnostInformacijaSale()) {
-                                    Response? odgovor = await updateSala();
-                                    if (odgovor != null) {
-                                      if (odgovor.statusCode == 200) {
-                                        Navigator.of(context).pop();
-                                      } else {
-                                        const snackBar = SnackBar(
-                                          backgroundColor:
-                                              Color.fromARGB(255, 185, 44, 34),
-                                          content: Text(
-                                            'Greska pri izmjeni sale!',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        );
-
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
+                                    try {
+                                      Response? odgovor = await updateSala();
+                                      if (odgovor != null) {
+                                        if (odgovor.statusCode == 200) {
+                                          Navigator.of(context).pop();
+                                        }
                                       }
+                                    } catch (err) {
+                                      const snackBar = SnackBar(
+                                        duration: Duration(seconds: 2),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 185, 44, 34),
+                                        content: Text(
+                                          'Greška pri izmjeni grupne sale!',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
                                     }
+                                  } else {
+                                    const snackBar = SnackBar(
+                                      duration: Duration(seconds: 2),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 185, 44, 34),
+                                      content: Text(
+                                        'Nevalidne informacije sale!',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    );
+
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   }
                                 },
                               ),

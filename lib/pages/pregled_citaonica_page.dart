@@ -82,7 +82,10 @@ class _PregledCitaonicaPageState extends State<PregledCitaonicaPage> {
                         } else if (snapshot.connectionState ==
                             ConnectionState.done) {
                           if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
+                            return const Center(
+                                child: Text('ERROR',
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 25)));
                           } else if (snapshot.hasData) {
                             return Column(
                               children: [

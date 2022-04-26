@@ -214,41 +214,61 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                               //print('Citaonica $citaonicaId');
                               if (ispravnostInformacijaSale()) {
                                 //await dodajNoveKarakteristike();
-                                List<Karakteristike> tempKreirane =
-                                    <Karakteristike>[];
-                                if (listaDodatihKreiranih.isNotEmpty) {
-                                  tempKreirane =
-                                      await dodajNoveKarakteristike();
-                                }
-                                List<KarakteristikeSale> temp =
-                                    <KarakteristikeSale>[];
-                                for (var item in listaDodatihPostojecih) {
-                                  temp.add(KarakteristikeSale(
-                                    karakteristikaId: item.karakteristikaId,
-                                  ));
-                                }
-                                for (var item in tempKreirane) {
-                                  temp.add(KarakteristikeSale(
-                                      karakteristikaId: item.id));
-                                }
-                                Response? res = await grupSale.createGrupnaSala(
-                                    dioClient: dioCL,
-                                    citaonicaId: widget.citaonicaId.toString(),
-                                    sala: GrupnaSala(
-                                        naziv: nazivController.text.toString(),
-                                        brojMjesta: int.parse(
-                                            kapacitetController.text
-                                                .toString()),
-                                        qrKod: kodController.text.toString(),
-                                        opis: opisController.text.toString(),
-                                        clanarine: <Clanarina>[],
-                                        karakteristike: temp,
-                                        dostupno: true));
-                                if (res != null) {
-                                  if (res.statusCode == 201 ||
-                                      res.statusCode == 200) {
-                                    Navigator.of(context).pop();
+                                try {
+                                  List<Karakteristike> tempKreirane =
+                                      <Karakteristike>[];
+                                  if (listaDodatihKreiranih.isNotEmpty) {
+                                    tempKreirane =
+                                        await dodajNoveKarakteristike();
                                   }
+                                  List<KarakteristikeSale> temp =
+                                      <KarakteristikeSale>[];
+                                  for (var item in listaDodatihPostojecih) {
+                                    temp.add(KarakteristikeSale(
+                                      karakteristikaId: item.karakteristikaId,
+                                    ));
+                                  }
+                                  for (var item in tempKreirane) {
+                                    temp.add(KarakteristikeSale(
+                                        karakteristikaId: item.id));
+                                  }
+                                  Response? res =
+                                      await grupSale.createGrupnaSala(
+                                          dioClient: dioCL,
+                                          citaonicaId:
+                                              widget.citaonicaId.toString(),
+                                          sala: GrupnaSala(
+                                              naziv: nazivController.text
+                                                  .toString(),
+                                              brojMjesta: int.parse(
+                                                  kapacitetController.text
+                                                      .toString()),
+                                              qrKod:
+                                                  kodController.text.toString(),
+                                              opis: opisController.text
+                                                  .toString(),
+                                              clanarine: <Clanarina>[],
+                                              karakteristike: temp,
+                                              dostupno: true));
+                                  if (res != null) {
+                                    if (res.statusCode == 201 ||
+                                        res.statusCode == 200) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  }
+                                } catch (err) {
+                                  const snackBar = SnackBar(
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 185, 44, 34),
+                                    content: Text(
+                                      'Greška pri kreiranju grupne sale!',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  );
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
                                 }
                               }
                             },

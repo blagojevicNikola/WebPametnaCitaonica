@@ -2,21 +2,30 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class PostojeceMjestoWidget extends StatelessWidget {
-  const PostojeceMjestoWidget(
-      {Key? key,
-      required this.index,
-      required this.velicina,
-      required this.ugao})
-      : super(key: key);
+  const PostojeceMjestoWidget({
+    Key? key,
+    required this.index,
+    required this.velicina,
+    required this.ugao,
+    required this.funkcijaBrisanjaMjesta,
+    required this.opcijaBrisanjaUkljucena,
+    required this.idMjesta,
+  }) : super(key: key);
 
   final int index;
+  final int idMjesta;
   final double velicina;
   final int ugao;
+  final Function(int) funkcijaBrisanjaMjesta;
+  final bool opcijaBrisanjaUkljucena;
   //final Mjesto mjestoDat;
 
   @override
   Widget build(BuildContext context) {
-    return buildIcon();
+    return (opcijaBrisanjaUkljucena == true)
+        ? InkWell(
+            child: buildIcon(), onTap: () => funkcijaBrisanjaMjesta(idMjesta))
+        : buildIcon();
   }
 
   Widget buildIcon() {

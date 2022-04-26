@@ -24,9 +24,7 @@ ObavjestenjeService obavjService = ObavjestenjeService();
 class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
   Obavjestenje obavjestenje = Obavjestenje(naslov: '', tekstNotifikacije: '');
   DioClient dioCL = DioClient();
-
   late Future<List<Obavjestenje>> listaObavjestenja;
-
   @override
   void initState() {
     listaObavjestenja = obavjService.getObavjestenja(
@@ -193,6 +191,8 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                     bottom: 10),
                 child: FutureBuilder<List<Obavjestenje>>(
                     future: listaObavjestenja,
+                    //obavjService.getObavjestenja(dioCL, '12', '1'),
+
                     initialData: null,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {

@@ -67,24 +67,4 @@ class ObavjestenjeService {
     }
     return response;
   }
-
-  /* Future<Obavjestenje?> azurirajCitaonicu(
-      {required Obavjestenje ObavjestenjeInfo, required String citaonicaId}) async {
-    Obavjestenje? retrievedCitaonica;
-
-    try {
-      Response response = await _dio.put(
-        _baseUrl + '/citaonice/${citaonicaId.toString()}/'+'obavjestenja',
-        data: citaonicaInfo.toJson(),
-      );
-
-      //print('User created: ${response.data}');
-
-      retrievedCitaonica = Citaonica.fromJson(response.data);
-    } catch (e) {
-      print('Error creating user: $e');
-    }
-
-    return retrievedCitaonica;
-  }*/
 }

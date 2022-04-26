@@ -45,17 +45,18 @@ class MjestaService {
     return retrievedMjesto;
   }
 
-  Future<Response?> deleteCitaonica(
-      {required DioClient dioClient, required String citaonicaId}) async {
-    Response? temp;
+  Future<Response?> deleteMjesto(
+      {required DioClient dioClient,
+      required String individualnaSalaId,
+      required String mjestaId}) async {
     try {
-      temp = await dioClient.dio.delete(
-        '/citaonice/$citaonicaId',
+      Response? temp = await dioClient.dio.delete(
+        '/individualne-sale/$individualnaSalaId/mjesta/$mjestaId',
       );
+      return temp;
     } catch (e) {
       print('Error deleting user: $e');
     }
-    return temp;
   }
 
   Future<Response?> azurirajMjesta(

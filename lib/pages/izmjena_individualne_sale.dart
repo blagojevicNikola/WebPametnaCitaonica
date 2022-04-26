@@ -38,10 +38,11 @@ class _IzmjenaIndividualneSalePageState
   final velicinaController = TextEditingController();
   final qrCodeController = TextEditingController();
   final brojController = TextEditingController();
-  late final nazivSaleController;
+  late final TextEditingController nazivSaleController;
   DioClient dioCL = DioClient();
   GlobalKey rowKey = GlobalKey();
   late Future<List<dynamic>> odgovorServera;
+  List<bool> listaOpcija = <bool>[false];
 
   @override
   void initState() {
@@ -72,16 +73,16 @@ class _IzmjenaIndividualneSalePageState
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
-              child: const Text('Dodaj sliku'),
-              onPressed: () {
-                print(getKoeficijentVelicineMjesta());
-              },
-            ),
-            TextButton(
-              child: const Text('Ukloni sliku'),
-              onPressed: () {},
-            ),
+            // TextButton(
+            //   child: const Text('Dodaj sliku'),
+            //   onPressed: () {
+            //     print(getKoeficijentVelicineMjesta());
+            //   },
+            // ),
+            // TextButton(
+            //   child: const Text('Ukloni sliku'),
+            //   onPressed: () {},
+            // ),
             TextButton(
                 child: const Text('Dodaj mjesto'),
                 onPressed: () {
@@ -99,6 +100,17 @@ class _IzmjenaIndividualneSalePageState
                     dodajMjesto();
                   }
                 }),
+            ToggleButtons(
+              children: const [
+                Icon(Icons.delete),
+              ],
+              isSelected: listaOpcija,
+              onPressed: (int index) {
+                setState(() {
+                  listaOpcija[index] = !listaOpcija[index];
+                });
+              },
+            ),
             const SizedBox(width: 30),
             Row(
               children: [
@@ -178,7 +190,9 @@ class _IzmjenaIndividualneSalePageState
                     child: Center(child: CircularProgressIndicator()));
               } else if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  return Text('Error  : ${snapshot.error}');
+                  return const Center(
+                      child: Text('ERROR',
+                          style: TextStyle(color: Colors.red, fontSize: 25)));
                 } else if (snapshot.hasData) {
                   return Stack(
                     children: [
@@ -192,11 +206,14 @@ class _IzmjenaIndividualneSalePageState
                           left: item.pozicija.x * getSirinaSlike(),
                           top: item.pozicija.y * getVisinaSlike(),
                           child: PostojeceMjestoWidget(
-                            index: item.oznakaSale,
+                            idMjesta: item.id,
+                            index: item.brojMjesta,
                             velicina: sqrt((item.velicina *
                                     getKoeficijentVelicineMjesta()) /
                                 100),
                             ugao: item.ugao,
+                            opcijaBrisanjaUkljucena: listaOpcija[0],
+                            funkcijaBrisanjaMjesta: ukloniPostojeceMjesto,
                           ),
                         ),
                       for (var item in listaMjesta)
@@ -207,6 +224,8 @@ class _IzmjenaIndividualneSalePageState
                             index: listaMjesta.indexOf(item),
                             onDragEnd: onDragEnd,
                             mjestoDat: item,
+                            opcijaBrisanjaUkljucena: listaOpcija[0],
+                            obrisiMjesto: ukloniDodatoMjesto,
                           ),
                         ),
                       Positioned(
@@ -275,6 +294,85 @@ class _IzmjenaIndividualneSalePageState
     setState(() {
       listaMjesta[index].pozicija.x += offset.dx;
       listaMjesta[index].pozicija.y += offset.dy;
+    });
+  }
+
+  void ukloniDodatoMjesto(int index) {
+    showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text("Da li želite da obrišete mjesto?"),
+          actions: [
+            TextButton(
+              child: const Text('Izađi'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text('Potvrdi'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            )
+          ],
+        );
+      },
+    ).then(
+      (value) {
+        if (value == true) {
+          setState(
+            () {
+              listaMjesta.removeAt(index);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Future<void> ukloniPostojeceMjesto(int mjestoId) async {
+    showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text("Da li želite da obrišete mjesto?"),
+          actions: [
+            TextButton(
+              child: const Text('Izađi'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text('Potvrdi'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            )
+          ],
+        );
+      },
+    ).then((value) async {
+      if (value == true) {
+        Response? temp = await mjestaService.deleteMjesto(
+            dioClient: dioCL,
+            individualnaSalaId:
+                widget.argumenti.individualnaSalaData.id.toString(),
+            mjestaId: mjestoId.toString());
+        if (temp != null) {
+          if (temp.statusCode == 200) {
+            setState(() {
+              odgovorServera = Future.wait([
+                dohvatiSliku(),
+                mjestaService.getMjesta(
+                    dioCL, widget.argumenti.individualnaSalaData.id.toString())
+              ]);
+            });
+          }
+        }
+      }
     });
   }
 

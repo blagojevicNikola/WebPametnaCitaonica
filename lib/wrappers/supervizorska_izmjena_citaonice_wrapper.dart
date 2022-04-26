@@ -24,7 +24,7 @@ class _SupervizorskaIzmjenaCitaoniceWrapperPageState
             switch (settings.name) {
               case 'promjena':
                 builder = (BuildContext context) =>
-                    const PromjenaInformacijaCitaonice(citaonicaId: 66);
+                    const PromjenaInformacijaCitaonice();
                 break;
               default:
                 throw Exception('Invalid route:}');

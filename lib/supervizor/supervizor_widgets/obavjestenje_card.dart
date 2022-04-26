@@ -9,11 +9,13 @@ class ObavjestenjeCard extends StatefulWidget {
   final int index;
   final Obavjestenje obavjestenjeData;
   final Function(int) funkcijaBrisanja;
+  final Function() funkcijaOsvjezavanja;
 
   const ObavjestenjeCard(
       {required this.index,
       required this.obavjestenjeData,
       required this.funkcijaBrisanja,
+      required this.funkcijaOsvjezavanja,
       Key? key})
       : super(key: key);
 
@@ -96,12 +98,7 @@ class _ObavjestenjeCardState extends State<ObavjestenjeCard> {
                             onPressed: () async {
                               Navigator.pop(context);
                               widget.funkcijaBrisanja(widget.index);
-
-                              /*Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          super.widget));*/
+                              widget.funkcijaOsvjezavanja;
                             },
                             child: const Text('Da'),
                           ),

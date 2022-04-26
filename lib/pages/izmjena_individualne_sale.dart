@@ -192,7 +192,7 @@ class _IzmjenaIndividualneSalePageState
                           left: item.pozicija.x * getSirinaSlike(),
                           top: item.pozicija.y * getVisinaSlike(),
                           child: PostojeceMjestoWidget(
-                            index: item.brojMjesta,
+                            index: item.oznakaSale,
                             velicina: sqrt((item.velicina *
                                     getKoeficijentVelicineMjesta()) /
                                 100),

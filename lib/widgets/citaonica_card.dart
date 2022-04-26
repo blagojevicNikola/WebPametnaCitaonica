@@ -186,7 +186,7 @@ class CitaonicaCard extends StatelessWidget {
                           ),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  'https://localhost:8443/api/v1/citaonice/${citaonicaData.id}/slika'),
+                                  'https://localhost:8443/api/v1/citaonice/${citaonicaData.id}/slika/'),
                               fit: BoxFit.fill),
                         ),
                       ),

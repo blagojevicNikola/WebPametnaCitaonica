@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/dio_client.dart';
 import 'package:web_aplikacija/api/grupne_sale_service.dart';
 import 'package:web_aplikacija/models/argumenti_izmjene_grupne_sale.dart';
+import 'package:web_aplikacija/models/grupne_rezervacije_mjesta_prikaz.dart';
+import 'package:web_aplikacija/widgets/grupne_rezervacije_mjesta.dart';
 
 import '../constants/config.dart';
 import '../models/grupna_sala.dart';
@@ -113,7 +115,14 @@ class _SupervizorskaGrupTileState extends State<SupervizorskaGrupTile> {
                         splashRadius: 25,
                         icon: const Icon(Icons.library_books_outlined),
                         onPressed: () {
-                          print('Pa hej, i ja cekam milosa');
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                GrupneRezervacijeMjesta(
+                              idSale: widget.grupnaSalaData.id,
+                              oznakaSale: widget.grupnaSalaData.naziv,
+                            ),
+                          );
                         },
                       ),
                     ),

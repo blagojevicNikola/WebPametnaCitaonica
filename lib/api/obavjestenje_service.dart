@@ -27,44 +27,45 @@ class ObavjestenjeService {
     }
   }
 
-  Future<Obavjestenje?> createObavjestenje(
+  Future<Response?> createObavjestenje(
       {required DioClient dioClient,
       required Obavjestenje obavjestenjeInfo,
       required int citaonicaId,
       required int supervizorId}) async {
-    Obavjestenje? retrievedObavjestenje;
+    Response? response;
 
     try {
-      Response response = await dioClient.dio.post(
+      response = await dioClient.dio.post(
         '/citaonice/'
         '${citaonicaId.toString()}/'
         // '${supervizorId.toString()}/' +
-        'obavjestenja',
+        'obavjestenja/',
         data: obavjestenjeInfo.toJson(),
       );
 
       //print('User created: ${response.data}');
 
-      retrievedObavjestenje = Obavjestenje.fromJson(response.data);
     } catch (e) {
       print('Error creating user: $e');
     }
 
-    return retrievedObavjestenje;
+    return response;
   }
 
-  Future<void> deleteObavjestenje(
+  Future<Response?> deleteObavjestenje(
       {required DioClient dioClient,
       required int obavjestenjeId,
       required int citaonicaId}) async {
+    Response? response;
     try {
-      await dioClient.dio.delete('/citaonice/'
+      response = await dioClient.dio.delete('/citaonice/'
               '${citaonicaId.toString()}/' +
           '/obavjestenja/' +
-          '${obavjestenjeId.toString()}/');
+          '${obavjestenjeId.toString()}');
     } catch (e) {
       print('Error deleting user: $e');
     }
+    return response;
   }
 
   /* Future<Obavjestenje?> azurirajCitaonicu(

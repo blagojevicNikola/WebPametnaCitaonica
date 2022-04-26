@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/supervizor/supervizor_home_page.dart';
 import '../../api/dio_client.dart';
@@ -113,7 +111,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                           bottom: 10),
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Color.fromARGB(255, 129, 189, 238),
+                            primary: const Color.fromARGB(255, 129, 189, 238),
                             onPrimary: Colors.white,
                             shadowColor: Colors.greenAccent,
                             elevation: 3,
@@ -147,24 +145,6 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                               );
                             } else {
                               kreirajObavjestenje();
-                              showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Dodavanje obavjestenja'),
-                                  content: const Text(
-                                      'Uspjesno ste postavili obavještenje !'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(
-                                          context,
-                                        );
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              );
                             }
                           }),
                     ),
@@ -242,6 +222,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
                                     idObavjestenjaZaBrisanje =
                                         list[index].idObavjestenja as int;
                                     return ObavjestenjeCard(
+                                      funkcijaOsvjezavanja: refreshPage,
                                       index: list[index].idObavjestenja as int,
                                       obavjestenjeData: list[index],
                                       funkcijaBrisanja: obrisiObavjestenje,
@@ -278,16 +259,38 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
   }
 
   void kreirajObavjestenje() {
-    obavjService.createObavjestenje(
-        dioClient: dioCL,
-        obavjestenjeInfo: Obavjestenje(
-            naslov: obavjestenje.naslov,
-            tekstNotifikacije: obavjestenje.tekstNotifikacije),
-        supervizorId: supervizorskiId as int,
-        citaonicaId: citaonicaIdGlobal as int);
-    setState(() {
-      listaObavjestenja = obavjService.getObavjestenja(
-          dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
+    setState(() async {
+      Response? response = await obavjService.createObavjestenje(
+          dioClient: dioCL,
+          obavjestenjeInfo: Obavjestenje(
+              naslov: obavjestenje.naslov,
+              tekstNotifikacije: obavjestenje.tekstNotifikacije),
+          supervizorId: supervizorskiId as int,
+          citaonicaId: citaonicaIdGlobal as int);
+
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Dodavanje obavjestenja'),
+            content: const Text('Uspjesno ste postavili obavještenje !'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        setState(() {
+          listaObavjestenja = obavjService.getObavjestenja(
+              dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
+        });
+      }
     });
   }
 
@@ -299,13 +302,37 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
   }
 
   void obrisiObavjestenje(int id) {
-    obavjService.deleteObavjestenje(
-        dioClient: dioCL,
-        obavjestenjeId: id,
-        citaonicaId: citaonicaIdGlobal as int);
-    setState(() {
-      listaObavjestenja = obavjService.getObavjestenja(
-          dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
+    setState(() async {
+      Response? response = await obavjService.deleteObavjestenje(
+          dioClient: dioCL,
+          obavjestenjeId: id,
+          citaonicaId: citaonicaIdGlobal as int);
+
+      if (response?.statusCode == 200 ||
+          response?.statusCode == 201 ||
+          response?.statusCode == 204) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Brisanje obavještenja'),
+            content: const Text('Uspjesno ste obrisali obavještenje !'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        setState(() {
+          listaObavjestenja = obavjService.getObavjestenja(
+              dioCL, citaonicaIdGlobal as int, supervizorskiId as int);
+        });
+      }
     });
   }
 }

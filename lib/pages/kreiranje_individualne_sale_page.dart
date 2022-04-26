@@ -237,14 +237,28 @@ class _KreiranjeIdividualneSalePageState
                       style: TextStyle(fontSize: 21, color: Colors.white),
                     ),
                     onPressed: () async {
-                      final kreirano = await kreirajIndividualnuSalu();
-                      if (kreirano == true) {
-                        Navigator.of(context).pop();
-                      } else {
+                      try {
+                        final kreirano = await kreirajIndividualnuSalu();
+                        if (kreirano == true) {
+                          Navigator.of(context).pop();
+                        } else {
+                          const snackBar = SnackBar(
+                            duration: Duration(seconds: 3),
+                            backgroundColor: Color.fromARGB(255, 185, 44, 34),
+                            content: Text(
+                              'Nevalidne informacije individualne sale!',
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      } catch (err) {
                         const snackBar = SnackBar(
+                          duration: Duration(seconds: 3),
                           backgroundColor: Color.fromARGB(255, 185, 44, 34),
                           content: Text(
-                            'Greska pri kreiranju sale i dodavanju mjesta!',
+                            'Greska pri kreiranju individualne sale!',
                             textAlign: TextAlign.center,
                           ),
                         );
@@ -303,7 +317,7 @@ class _KreiranjeIdividualneSalePageState
   }
 
   Future<bool> kreirajIndividualnuSalu() async {
-    if (listaMjesta.isNotEmpty) {
+    if (listaMjesta.isNotEmpty && slika != null) {
       final salaTemp = await indSaleService.createIndividualnaSala(
         dioClient: dioCL,
         citaonicaId: widget.citaonicaId.toString(),

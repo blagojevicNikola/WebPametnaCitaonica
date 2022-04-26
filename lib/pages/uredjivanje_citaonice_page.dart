@@ -211,7 +211,11 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                   } else if (snapshot.connectionState ==
                                       ConnectionState.done) {
                                     if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
+                                      return const Center(
+                                          child: Text('ERROR',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 25)));
                                     } else if (snapshot.hasData) {
                                       return Padding(
                                         padding: const EdgeInsets.all(9.0),
@@ -294,7 +298,11 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                   } else if (snapshot.connectionState ==
                                       ConnectionState.done) {
                                     if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
+                                      return const Center(
+                                          child: Text('ERROR',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 25)));
                                     } else if (snapshot.hasData) {
                                       return Padding(
                                         padding: const EdgeInsets.all(9.0),
@@ -379,7 +387,11 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                   } else if (snapshot.connectionState ==
                                       ConnectionState.done) {
                                     if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
+                                      return const Center(
+                                          child: Text('ERROR',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 25)));
                                     } else if (snapshot.hasData) {
                                       return Padding(
                                         padding: const EdgeInsets.all(9.0),
@@ -472,15 +484,30 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                         fontSize: 21, color: Colors.white),
                                   ),
                                   onPressed: () async {
-                                    final response =
-                                        await citService.deleteCitaonica(
-                                            dioClient: dioCL,
-                                            citaonicaId:
-                                                widget.citData.id.toString());
-                                    if (response != null) {
-                                      if (response.statusCode == 200) {
-                                        Navigator.of(context).pop();
+                                    try {
+                                      final response =
+                                          await citService.deleteCitaonica(
+                                              dioClient: dioCL,
+                                              citaonicaId:
+                                                  widget.citData.id.toString());
+                                      if (response != null) {
+                                        if (response.statusCode == 200) {
+                                          Navigator.of(context).pop();
+                                        }
                                       }
+                                    } catch (err) {
+                                      const snackBar = SnackBar(
+                                        duration: Duration(seconds: 2),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 185, 44, 34),
+                                        content: Text(
+                                          'Greška pri brisanju citaonice!',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
                                     }
                                   }),
                             ),
@@ -625,44 +652,83 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
   }
 
   void obrisiIndividualnuSalu(int? salaIndex) async {
-    final brisanje = await indSaleService.deleteIndividualnaSala(
-        dioClient: dioCL,
-        citaonicaId: widget.citData.id.toString(),
-        individualnaSalaId: salaIndex.toString());
-    if (brisanje.isEmpty) {
-      setState(() {
-        individualneSaleData = indSaleService.getIndividualneSale(
-            dioCL, widget.citData.id.toString());
-      });
+    try {
+      final brisanje = await indSaleService.deleteIndividualnaSala(
+          dioClient: dioCL,
+          citaonicaId: widget.citData.id.toString(),
+          individualnaSalaId: salaIndex.toString());
+      if (brisanje.isEmpty) {
+        setState(() {
+          individualneSaleData = indSaleService.getIndividualneSale(
+              dioCL, widget.citData.id.toString());
+        });
+      }
+    } catch (err) {
+      const snackBar = SnackBar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Color.fromARGB(255, 185, 44, 34),
+        content: Text(
+          'Greška pri brisanju individualne sale!',
+          textAlign: TextAlign.center,
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
   void obrisiGrupnuSalu(int? salaIndex) async {
-    final brisanje = await grupSaleService.deleteGrupnaSala(
-        dioClient: dioCL,
-        citaonicaId: widget.citData.id.toString(),
-        grupnaSalaId: salaIndex.toString());
-    if (brisanje.isEmpty) {
-      setState(() {
-        grupneSaleData =
-            grupSaleService.getGrupneSale(dioCL, widget.citData.id.toString());
-      });
+    try {
+      final brisanje = await grupSaleService.deleteGrupnaSala(
+          dioClient: dioCL,
+          citaonicaId: widget.citData.id.toString(),
+          grupnaSalaId: salaIndex.toString());
+      if (brisanje.isEmpty) {
+        setState(() {
+          grupneSaleData = grupSaleService.getGrupneSale(
+              dioCL, widget.citData.id.toString());
+        });
+      }
+    } catch (err) {
+      const snackBar = SnackBar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Color.fromARGB(255, 185, 44, 34),
+        content: Text(
+          'Greška pri brisanju grupne sale!',
+          textAlign: TextAlign.center,
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
   void obrisiSupervizora(int? supervizorId) async {
-    final brisanje = await supervizorService.deleteSupervizor(
-        dioClient: dioCL,
-        citaonicaId: widget.citData.id.toString(),
-        supervizorId: supervizorId.toString(),
-        supervizorPassword: '');
-    if (brisanje != null) {
-      if (brisanje.statusCode == 204) {
-        setState(() {
-          supervizoriData = supervizorService.getSupervizore(
-              dioCL, widget.citData.id.toString());
-        });
+    try {
+      final brisanje = await supervizorService.deleteSupervizor(
+          dioClient: dioCL,
+          citaonicaId: widget.citData.id.toString(),
+          supervizorId: supervizorId.toString(),
+          supervizorPassword: '');
+      if (brisanje != null) {
+        if (brisanje.statusCode == 204) {
+          setState(() {
+            supervizoriData = supervizorService.getSupervizore(
+                dioCL, widget.citData.id.toString());
+          });
+        }
       }
+    } catch (err) {
+      const snackBar = SnackBar(
+        duration: Duration(seconds: 2),
+        backgroundColor: Color.fromARGB(255, 185, 44, 34),
+        content: Text(
+          'Greška pri brisanju supervizora!',
+          textAlign: TextAlign.center,
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 }

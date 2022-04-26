@@ -145,31 +145,31 @@ class CitaonicaCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 9, 9, 3),
-                          child: RichText(
-                            text: const TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Radno vrijeme:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromARGB(255, 105, 105, 105),
-                                  ),
-                                ),
-                                // TextSpan(
-                                //   text: citaonicaData.radnoVrijeme,
-                                //   style: const TextStyle(
-                                //     fontSize: 18,
-                                //     fontWeight: FontWeight.normal,
-                                //     color: Color.fromARGB(255, 105, 105, 105),
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.fromLTRB(15, 9, 9, 3),
+                        //   child: RichText(
+                        //     text: TextSpan(
+                        //       children: [
+                        //         const TextSpan(
+                        //           text: 'Radno vrijeme:',
+                        //           style: TextStyle(
+                        //             fontSize: 18,
+                        //             fontWeight: FontWeight.bold,
+                        //             color: Color.fromARGB(255, 105, 105, 105),
+                        //           ),
+                        //         ),
+                        //         TextSpan(
+                        //           text: formatiranoRadnoVrijeme(),
+                        //           style: const TextStyle(
+                        //             fontSize: 18,
+                        //             fontWeight: FontWeight.normal,
+                        //             color: Color.fromARGB(255, 105, 105, 105),
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                     Padding(
@@ -186,7 +186,7 @@ class CitaonicaCard extends StatelessWidget {
                           ),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  'https://localhost:8443/api/v1/citaonice/${citaonicaData.id}/slika'),
+                                  'https://localhost:8443/api/v1/citaonice/${citaonicaData.id}/slika/'),
                               fit: BoxFit.fill),
                         ),
                       ),
@@ -199,5 +199,92 @@ class CitaonicaCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String formatiranoRadnoVrijeme() {
+    final dani = {
+      0: 'pon',
+      1: 'uto',
+      2: 'sri',
+      3: 'čet',
+      4: 'pet',
+      5: 'sub',
+      6: 'ned'
+    };
+    String ispis = '';
+    List<int> pomocnaLista = <int>[];
+    int i = 0;
+    while (i < citaonicaData.radnoVrijeme.length) {
+      print('test');
+      for (int j = i + 1; j < citaonicaData.radnoVrijeme.length; j++) {
+        if (citaonicaData.radnoVrijeme[j].pocetak ==
+                citaonicaData.radnoVrijeme[i].pocetak &&
+            citaonicaData.radnoVrijeme[j].kraj ==
+                citaonicaData.radnoVrijeme[i].kraj &&
+            (citaonicaData.radnoVrijeme[j].id! -
+                    citaonicaData.radnoVrijeme[i].id!) ==
+                1) {
+          pomocnaLista.add(j);
+        } else {
+          break;
+        }
+      }
+      if (pomocnaLista.isNotEmpty) {
+        String temp = '';
+        if (ispis.isNotEmpty) {
+          temp = ',';
+        }
+        ispis = ispis +
+            temp +
+            dani[i].toString() +
+            '-' +
+            dani[pomocnaLista.last].toString() +
+            ':' +
+            citaonicaData.radnoVrijeme[i].pocetak!.hour
+                .toString()
+                .padLeft(2, '0') +
+            ':' +
+            citaonicaData.radnoVrijeme[i].pocetak!.minute
+                .toString()
+                .padLeft(2, '0') +
+            '-' +
+            citaonicaData.radnoVrijeme[i].kraj!.hour
+                .toString()
+                .padLeft(2, '0') +
+            ':' +
+            citaonicaData.radnoVrijeme[i].kraj!.minute
+                .toString()
+                .padLeft(2, '0');
+        i = pomocnaLista.last + 1;
+        pomocnaLista.clear();
+      } else {
+        String temp = '';
+        if (ispis.isNotEmpty) {
+          temp = ',';
+        }
+        ispis = ispis +
+            temp +
+            dani[i].toString() +
+            ':' +
+            citaonicaData.radnoVrijeme[i].pocetak!.hour
+                .toString()
+                .padLeft(2, '0') +
+            ':' +
+            citaonicaData.radnoVrijeme[i].pocetak!.minute
+                .toString()
+                .padLeft(2, '0') +
+            '-' +
+            citaonicaData.radnoVrijeme[i].kraj!.hour
+                .toString()
+                .padLeft(2, '0') +
+            ':' +
+            citaonicaData.radnoVrijeme[i].kraj!.minute
+                .toString()
+                .padLeft(2, '0');
+        pomocnaLista.clear();
+        i++;
+      }
+    }
+    return ispis;
   }
 }

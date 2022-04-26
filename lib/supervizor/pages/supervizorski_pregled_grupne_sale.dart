@@ -160,7 +160,11 @@ class _SupervizorskiPregledGrupneSalePageState
                                 } else if (snapshot.connectionState ==
                                     ConnectionState.done) {
                                   if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
+                                    return const Center(
+                                        child: Text('ERROR',
+                                            style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 25)));
                                   } else if (snapshot.hasData) {
                                     return Padding(
                                         padding: const EdgeInsets.all(9.0),

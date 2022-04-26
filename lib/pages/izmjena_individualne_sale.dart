@@ -190,7 +190,9 @@ class _IzmjenaIndividualneSalePageState
                     child: Center(child: CircularProgressIndicator()));
               } else if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  return Text('Error  : ${snapshot.error}');
+                  return const Center(
+                      child: Text('ERROR',
+                          style: TextStyle(color: Colors.red, fontSize: 25)));
                 } else if (snapshot.hasData) {
                   return Stack(
                     children: [
@@ -331,21 +333,47 @@ class _IzmjenaIndividualneSalePageState
   }
 
   Future<void> ukloniPostojeceMjesto(int mjestoId) async {
-    Response? temp = await mjestaService.deleteMjesto(
-        dioClient: dioCL,
-        individualnaSalaId: widget.argumenti.individualnaSalaData.id.toString(),
-        mjestaId: mjestoId.toString());
-    if (temp != null) {
-      if (temp.statusCode == 200) {
-        setState(() {
-          odgovorServera = Future.wait([
-            dohvatiSliku(),
-            mjestaService.getMjesta(
-                dioCL, widget.argumenti.individualnaSalaData.id.toString())
-          ]);
-        });
+    showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text("Da li želite da obrišete mjesto?"),
+          actions: [
+            TextButton(
+              child: const Text('Izađi'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text('Potvrdi'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            )
+          ],
+        );
+      },
+    ).then((value) async {
+      if (value == true) {
+        Response? temp = await mjestaService.deleteMjesto(
+            dioClient: dioCL,
+            individualnaSalaId:
+                widget.argumenti.individualnaSalaData.id.toString(),
+            mjestaId: mjestoId.toString());
+        if (temp != null) {
+          if (temp.statusCode == 200) {
+            setState(() {
+              odgovorServera = Future.wait([
+                dohvatiSliku(),
+                mjestaService.getMjesta(
+                    dioCL, widget.argumenti.individualnaSalaData.id.toString())
+              ]);
+            });
+          }
+        }
       }
-    }
+    });
   }
 
   void dodajMjesto() {

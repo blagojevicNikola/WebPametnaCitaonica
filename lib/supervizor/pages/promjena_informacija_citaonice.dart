@@ -11,9 +11,9 @@ import '../../widgets/information_field.dart';
 import '../../widgets/unos_radnog_vremena.dart';
 
 class PromjenaInformacijaCitaonice extends StatefulWidget {
-  final int citaonicaId;
-  const PromjenaInformacijaCitaonice({Key? key, required this.citaonicaId})
-      : super(key: key);
+  const PromjenaInformacijaCitaonice({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<PromjenaInformacijaCitaonice> createState() =>
@@ -41,7 +41,7 @@ class _PromjenaInformacijaCitaoniceState
     RadnoVrijemeUDanu(id: 6),
     RadnoVrijemeUDanu(id: 7),
   ];
-
+  int? citaonicaId;
   late Future<Citaonica> citaonica;
   CitaonicaService citaonicaService = CitaonicaService();
   DioClient dioCL = DioClient();
@@ -49,6 +49,7 @@ class _PromjenaInformacijaCitaoniceState
   void initState() {
     citaonica =
         citaonicaService.getJednaCitaonica(dioCL, supervizorskiId!.toString());
+    citaonicaId = citaonicaIdGlobal;
     super.initState();
   }
 
@@ -97,7 +98,10 @@ class _PromjenaInformacijaCitaoniceState
                         } else if (snapshot.connectionState ==
                             ConnectionState.done) {
                           if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
+                            return const Center(
+                                child: Text('ERROR',
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 25)));
                           } else if (snapshot.hasData) {
                             for (int i = 0; i < radnoVr.length; i++) {
                               int pozicija = snapshot.data!.radnoVrijeme
@@ -321,9 +325,10 @@ class _PromjenaInformacijaCitaoniceState
           adresa: adresaController.text.toString(),
           radnoVrijeme: radnoVr,
           vlasnik: vlasnikController.text.toString(),
+          opis: opisController.text.toString(),
           //administratorId: 1),
         ),
-        index: '12'); //widget.citaonicaId.toString());
+        index: citaonicaId.toString()); //widget.citaonicaId.toString());
     return odgovor;
   }
 }

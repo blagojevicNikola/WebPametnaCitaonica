@@ -1,5 +1,9 @@
+import 'dart:html';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:web_aplikacija/api/dio_client.dart';
+import 'package:web_aplikacija/api/mjesta_service.dart';
 import 'package:web_aplikacija/api/prikaz_individualnih_rezervacija_mjesta_service.dart';
 import 'package:web_aplikacija/models/argumenti_prikaza_individualne_rezervacije_mjesta.dart';
 import 'package:web_aplikacija/models/individualne_rezervacije_mjesta_prikaz.dart';
@@ -7,14 +11,15 @@ import 'package:web_aplikacija/models/karakteristike.dart';
 import 'package:web_aplikacija/models/karakteristike_sale.dart';
 import 'package:web_aplikacija/widgets/individualna_rezervacija_card.dart';
 
+import '../models/mjesto.dart';
 import 'karakteristike_field.dart';
 
 class IndividualneRezervacijeMjesta extends StatefulWidget {
-  int idMjesta;
-  int brojMjesta;
+  final Mjesto mjestoData;
+  final Function(Mjesto, bool) funkcijaZakljucavanjaMjesta;
   IndividualneRezervacijeMjesta({
-    required this.idMjesta,
-    required this.brojMjesta,
+    required this.mjestoData,
+    required this.funkcijaZakljucavanjaMjesta,
     Key? key,
   }) : super(key: key);
 
@@ -31,7 +36,8 @@ class _IndividualneRezervacijeMjestaState
   PrikazIndividualnihRezervacijaMjestaService
       prikazIndividualnihRezervacijaMjestaServis =
       PrikazIndividualnihRezervacijaMjestaService();
-
+  MjestaService mjestaService = MjestaService();
+  bool? mjestoJeSlobodno;
   @override
   void initState() {
     listaRezervacija =
@@ -39,7 +45,8 @@ class _IndividualneRezervacijeMjestaState
             DateTime.now().subtract(const Duration(days: 20)),
             DateTime.now().add(const Duration(days: 20)),
             dioCl,
-            widget.idMjesta);
+            widget.mjestoData.id!);
+    mjestoJeSlobodno = widget.mjestoData.dostupno;
     super.initState();
   }
 
@@ -54,9 +61,76 @@ class _IndividualneRezervacijeMjestaState
         child: Dialog(
             child: Column(
           children: [
-            Text(
-              '\nRezervacije za mjesto broj: ${widget.brojMjesta}',
-              style: const TextStyle(fontSize: 25, color: Colors.black54),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Material(
+                  borderRadius: BorderRadius.circular(17),
+                  color: (mjestoJeSlobodno == false)
+                      ? const Color.fromARGB(255, 190, 62, 53)
+                      : const Color.fromARGB(255, 55, 155, 59),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(17),
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: (mjestoJeSlobodno == false)
+                            ? const Text(
+                                'Otključaj mjesto',
+                                style: TextStyle(
+                                    fontSize: 19, color: Colors.white),
+                              )
+                            : const Text(
+                                'Zaključaj mjesto',
+                                style: TextStyle(
+                                    fontSize: 19, color: Colors.white),
+                              )),
+                    onTap: () async {
+                      {
+                        try {
+                          bool temp = await zakljucajMjesto(!mjestoJeSlobodno!);
+                          if (temp == true) {
+                            widget.funkcijaZakljucavanjaMjesta(
+                                widget.mjestoData, mjestoJeSlobodno!);
+                            const snackBar = SnackBar(
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Color.fromARGB(255, 52, 147, 44),
+                              content: Text(
+                                'Uspješno zaključano mjesto!',
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        } catch (err) {
+                          const snackBar = SnackBar(
+                            duration: Duration(seconds: 2),
+                            backgroundColor: Color.fromARGB(255, 185, 44, 34),
+                            content: Text(
+                              'Greška!',
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  'Rezervacije za mjesto broj: ${widget.mjestoData.brojMjesta}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 25, color: Colors.black54),
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -140,7 +214,9 @@ class _IndividualneRezervacijeMjestaState
   void obrisiIndividualnuRezervacijuKorisnika(int ind) async {
     var response =
         await prikazIndividualnihRezervacijaMjestaServis.deleteRezervacija(
-            mjestoId: widget.idMjesta, dioClient: dioCl, rezervacijaId: ind);
+            mjestoId: widget.mjestoData.id!,
+            dioClient: dioCl,
+            rezervacijaId: ind);
     if (response.statusCode == 200 || response.statusCode == 204) {
       setState(() {
         listaRezervacija =
@@ -148,7 +224,7 @@ class _IndividualneRezervacijeMjestaState
                 DateTime.now().subtract(const Duration(days: 20)),
                 DateTime.now().add(const Duration(days: 20)),
                 dioCl,
-                widget.idMjesta);
+                widget.mjestoData.id!);
       });
     } else {
       showDialog<String>(
@@ -174,8 +250,29 @@ class _IndividualneRezervacijeMjestaState
                 DateTime.now().subtract(const Duration(days: 20)),
                 DateTime.now().add(const Duration(days: 20)),
                 dioCl,
-                widget.idMjesta);
+                widget.mjestoData.id!);
       });
+    }
+  }
+
+  Future<bool> zakljucajMjesto(bool dostupno) async {
+    Response? odgovor = await mjestaService.zakljucajMjesto(
+        dioClient: dioCl,
+        dostupno: dostupno,
+        individualnaSalaId: '',
+        mjestoId: widget.mjestoData.id.toString());
+    if (odgovor != null) {
+      if (odgovor.statusCode == 200) {
+        widget.mjestoData.dostupno = mjestoJeSlobodno!;
+        setState(() {
+          mjestoJeSlobodno = !mjestoJeSlobodno!;
+        });
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
   }
 }

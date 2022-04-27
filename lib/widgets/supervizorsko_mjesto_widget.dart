@@ -3,19 +3,21 @@ import 'dart:math' as math;
 
 import 'package:web_aplikacija/widgets/individualne_rezervacije_mjesta.dart';
 
+import '../models/mjesto.dart';
+
 class SupervizorskoMjestoWidget extends StatelessWidget {
   const SupervizorskoMjestoWidget(
       {Key? key,
       required this.index,
+      required this.mjestoData,
       required this.velicina,
-      required this.ugao,
-      required this.id})
+      required this.funkcijaZakljucavanjaMjesta})
       : super(key: key);
 
-  final int id;
   final int index;
   final double velicina;
-  final int ugao;
+  final Mjesto mjestoData;
+  final Function(Mjesto, bool) funkcijaZakljucavanjaMjesta;
   //final Mjesto mjestoDat;
 
   @override
@@ -26,7 +28,7 @@ class SupervizorskoMjestoWidget extends StatelessWidget {
   Widget buildIcon(BuildContext context) {
     return Stack(children: [
       Transform.rotate(
-        angle: ugao * math.pi / 180,
+        angle: mjestoData.ugao * math.pi / 180,
         child: InkWell(
           onTap: () {
             //print('Milosa Skobica cekam!');
@@ -37,13 +39,16 @@ class SupervizorskoMjestoWidget extends StatelessWidget {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => IndividualneRezervacijeMjesta(
-                idMjesta: id,
-                brojMjesta: index,
+                mjestoData: mjestoData,
+                funkcijaZakljucavanjaMjesta: funkcijaZakljucavanjaMjesta,
               ),
             );
           },
           child: Icon(Icons.event_seat,
-              color: const Color.fromARGB(255, 88, 88, 88), size: velicina),
+              color: (mjestoData.dostupno == false)
+                  ? const Color.fromARGB(255, 243, 210, 79)
+                  : const Color.fromARGB(255, 88, 88, 88),
+              size: velicina),
         ),
       ),
       Positioned(

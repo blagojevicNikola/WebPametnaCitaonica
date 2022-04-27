@@ -117,12 +117,12 @@ class _SupervizorskiPregledIndividualneSalePageState
                           left: item.pozicija.x * getSirinaSlike(),
                           top: item.pozicija.y * getVisinaSlike(),
                           child: SupervizorskoMjestoWidget(
-                            id: item.id!,
+                            mjestoData: item,
                             index: item.brojMjesta,
                             velicina: sqrt((item.velicina *
                                     getKoeficijentVelicineMjesta()) /
                                 100),
-                            ugao: item.ugao,
+                            funkcijaZakljucavanjaMjesta: zakljucajMjesto,
                           ),
                         ),
                       Positioned(
@@ -189,6 +189,12 @@ class _SupervizorskiPregledIndividualneSalePageState
     } else {
       return true;
     }
+  }
+
+  void zakljucajMjesto(Mjesto m, bool dostupno) {
+    setState(() {
+      m.dostupno = dostupno;
+    });
   }
 
   Future<bool> azurirajIndividualnuSalu() async {

@@ -2,11 +2,13 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_aplikacija/api/auth_service.dart';
 import 'package:web_aplikacija/main.dart';
 import 'package:web_aplikacija/pages/zaboravljena_lozinka_page.dart';
 
 import '../api/dio_client.dart';
+import '../models/web_login.dart';
 import '../supervizor/supervizor_home_page.dart';
 
 //import 'Registracija.dart';
@@ -242,6 +244,13 @@ class _LoginDemoState extends State<LoginDemo> {
                           if (response != null) {
                             if (response.statusCode == 201 &&
                                 response.data['uloga'] == 'ADMIN') {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+
+                              prefs.setString(
+                                  'accessToken', response.data['accessToken']);
+                              prefs.setString('refreshToken',
+                                  response.data['refreshToken']);
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -291,6 +300,13 @@ class _LoginDemoState extends State<LoginDemo> {
                           if (response != null) {
                             if (response.statusCode == 201 &&
                                 response.data['uloga'] == 'SUPERVIZOR') {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+
+                              prefs.setString(
+                                  'accessToken', response.data['accessToken']);
+                              prefs.setString('refreshToken',
+                                  response.data['refreshToken']);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

@@ -31,7 +31,7 @@ class LoginDemo extends StatefulWidget {
 class _LoginDemoState extends State<LoginDemo> {
   //late Future<Korisnik> test;
   AuthService authService = AuthService();
-  DioClient dioCL = DioClient();
+  Dio dioCL = Dio();
   String izbor = 'Administrator';
   String emailLogin = '';
   String lozinkaLogin = '';
@@ -233,9 +233,12 @@ class _LoginDemoState extends State<LoginDemo> {
                     } else {
                       if (izbor == 'Administrator') {
                         try {
-                          print(izbor);
-                          var response = await authService.postLogin(
-                              dioCL, emailLogin, lozinkaLogin);
+                          var response = await dioCL.post(
+                              'https://localhost:8443/api/v1/prijava/',
+                              data: {
+                                'korisnickoIme': emailLogin,
+                                'lozinka': lozinkaLogin
+                              });
                           if (response != null) {
                             if (response.statusCode == 201 &&
                                 response.data['uloga'] == 'ADMIN') {
@@ -263,6 +266,8 @@ class _LoginDemoState extends State<LoginDemo> {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
                             }
+                          } else {
+                            print('greskaa');
                           }
                         } catch (err) {
                           const snackBar = SnackBar(
@@ -276,22 +281,55 @@ class _LoginDemoState extends State<LoginDemo> {
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       } else if (izbor == 'Supervizor') {
-                        print(izbor);
-                        var response = await authService.postLogin(
-                            dioCL, emailLogin, lozinkaLogin);
-                        if (response != null) {
-                          if (response.statusCode == 201 &&
-                              response.data['uloga'] == 'SUPERVIZOR') {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => SupervizorHomePage(
-                                          title: 'Supervizorska App',
-                                          supervizorId: response.data['id'],
-                                          citaonicaId:
-                                              response.data['citaonicaId'],
-                                        )));
+                        try {
+                          var response = await dioCL.post(
+                              'https://localhost:8443/api/v1/prijava/',
+                              data: {
+                                'korisnickoIme': emailLogin,
+                                'lozinka': lozinkaLogin
+                              });
+                          if (response != null) {
+                            if (response.statusCode == 201 &&
+                                response.data['uloga'] == 'SUPERVIZOR') {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => SupervizorHomePage(
+                                            title: 'Supervizorska App',
+                                            supervizorId: response.data['id'],
+                                            citaonicaId:
+                                                response.data['citaonicaId'],
+                                          )));
+                            }
                           }
+                        } on DioError catch (err) {
+                          if (err.response != null) {
+                            if (err.response!.statusCode == 403) {
+                              const snackBar = SnackBar(
+                                backgroundColor:
+                                    Color.fromARGB(255, 185, 44, 34),
+                                content: Text(
+                                  'Pogresno korisnicko ime/lozinka. Pokušaj ponovo!',
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          } else {
+                            print('greskaa');
+                          }
+                        } catch (err) {
+                          const snackBar = SnackBar(
+                            backgroundColor: Color.fromARGB(255, 185, 44, 34),
+                            content: Text(
+                              'Greška!',
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       }
                     }

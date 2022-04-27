@@ -69,6 +69,7 @@ class _SupervizorskiPregledIndividualneSalePageState
                 },
               ),
             ),
+            const SizedBox(width: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

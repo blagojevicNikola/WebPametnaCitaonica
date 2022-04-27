@@ -29,6 +29,8 @@ class IndividualneRezervacijeMjesta extends StatefulWidget {
   }
 }
 
+GlobalKey snackBarKey = GlobalKey();
+
 class _IndividualneRezervacijeMjestaState
     extends State<IndividualneRezervacijeMjesta> {
   late Future<List<IndividualneRezervacijeMjestaPrikaz>> listaRezervacija;
@@ -59,154 +61,168 @@ class _IndividualneRezervacijeMjestaState
       ),
       child: SingleChildScrollView(
         child: Dialog(
+            key: snackBarKey,
             child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Material(
-                  borderRadius: BorderRadius.circular(17),
-                  color: (mjestoJeSlobodno == false)
-                      ? const Color.fromARGB(255, 190, 62, 53)
-                      : const Color.fromARGB(255, 55, 155, 59),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(17),
-                    child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: (mjestoJeSlobodno == false)
-                            ? const Text(
-                                'Otključaj mjesto',
-                                style: TextStyle(
-                                    fontSize: 19, color: Colors.white),
-                              )
-                            : const Text(
-                                'Zaključaj mjesto',
-                                style: TextStyle(
-                                    fontSize: 19, color: Colors.white),
-                              )),
-                    onTap: () async {
-                      {
-                        try {
-                          bool temp = await zakljucajMjesto(!mjestoJeSlobodno!);
-                          if (temp == true) {
-                            widget.funkcijaZakljucavanjaMjesta(
-                                widget.mjestoData, mjestoJeSlobodno!);
-                            const snackBar = SnackBar(
-                              duration: Duration(seconds: 2),
-                              backgroundColor: Color.fromARGB(255, 52, 147, 44),
-                              content: Text(
-                                'Uspješno zaključano mjesto!',
-                                textAlign: TextAlign.center,
-                              ),
-                            );
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(17),
+                      color: (mjestoJeSlobodno == false)
+                          ? const Color.fromARGB(255, 53, 190, 53)
+                          : const Color.fromARGB(255, 190, 62, 53),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(17),
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: (mjestoJeSlobodno == false)
+                                ? const Text(
+                                    'Otključaj mjesto',
+                                    style: TextStyle(
+                                        fontSize: 19, color: Colors.white),
+                                  )
+                                : const Text(
+                                    'Zaključaj mjesto',
+                                    style: TextStyle(
+                                        fontSize: 19, color: Colors.white),
+                                  )),
+                        onTap: () async {
+                          {
+                            try {
+                              bool temp =
+                                  await zakljucajMjesto(!mjestoJeSlobodno!);
+                              if (temp == true) {
+                                widget.funkcijaZakljucavanjaMjesta(
+                                    widget.mjestoData, mjestoJeSlobodno!);
+                                SnackBar snackBar = SnackBar(
+                                    duration: const Duration(seconds: 2),
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 52, 147, 44),
+                                    content: (mjestoJeSlobodno == false)
+                                        ? const Text(
+                                            'Uspješno zaključano mjesto!',
+                                            textAlign: TextAlign.center,
+                                          )
+                                        : const Text(
+                                            'Uspješno otključano mjesto!',
+                                            textAlign: TextAlign.center,
+                                          ));
 
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            } catch (err) {
+                              const snackBar = SnackBar(
+                                duration: Duration(seconds: 2),
+                                backgroundColor:
+                                    Color.fromARGB(255, 185, 44, 34),
+                                content: Text(
+                                  'Greška!',
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
                           }
-                        } catch (err) {
-                          const snackBar = SnackBar(
-                            duration: Duration(seconds: 2),
-                            backgroundColor: Color.fromARGB(255, 185, 44, 34),
-                            content: Text(
-                              'Greška!',
-                              textAlign: TextAlign.center,
-                            ),
-                          );
-
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                      }
-                    },
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Text(
-                  'Rezervacije za mjesto broj: ${widget.mjestoData.brojMjesta}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 25, color: Colors.black54),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      'Rezervacije za mjesto broj: ${widget.mjestoData.brojMjesta}',
+                      textAlign: TextAlign.center,
+                      style:
+                          const TextStyle(fontSize: 25, color: Colors.black54),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: FutureBuilder<List<IndividualneRezervacijeMjestaPrikaz>>(
-                  future: listaRezervacija,
-                  initialData: null,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox(
-                          height: 120,
-                          width: 120,
-                          child: Center(child: CircularProgressIndicator()));
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else if (snapshot.hasData &&
-                          snapshot.data.toString() != '[]') {
-                        List<IndividualneRezervacijeMjestaPrikaz>? list =
-                            snapshot.data?.toList();
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child:
+                      FutureBuilder<List<IndividualneRezervacijeMjestaPrikaz>>(
+                          future: listaRezervacija,
+                          initialData: null,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const SizedBox(
+                                  height: 120,
+                                  width: 120,
+                                  child: Center(
+                                      child: CircularProgressIndicator()));
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else if (snapshot.hasData &&
+                                  snapshot.data.toString() != '[]') {
+                                List<IndividualneRezervacijeMjestaPrikaz>?
+                                    list = snapshot.data?.toList();
 
-                        for (int i = 0; i < list!.length; i++) {
-                          if (list[i].vrijemeOtkazivanja != null ||
-                              (list[i]
-                                  .vrijemeVazenjaDo
-                                  .isBefore(DateTime.now())) ||
-                              list[i].vrijemePotvrde != null) {
-                            list[i].vrijemeVazenjaOd = list[i]
-                                .vrijemeVazenjaOd
-                                .add(const Duration(days: 15));
-                          }
-                        }
-                        list.sort((a, b) =>
-                            a.vrijemeVazenjaOd.compareTo(b.vrijemeVazenjaOd));
-                        return Column(
-                          children: [
-                            const SizedBox(height: 50),
-                            ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return IndividualnaRezervacijaKorisnikaCard(
-                                    indRezKorData: list[index],
-                                    // index: snapshot.data![index].id,
-                                    index: list[index].id,
-                                    funkcijaBrisanja:
-                                        obrisiIndividualnuRezervacijuKorisnika,
-                                  );
-                                },
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                      height: 40,
-                                      width: 40,
-                                    ),
-                                itemCount: snapshot.data!.length),
-                            const SizedBox(height: 40),
-                          ],
-                        );
-                      } else {
-                        return Center(
-                          child: Container(
-                              alignment: Alignment.centerLeft,
-                              height: 300,
-                              child: const Text(
-                                'Trenutno nema rezervacija za prikazati !',
-                                style: TextStyle(fontSize: 30),
-                              )),
-                        );
-                      }
-                    } else {
-                      return Text('State: ${snapshot.connectionState}');
-                    }
-                  }),
-            ),
-          ],
-        )),
+                                for (int i = 0; i < list!.length; i++) {
+                                  if (list[i].vrijemeOtkazivanja != null ||
+                                      (list[i]
+                                          .vrijemeVazenjaDo
+                                          .isBefore(DateTime.now())) ||
+                                      list[i].vrijemePotvrde != null) {
+                                    list[i].vrijemeVazenjaOd = list[i]
+                                        .vrijemeVazenjaOd
+                                        .add(const Duration(days: 15));
+                                  }
+                                }
+                                list.sort((a, b) => a.vrijemeVazenjaOd
+                                    .compareTo(b.vrijemeVazenjaOd));
+                                return Column(
+                                  children: [
+                                    const SizedBox(height: 50),
+                                    ListView.separated(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return IndividualnaRezervacijaKorisnikaCard(
+                                            indRezKorData: list[index],
+                                            // index: snapshot.data![index].id,
+                                            index: list[index].id,
+                                            funkcijaBrisanja:
+                                                obrisiIndividualnuRezervacijuKorisnika,
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) =>
+                                            const SizedBox(
+                                              height: 40,
+                                              width: 40,
+                                            ),
+                                        itemCount: snapshot.data!.length),
+                                    const SizedBox(height: 40),
+                                  ],
+                                );
+                              } else {
+                                return Center(
+                                  child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      height: 300,
+                                      child: const Text(
+                                        'Trenutno nema rezervacija za prikazati !',
+                                        style: TextStyle(fontSize: 30),
+                                      )),
+                                );
+                              }
+                            } else {
+                              return Text('State: ${snapshot.connectionState}');
+                            }
+                          }),
+                ),
+              ],
+            )),
       ),
     );
   }

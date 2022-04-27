@@ -563,6 +563,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
 
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
+                                        Navigator.of(context).pop();
                                       }
                                     }
                                   } on DioError catch (err) {

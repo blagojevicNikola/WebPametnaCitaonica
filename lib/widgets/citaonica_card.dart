@@ -52,11 +52,6 @@ class CitaonicaCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(15, 15, 15, 3),
-                      child:
-                          Icon(Icons.lock_open, color: Colors.green, size: 30),
-                    )
                   ],
                 ),
                 Divider(

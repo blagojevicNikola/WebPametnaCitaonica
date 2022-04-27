@@ -94,6 +94,8 @@ class _SupervizorskiPregledGrupneSalePageState
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0),
                   ),
                 ),
                 width: MediaQuery.of(context).size.width * 0.64,
@@ -185,60 +187,58 @@ class _SupervizorskiPregledGrupneSalePageState
                                 }
                               }),
                           const SizedBox(height: 30),
-                          Padding(
-                            padding: const EdgeInsets.all(9.0),
-                            child: Align(
-                              alignment: Alignment.bottomRight,
-                              child: TextButton(
-                                style: ButtonStyle(
-                                    fixedSize: MaterialStateProperty.all(
-                                      const Size(120, 40),
-                                    ),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(14.0),
-                                      ),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                      const Color.fromARGB(255, 87, 182, 93),
-                                    ),
-                                    overlayColor: MaterialStateProperty.all(
-                                        const Color.fromARGB(
-                                            255, 112, 218, 116))),
-                                child: const Text(
-                                  'Sacuvaj',
-                                  style: TextStyle(
-                                      fontSize: 21, color: Colors.white),
-                                ),
-                                onPressed: () async {
-                                  if (ispravnostInformacijaSale()) {
-                                    Response? odgovor = await updateSala();
-                                    if (odgovor != null) {
-                                      if (odgovor.statusCode == 200) {
-                                        Navigator.of(context).pop();
-                                      } else {
-                                        const snackBar = SnackBar(
-                                          backgroundColor:
-                                              Color.fromARGB(255, 185, 44, 34),
-                                          content: Text(
-                                            'Greska pri izmjeni sale!',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        );
-
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
-                                      }
-                                    }
-                                  }
-                                },
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(9.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: TextButton(
+                          style: ButtonStyle(
+                              fixedSize: MaterialStateProperty.all(
+                                const Size(120, 40),
+                              ),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                const Color.fromARGB(255, 87, 182, 93),
+                              ),
+                              overlayColor: MaterialStateProperty.all(
+                                  const Color.fromARGB(255, 112, 218, 116))),
+                          child: const Text(
+                            'Sacuvaj',
+                            style: TextStyle(fontSize: 21, color: Colors.white),
+                          ),
+                          onPressed: () async {
+                            if (ispravnostInformacijaSale()) {
+                              Response? odgovor = await updateSala();
+                              if (odgovor != null) {
+                                if (odgovor.statusCode == 200) {
+                                  Navigator.of(context).pop();
+                                } else {
+                                  const snackBar = SnackBar(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 185, 44, 34),
+                                    content: Text(
+                                      'Greska pri izmjeni sale!',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  );
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              }
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),

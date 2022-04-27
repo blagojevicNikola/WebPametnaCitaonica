@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_aplikacija/api/dio_client.dart';
+import 'package:web_aplikacija/api/odjava_service.dart';
 
 class OdjavaSupervizorPage extends StatefulWidget {
   const OdjavaSupervizorPage({Key? key}) : super(key: key);
@@ -9,6 +11,8 @@ class OdjavaSupervizorPage extends StatefulWidget {
 }
 
 class _OdjavaSupervizorPageState extends State<OdjavaSupervizorPage> {
+  OdjavaService odjavaService = OdjavaService();
+  DioClient dioCl = DioClient();
   //late Future<Korisnik> test;
 
   @override
@@ -42,26 +46,7 @@ class _OdjavaSupervizorPageState extends State<OdjavaSupervizorPage> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Odjava'),
-                            content: const Text('Uspješno ste se odjavili !'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () async {
-                                  final pref =
-                                      await SharedPreferences.getInstance();
-                                  await pref.clear();
-                                  //Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false);
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, "login", (r) => false);
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
-                        );
+                        odjaviSe();
                       },
                       child: const Text('Da'),
                     ),
@@ -76,5 +61,46 @@ class _OdjavaSupervizorPageState extends State<OdjavaSupervizorPage> {
             child: const Text('Odjava')),
       ),
     );
+  }
+
+  void odjaviSe() async {
+    var odgovor = await odjavaService.createOdjava(dioClient: dioCl);
+    if (odgovor?.statusCode == 200 || odgovor?.statusCode == 201) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Odjava'),
+          content: const Text('Uspješno ste se odjavili !'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                final pref = await SharedPreferences.getInstance();
+                await pref.clear();
+                //Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false);
+                Navigator.pushNamedAndRemoveUntil(
+                    context, "login", (r) => false);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Greška'),
+          content: const Text('Greška na serveru !'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

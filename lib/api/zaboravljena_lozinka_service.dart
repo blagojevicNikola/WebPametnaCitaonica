@@ -15,7 +15,7 @@ class ZaboravljenaLozinkaService {
         data: emailData.toJson(),
       );
     } catch (e) {
-      print('Error creating user: $e');
+      rethrow;
     }
 
     return response;
@@ -31,7 +31,7 @@ class ZaboravljenaLozinkaService {
         data: resetData.toJson(),
       );
     } catch (e) {
-      print('Error creating user: $e');
+      rethrow;
     }
 
     return response;

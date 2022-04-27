@@ -115,33 +115,58 @@ class _ZaboravljenaLozinkaState extends State<ZaboravljenaLozinka> {
                       ),
                     );
                   } else {
-                    emailInfo.email = unosEmail;
-                    var odgovor = await zaboravljenaLozinkaService.slanjeEmaila(
-                        dioClient: dioCl, emailData: emailInfo);
-                    if (odgovor?.statusCode == 200 ||
-                        odgovor?.statusCode == 201) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const ResetLozinkePage()));
-                    } else {
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Greška'),
-                          content: const Text('Greška na serveru !'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                var nav = Navigator.of(context);
-                                //Navigator.pop(context, 'OK');
-                                nav.pop();
-                              },
-                              child: const Text('OK'),
+                    try {
+                      emailInfo.email = unosEmail;
+                      var odgovor = await zaboravljenaLozinkaService
+                          .slanjeEmaila(dioClient: dioCl, emailData: emailInfo);
+                      if (odgovor?.statusCode == 200 ||
+                          odgovor?.statusCode == 201) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const ResetLozinkePage()));
+                      }
+                    } on DioError catch (err) {
+                      if (err.response != null) {
+                        if (err.response?.statusCode == 404) {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Greška'),
+                              content: const Text(
+                                  'Nalog sa ovom e-mail adresom ne postoji!'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    var nav = Navigator.of(context);
+                                    //Navigator.pop(context, 'OK');
+                                    nav.pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
+                          );
+                        } else {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Greška'),
+                              content: const Text('Greška na serveru !'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    var nav = Navigator.of(context);
+                                    //Navigator.pop(context, 'OK');
+                                    nav.pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      }
                     }
                   }
                 },

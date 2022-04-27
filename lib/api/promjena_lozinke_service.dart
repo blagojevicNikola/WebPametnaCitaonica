@@ -17,7 +17,7 @@ class PromjenaLozinkeService {
 
       //retrievedObavjestenje = WebLogin.fromJson(response.data);
     } catch (e) {
-      print('Error creating user: $e');
+      rethrow;
     }
 
     return response;

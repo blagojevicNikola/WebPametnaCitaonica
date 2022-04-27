@@ -28,13 +28,13 @@ class LoginDemo extends StatefulWidget {
   _LoginDemoState createState() => _LoginDemoState();
 }
 
-String lozinkaLogin = '', emailLogin = '';
-String izbor = 'Administrator';
-
 class _LoginDemoState extends State<LoginDemo> {
   //late Future<Korisnik> test;
   AuthService authService = AuthService();
   DioClient dioCL = DioClient();
+  String izbor = 'Administrator';
+  String emailLogin = '';
+  String lozinkaLogin = '';
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +128,7 @@ class _LoginDemoState extends State<LoginDemo> {
                       izbor = changedValue.toString();
                       dropdownValue = changedValue.toString();
                       setState(() {
+                        izbor;
                         dropdownValue;
                       });
                     },
@@ -232,12 +233,13 @@ class _LoginDemoState extends State<LoginDemo> {
                     } else {
                       if (izbor == 'Administrator') {
                         try {
+                          print(izbor);
                           var response = await authService.postLogin(
                               dioCL, emailLogin, lozinkaLogin);
                           if (response != null) {
                             if (response.statusCode == 201 &&
                                 response.data['uloga'] == 'ADMIN') {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => const MyHomePage(
@@ -274,12 +276,13 @@ class _LoginDemoState extends State<LoginDemo> {
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       } else if (izbor == 'Supervizor') {
+                        print(izbor);
                         var response = await authService.postLogin(
                             dioCL, emailLogin, lozinkaLogin);
                         if (response != null) {
                           if (response.statusCode == 201 &&
                               response.data['uloga'] == 'SUPERVIZOR') {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => SupervizorHomePage(

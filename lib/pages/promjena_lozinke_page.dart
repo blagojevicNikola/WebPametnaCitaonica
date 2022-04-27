@@ -121,20 +121,6 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
                       ],
                     ),
                   );
-                } else if (lozinkaLogin != unosLozinka) {
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('Neispravna lozinka'),
-                      content: const Text('Unijeli ste netačnu lozinku !'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
                 } else if (novaLozinka.length < 8) {
                   showDialog<String>(
                     context: context,
@@ -142,21 +128,6 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
                       title: const Text('Neispravna nova lozinka'),
                       content: const Text(
                           'Dužina nove lozinke mora biti 8 ili vise karaktera !'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
-                } else if (novaLozinka == lozinkaLogin) {
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('Neispravna nova lozinka'),
-                      content: const Text(
-                          'Nova lozinka ne može biti ista kao trenutna lozinka !'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () => Navigator.pop(context, 'OK'),
@@ -197,51 +168,33 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
   }
 
   void promjeniLozinku() async {
-    var response = await promjenaLozinkeService.promjeniLozinku(
-        dioClient: dioCl, promjenaLozinkeData: promjenaLozinkeInfo);
-    if (response?.statusCode == 200 || response?.statusCode == 200) {
-      lozinkaLogin = novaLozinkaPotvrda;
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Uspješna promjena lozinke'),
-          content: const Text('Čestitamo, uspješno ste promjenili lozinku !'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, "login", (r) => false);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    } else if (response?.statusCode == 403) {
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Greška'),
-          content: const Text('Trenutna lozinka nije ispravna !'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                var nav = Navigator.of(context);
-                //Navigator.pop(context, 'OK');
-                nav.pop();
-                //nav.pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    } else {
+    try {
+      var response = await promjenaLozinkeService.promjeniLozinku(
+          dioClient: dioCl, promjenaLozinkeData: promjenaLozinkeInfo);
+      if (response?.statusCode == 200 || response?.statusCode == 200) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Uspješna promjena lozinke'),
+            content: const Text('Čestitamo, uspješno ste promjenili lozinku !'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "login", (r) => false);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (err) {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: const Text('Greška'),
-          content: const Text('Greška na serveru !'),
+          content: const Text('Pogrešno uneseni podaci za promjenu lozinke !'),
           actions: <Widget>[
             TextButton(
               onPressed: () {

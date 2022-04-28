@@ -78,7 +78,7 @@ class IndividualneSaleService {
 
       retrievedIndividualnaSala = IndividualnaSala.fromJson(response.data);
     } catch (e) {
-      print('Error creating user: $e');
+      rethrow;
     }
 
     return retrievedIndividualnaSala;

@@ -51,7 +51,7 @@ class KarakteristikeSaleService {
         '/citaonice/$citaonicaId/supervizori/$supervizorId',
       );
     } catch (e) {
-      print('Error deleting user: $e');
+      rethrow;
     }
     return temp;
   }
@@ -69,7 +69,7 @@ class KarakteristikeSaleService {
       );
       temp = response;
     } catch (e) {
-      print('Error creating user: $e');
+      rethrow;
     }
     return temp;
     //print('User created: ${response.data}');

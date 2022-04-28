@@ -208,7 +208,20 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
                             onPressed: () async {
                               if (ispravnostInformacijaCitaonice(radnoVr)) {
                                 try {
-                                  kreirajCitaonicu();
+                                  bool temp = await kreirajCitaonicu();
+                                  if (temp == true) {
+                                    const snackBar = SnackBar(
+                                      duration: Duration(seconds: 2),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 66, 157, 54),
+                                      content: Text(
+                                        'Čitaonica je uspješno kreirana!',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
                                 } catch (err) {
                                   const snackBar = SnackBar(
                                     backgroundColor:
@@ -273,7 +286,7 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
     }
   }
 
-  void kreirajCitaonicu() async {
+  Future<bool> kreirajCitaonicu() async {
     dio.FormData f = dio.FormData.fromMap({
       'slika': dio.MultipartFile.fromBytes(slika!.toList(),
           contentType: MediaType('image', 'png'), filename: 'index')
@@ -297,10 +310,17 @@ class _DodavanjeCitaonicaPageState extends State<DodavanjeCitaonicaPage> {
       dio.Dio dioSlika = dio.Dio();
       dioSlika.options.headers['Authorization'] =
           'Bearer ${prefs.getString('accessToken')}';
-      await dioSlika.post(
+      Response odg = await dioSlika.post(
         'https://localhost:8443/api/v1/citaonice/${cit.id}/slika/',
         data: f,
       );
+      if (odg.statusCode == 201 || odg.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
   }
 

@@ -491,7 +491,7 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                               citaonicaId:
                                                   widget.citData.id.toString());
                                       if (response != null) {
-                                        if (response.statusCode == 200) {
+                                        if (response.statusCode == 204) {
                                           Navigator.of(context).pop();
                                         }
                                       }

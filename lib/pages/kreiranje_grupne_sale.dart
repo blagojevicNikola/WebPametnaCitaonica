@@ -111,7 +111,7 @@ class _KreiranjeGrupneSalePageState extends State<KreiranjeGrupneSalePage> {
                             Padding(
                               padding: const EdgeInsets.all(9),
                               child: InformationField(
-                                labelInformation: 'Ime',
+                                labelInformation: 'Naziv sale',
                                 control: nazivController,
                               ),
                             ),

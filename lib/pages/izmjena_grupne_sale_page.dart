@@ -117,7 +117,7 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                           Padding(
                             padding: const EdgeInsets.all(9),
                             child: InformationField(
-                              labelInformation: 'Broj mjesta',
+                              labelInformation: 'Kapacitet',
                               control: brojMjestaSaleController =
                                   TextEditingController(
                                 text: widget.data.grupnaSalaData.brojMjesta
@@ -128,7 +128,7 @@ class _IzmjenaGrupneSalePageState extends State<IzmjenaGrupneSalePage> {
                           Padding(
                             padding: const EdgeInsets.all(9),
                             child: InformationField(
-                              labelInformation: 'QR Code',
+                              labelInformation: 'Kod',
                               control: qrCodeSaleController =
                                   TextEditingController(
                                       text: widget.data.grupnaSalaData.qrKod),

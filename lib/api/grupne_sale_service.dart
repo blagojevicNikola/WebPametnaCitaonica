@@ -41,7 +41,7 @@ class GrupneSaleService {
 
       temp = response;
     } catch (e) {
-      print('Error creating user: $e');
+      rethrow;
     }
 
     return temp;

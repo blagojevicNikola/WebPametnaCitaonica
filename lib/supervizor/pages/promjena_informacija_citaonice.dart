@@ -232,9 +232,9 @@ class _PromjenaInformacijaCitaoniceState
                                             if (odgovor.statusCode == 200) {
                                               const snackBar = SnackBar(
                                                 backgroundColor: Color.fromARGB(
-                                                    255, 40, 233, 40),
+                                                    255, 66, 157, 54),
                                                 content: Text(
-                                                  'Uspjesna izmjena citaonice!',
+                                                  'Uspješna izmjena čitaonice!',
                                                   textAlign: TextAlign.center,
                                                 ),
                                               );
@@ -246,7 +246,7 @@ class _PromjenaInformacijaCitaoniceState
                                                 backgroundColor: Color.fromARGB(
                                                     255, 185, 44, 34),
                                                 content: Text(
-                                                  'Neuspjesna izmjena citaonice!',
+                                                  'Neuspješna izmjena čitaonice!',
                                                   textAlign: TextAlign.center,
                                                 ),
                                               );
@@ -259,7 +259,7 @@ class _PromjenaInformacijaCitaoniceState
                                               backgroundColor: Color.fromARGB(
                                                   255, 185, 44, 34),
                                               content: Text(
-                                                'Neuspjesna izmjena citaonice!',
+                                                'Neuspješna izmjena čitaonice!',
                                                 textAlign: TextAlign.center,
                                               ),
                                             );
@@ -272,7 +272,7 @@ class _PromjenaInformacijaCitaoniceState
                                             backgroundColor: Color.fromARGB(
                                                 255, 185, 44, 34),
                                             content: Text(
-                                              'Pogresno ispunjene informacije citaonice!',
+                                              'Pogrešno ispunjene informacije čitaonice!',
                                               textAlign: TextAlign.center,
                                             ),
                                           );

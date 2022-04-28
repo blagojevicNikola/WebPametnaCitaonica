@@ -79,10 +79,10 @@ class _KreiranjeIdividualneSalePageState
                     child: const Text('Dodaj sliku'),
                     onPressed: () => pickImage(),
                   ),
-                  TextButton(
-                    child: const Text('Ukloni sliku'),
-                    onPressed: () => removeImage(),
-                  ),
+                  // TextButton(
+                  //   child: const Text('Ukloni sliku'),
+                  //   onPressed: () => removeImage(),
+                  // ),
                   TextButton(
                     child: const Text('Dodaj mjesto'),
                     onPressed: () {
@@ -382,15 +382,15 @@ class _KreiranjeIdividualneSalePageState
     }
   }
 
-  void removeImage() async {
-    if (slika != null) {
-      setState(
-        () {
-          slika = null;
-        },
-      );
-    }
-  }
+  // void removeImage() async {
+  //   if (slika != null) {
+  //     setState(
+  //       () {
+  //         slika = null;
+  //       },
+  //     );
+  //   }
+  // }
 
   double getKoeficijentVelicineMjesta() {
     RenderBox? renderBoxSlika =

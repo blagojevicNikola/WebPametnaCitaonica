@@ -28,16 +28,7 @@ class _PromjenaLozinkeSupervizorPageState
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFFD6F4F4),
-            Color(0xFFD6F4F4),
-          ],
-        ),
-      ),
+      decoration: const BoxDecoration(color: Colors.white),
       child: ListView(
         // child: Column(
         children: <Widget>[

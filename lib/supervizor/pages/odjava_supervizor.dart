@@ -58,7 +58,9 @@ class _OdjavaSupervizorPageState extends State<OdjavaSupervizorPage> {
                 ),
               );
             },
-            child: const Text('Odjava')),
+            child: const ListTile(
+                leading: Icon(Icons.logout, color: Colors.white, size: 35),
+                title: Text('Odjava', style: TextStyle(color: Colors.white)))),
       ),
     );
   }

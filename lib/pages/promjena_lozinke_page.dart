@@ -26,16 +26,7 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFFD6F4F4),
-            Color(0xFFD6F4F4),
-          ],
-        ),
-      ),
+      decoration: const BoxDecoration(color: Colors.white),
       child: ListView(
         // child: Column(
         children: <Widget>[
@@ -50,7 +41,7 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
               },
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.lock, color: Colors.blue[700]),
-                  fillColor: Colors.white,
+                  fillColor: Color.fromARGB(255, 233, 233, 233),
                   filled: true,
                   border: const OutlineInputBorder(),
                   labelText: 'Trenutna lozinka',
@@ -69,7 +60,7 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
               },
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.password, color: Colors.blue[700]),
-                  fillColor: Colors.white,
+                  fillColor: Color.fromARGB(255, 233, 233, 233),
                   filled: true,
                   border: const OutlineInputBorder(),
                   labelText: 'Nova lozinka',
@@ -88,7 +79,7 @@ class _PromjenaLozinkePageState extends State<PromjenaLozinkePage> {
               },
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.password, color: Colors.blue[700]),
-                  fillColor: Colors.white,
+                  fillColor: Color.fromARGB(255, 233, 233, 233),
                   filled: true,
                   border: const OutlineInputBorder(),
                   labelText: 'Potvrda nove lozinka',

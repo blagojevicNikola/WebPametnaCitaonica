@@ -42,7 +42,7 @@ class _SlanjeNotifikacijaState extends State<SlanjeNotifikacija> {
     return SingleChildScrollView(
         controller: ScrollController(),
         child: Container(
-          color: const Color(0xFFD6F4F4),
+          color: Colors.white,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,

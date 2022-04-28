@@ -40,7 +40,7 @@ class SupervizorService {
 
       retrievedMjesto = Nalog.fromJson(response.data);
     } catch (e) {
-      print('Error creating user: $e');
+      rethrow;
     }
 
     return retrievedMjesto;

@@ -326,7 +326,7 @@ class _KreiranjeIdividualneSalePageState
             clanarine: <Clanarina>[],
             karakteristike: <KarakteristikeSale>[],
             opis: "",
-            brojMjesta: listaMjesta.length),
+            brojMjesta: 0),
       );
       if (salaTemp != null) {
         kreiranaIndividualnaSalaId = salaTemp.id;

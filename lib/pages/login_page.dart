@@ -211,7 +211,7 @@ class _LoginDemoState extends State<LoginDemo> {
                       ],
                     ),
                     borderRadius: BorderRadius.circular(20)),
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () async {
                     if (emailLogin.isEmpty
                         //||
@@ -356,7 +356,7 @@ class _LoginDemoState extends State<LoginDemo> {
                   ),
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.push(
                       context,

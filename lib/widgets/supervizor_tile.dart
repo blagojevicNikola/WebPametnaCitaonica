@@ -31,37 +31,51 @@ class SupervizorTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(9.0, 0.0, 0.0, 0.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: ime,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Color.fromARGB(255, 105, 105, 105),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(9.0, 0.0, 0.0, 0.0),
+                    child: RichText(
+                      text: TextSpan(
+                        text: ime,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Color.fromARGB(255, 105, 105, 105),
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ' $prezime',
+                            style: const TextStyle(
+                              fontSize: 24,
+                              color: Color.fromARGB(255, 105, 105, 105),
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' ($korisnickoIme)',
+                            style: const TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Color.fromARGB(255, 105, 105, 105),
+                            ),
+                          ),
+                        ],
                       ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: ' $prezime',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: Color.fromARGB(255, 105, 105, 105),
-                          ),
-                        ),
-                        TextSpan(
-                          text: ' ($korisnickoIme)',
-                          style: const TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: Color.fromARGB(255, 105, 105, 105),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ),
-                const SizedBox(width: 15),
                 Row(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(9, 0, 9, 0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(40),
+                        color: Colors.transparent,
+                        child: IconButton(
+                          color: const Color.fromARGB(255, 105, 105, 105),
+                          splashRadius: 25,
+                          icon: const Icon(Icons.lock),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(9, 0, 9, 0),
                       child: Material(

@@ -10,12 +10,13 @@ class Nalog {
   String korisnickoIme;
   String? lozinka;
   String mail;
-
+  bool? zakljucano;
   Nalog(
       {required this.ime,
       required this.prezime,
       required this.korisnickoIme,
       required this.mail,
+      this.zakljucano,
       this.id,
       this.lozinka});
 

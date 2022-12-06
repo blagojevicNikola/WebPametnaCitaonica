@@ -32,6 +32,6 @@ class GrupneRezervacijeSalePrikaz {
       required this.korisnikMail});
 
   factory GrupneRezervacijeSalePrikaz.fromJson(Map<String, dynamic> json) =>
-      _$GrupneRezervacijeMjestaPrikazFromJson(json);
-  Map<String, dynamic> toJson() => _$GrupneRezervacijeMjestaPrikazToJson(this);
+      _$GrupneRezervacijeSalePrikazFromJson(json);
+  Map<String, dynamic> toJson() => _$GrupneRezervacijeSalePrikazToJson(this);
 }

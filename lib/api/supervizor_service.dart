@@ -80,4 +80,23 @@ class SupervizorService {
     return temp;
     //print('User created: ${response.data}');
   }
+
+  Future<Response?> zakljucajSupervizora(
+      {required DioClient dioClient,
+      required bool zakljucaj,
+      required String nalogId}) async {
+    try {
+      Response? temp;
+      if (!zakljucaj) {
+        temp = await dioClient.dio
+            .patch('/nalozi/$nalogId/lock/', data: {'status': 'otkljucano'});
+      } else {
+        temp = await dioClient.dio
+            .patch('/nalozi/$nalogId/lock/', data: {'status': 'zakljucano'});
+      }
+      return temp;
+    } catch (err) {
+      rethrow;
+    }
+  }
 }

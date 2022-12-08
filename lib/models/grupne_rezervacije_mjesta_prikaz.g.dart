@@ -6,7 +6,7 @@ part of 'grupne_rezervacije_mjesta_prikaz.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GrupneRezervacijeSalePrikaz _$GrupneRezervacijeMjestaPrikazFromJson(
+GrupneRezervacijeSalePrikaz _$GrupneRezervacijeSalePrikazFromJson(
         Map<String, dynamic> json) =>
     GrupneRezervacijeSalePrikaz(
       id: json['id'] as int,
@@ -27,7 +27,7 @@ GrupneRezervacijeSalePrikaz _$GrupneRezervacijeMjestaPrikazFromJson(
       korisnikMail: json['korisnikMail'] as String,
     );
 
-Map<String, dynamic> _$GrupneRezervacijeMjestaPrikazToJson(
+Map<String, dynamic> _$GrupneRezervacijeSalePrikazToJson(
         GrupneRezervacijeSalePrikaz instance) =>
     <String, dynamic>{
       'id': instance.id,

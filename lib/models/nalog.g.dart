@@ -13,7 +13,7 @@ Nalog _$NalogFromJson(Map<String, dynamic> json) => Nalog(
       mail: json['mail'] as String,
       id: json['id'] as int?,
       lozinka: json['lozinka'] as String?,
-    );
+    )..zakljucan = json['zakljucan'] as bool?;
 
 Map<String, dynamic> _$NalogToJson(Nalog instance) => <String, dynamic>{
       'id': instance.id,
@@ -22,4 +22,5 @@ Map<String, dynamic> _$NalogToJson(Nalog instance) => <String, dynamic>{
       'korisnickoIme': instance.korisnickoIme,
       'lozinka': instance.lozinka,
       'mail': instance.mail,
+      'zakljucan': instance.zakljucan,
     };

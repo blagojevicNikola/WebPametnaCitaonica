@@ -251,9 +251,11 @@ class _LoginDemoState extends State<LoginDemo> {
                                   'accessToken', response.data['accessToken']);
                               prefs.setString('refreshToken',
                                   response.data['refreshToken']);
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
+                                  settings:
+                                      const RouteSettings(name: "admin_home"),
                                   builder: (_) => const MyHomePage(
                                       title: 'Administratorska App'),
                                 ),
@@ -310,6 +312,8 @@ class _LoginDemoState extends State<LoginDemo> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
+                                      settings: const RouteSettings(
+                                          name: "supervizor_home"),
                                       builder: (_) => SupervizorHomePage(
                                             title: 'Supervizorska App',
                                             supervizorId: response.data['id'],

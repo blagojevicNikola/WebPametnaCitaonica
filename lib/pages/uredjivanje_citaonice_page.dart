@@ -408,6 +408,8 @@ class _UredjivanjeCitaonicePage extends State<UredjivanjeCitaonicePage> {
                                                   snapshot.data![index].prezime,
                                               korisnickoIme: snapshot
                                                   .data![index].korisnickoIme,
+                                              zakljucan: snapshot
+                                                  .data![index].zakljucan,
                                               funkcijaBrisanja:
                                                   obrisiSupervizora,
                                             );

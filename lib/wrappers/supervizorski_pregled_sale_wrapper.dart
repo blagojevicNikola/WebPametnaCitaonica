@@ -41,7 +41,10 @@ class SupervizorskiPregledSaleWrapper extends StatelessWidget {
                 throw Exception('Invalid route:');
             }
             return MaterialPageRoute<void>(
-                builder: builder, settings: settings, maintainState: false);
+              builder: builder,
+              settings: settings,
+              maintainState: false,
+            );
           }),
     );
   }

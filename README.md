@@ -1,16 +1,24 @@
-# web_aplikacija
+# Pametna Citaonica
 
-A new Flutter project.
+Web app used by ***supervisor*** and ***administrator*** roles for managing libraries and study rooms.
 
-## Getting Started
+## Project Description
 
-This project is a starting point for a Flutter application.
+*Supervisor:*
+- Managing library info
+- Posting notifications for users
+- Locking seats and group study rooms
+- Overeview of seat and group study room reservations 
 
-A few resources to get you started if this is your first Flutter project:
+*Administrator:*
+- Creating library
+- Creating individual and group study rooms
+- Creating supervisor accounts 
+- Locking supervisor accounts 
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Demo
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="/assets/images/supervizor_web.png" width="600">
+<img src="/assets/images/web_editor.png" width="600">
+
+
